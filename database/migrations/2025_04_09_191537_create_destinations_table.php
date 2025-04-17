@@ -22,10 +22,14 @@ return new class extends Migration
             $table->text('gambar4');
             $table->text('gambar5');
             $table->text('gambarM');
-            $table->string('kategori');
+            $table->unsignedInteger('kategori_id');
             $table->text('desk');
             $table->text('long_desk');
             $table->integer('click_count')->nullable()->default(0);
+            $table->timestamps();
+
+            // tambahkan relasi foreign 
+            $table->foreign('kategori_id')->references('id_kategori')->on('kategori')->onDelete('cascade');
         });
     }
 

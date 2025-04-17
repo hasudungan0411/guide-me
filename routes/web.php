@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DestinasiController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
+use App\Http\Controllers\BlogController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +24,18 @@ Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.lo
 
 Route::middleware(['admin'])->group(function() {
     Route::get('/admin', [layoutscontroller::class, 'admin'])->name('layouts.admin');
+    
     Route::get('/destinasi/index', [DestinasiController::class, 'index'])->name('destinasi.index');
+    Route::get('/destinasi/create', [DestinasiController::class, 'create'])->name('destinasi.create');
+    Route::post('/destinasi/store', [DestinasiController::class, 'store'])->name('destinasi.store');
+    Route::get('/destinasi/detail/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
+    Route::get('/destinasi/edit/{id}', [DestinasiController::class, 'edit'])->name('destinasi.edit');
+    Route::put('/destinasi/update/{id}', [DestinasiController::class, 'update'])->name('destinasi.update');
+    Route::delete('/destinasi/delete/{id}', [DestinasiController::class, 'destroy'])->name('destinasi.destroy');
+
+    Route::resource('kategori', KategoriController::class);
+
+    Route::resource('blog', BlogController::class);
 });
 
 

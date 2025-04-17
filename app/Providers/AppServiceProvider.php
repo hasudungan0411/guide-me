@@ -3,22 +3,23 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
+    public function boot()
+    {
+        // Share warna acak di semua view
+        View::share('randomColor', $this->generateRandomColor());
+    }
+
+    public function register()
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
-    public function boot(): void
+    private function generateRandomColor()
     {
-        //
+        return '#' . strtoupper(dechex(rand(0, 255))) . strtoupper(dechex(rand(0, 255))) . strtoupper(dechex(rand(0, 255)));
     }
 }

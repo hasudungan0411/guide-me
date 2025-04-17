@@ -22,9 +22,14 @@ class Destination extends Model
         'gambar4',
         'gambar5',
         'gambarM',
-        'kategori',
+        'kategori_id',
         'desk',
         'long_desk',
         'click_count',
     ];
+
+    public function kategori()
+    {
+        return $this->belongsTo(kategori::class,'kategori_id', 'id_kategori');
+    }
 }

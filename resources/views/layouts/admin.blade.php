@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Admin Dashboard')</title>
-    
+    <title>@yield('title', 'Halaman Admin')</title>
+    @stack('styles')
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
+        rel="stylesheet">
     <link href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/font-awesome/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/DataTables/datatables.min.css') }}" rel="stylesheet">
@@ -18,6 +21,7 @@
     <link href="{{ asset('assets/css/dark_theme.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
 </head>
+
 <body>
     <div class="loader">
         <div class="spinner-grow text-primary" role="status">
@@ -34,22 +38,35 @@
             <div class="page-sidebar-inner slimscroll">
                 <ul class="accordion-menu">
                     <li class="sidebar-title">Apps</li>
-                    <li class="active-page">
-                        <a href="" class="active"><i class="material-icons-outlined">dashboard</i>Dashboard</a>
+
+                    <li class="{{ Request::routeIs('destinasi.index') ? 'active-page' : '' }}">
+                        <a href="{{ route('destinasi.index') }}"
+                            class="{{ Request::routeIs('destinasi.index') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">dashboard</i>Dashboard
+                        </a>
                     </li>
-                    <li>
-                        <a href=""><i class="material-icons-outlined">rss_feed</i>Blog</a>
+
+                    <li class="{{ Request::routeIs('blog*') ? 'active-page' : '' }}">
+                        <a href="{{ url('/blog') }}" class="{{ Request::RouteIs('blog*') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">rss_feed</i>Blog
+                        </a>
                     </li>
+
                     <li class="sidebar-title">Management</li>
-                    <li>
-                        <a href="#"><i class="material-icons">apps</i>Data<i class="material-icons has-sub-menu">add</i></a>
+                    <li class="{{ Request::is('kategori*') ? 'active-page' : '' }}">
+                        <a href="#"><i class="material-icons">apps</i>Data<i
+                                class="material-icons has-sub-menu">add</i></a>
                         <ul class="sub-menu">
-                            <li><a href="">Kategori</a></li>
-                            <li><a href="">Galeri</a></li>
+                            <li class="{{ Request::is('kategori*') ? 'active-page' : '' }}">
+                                <a href="{{ url('/kategori') }}"
+                                    class="{{ Request::is('kategori*') ? 'active' : '' }}">Kategori</a>
+                            </li>
+                            <li><a href="{{ url('/galeri') }}">Galeri</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
+
         </div>
 
         <!-- Page Container -->
@@ -67,17 +84,18 @@
                             <a href="#" class="nav-link"><i class="material-icons-outlined">menu</i></a>
                         </li>
                         <li class="nav-item nav-profile dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <img src="{{ asset('assets/images/avatars/profile-image-2.png') }}" alt="profile image">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img src="{{ asset('assets/images/avatars/profile-image-2.png') }}"
+                                    alt="profile image">
                                 <span>{{ session('admin')->nama }}</span>
                                 <i class="material-icons dropdown-icon">keyboard_arrow_down</i>
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="">Pengaturan Akun</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="{{ route('admin.logout') }}" 
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Keluar</a>
+                                <a class="dropdown-item" href="{{ route('admin.logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Keluar</a>
                             </div>
                         </li>
                     </ul>
@@ -122,9 +140,13 @@
     <script src="{{ asset('assets/js/connect.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables.js') }}"></script>
 
-    <!-- Form Logout (untuk keamanan di Laravel) -->
-    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-        @csrf
-    </form>
+    {{-- untuk tiny  --}}
+    @stack('scripts')
+
+<!-- Form Logout (untuk keamanan di Laravel) -->
+<form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
 </body>
+
 </html>
