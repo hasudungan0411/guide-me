@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
@@ -46,5 +47,12 @@ Route::middleware(['admin'])->group(function() {
 
 
 // Rute login pemilik destinasi wisata
+
+Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
+Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
+Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
+Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+
 
 

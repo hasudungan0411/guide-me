@@ -28,8 +28,19 @@ class Destination extends Model
         'click_count',
     ];
 
+<<<<<<< HEAD
     public function kategori()
     {
         return $this->belongsTo(kategori::class,'kategori_id', 'id_kategori');
+=======
+    public function acara()
+    {
+        return $this->hasMany(Acara::class, 'ID_Wisata');
+    }
+
+    public function pemilikwisata()
+    {
+        return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata','tujuan');
+>>>>>>> 75ee8f1 (Commit pertama)
     }
 }
