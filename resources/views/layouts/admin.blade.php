@@ -20,6 +20,7 @@
     <link href="{{ asset('assets/css/connect.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/dark_theme.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/CROP/croppie.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -39,29 +40,32 @@
                 <ul class="accordion-menu">
                     <li class="sidebar-title">Apps</li>
 
-                    <li class="{{ Request::routeIs('destinasi.index') ? 'active-page' : '' }}">
+                    <li class="{{ Request::routeIs('destinasi.*') ? 'active-page' : '' }}">
                         <a href="{{ route('destinasi.index') }}"
-                            class="{{ Request::routeIs('destinasi.index') ? 'active' : '' }}">
+                            class="{{ Request::routeIs('destinasi.*') ? 'active' : '' }}">
                             <i class="material-icons-outlined">dashboard</i>Dashboard
                         </a>
                     </li>
 
-                    <li class="{{ Request::routeIs('blog*') ? 'active-page' : '' }}">
-                        <a href="{{ url('/blog') }}" class="{{ Request::RouteIs('blog*') ? 'active' : '' }}">
+                    <li class="{{ Request::routeIs('blog.*') ? 'active-page' : '' }}">
+                        <a href="{{ url('/blog') }}" class="{{ Request::routeIs('blog.*') ? 'active' : '' }}">
                             <i class="material-icons-outlined">rss_feed</i>Blog
                         </a>
                     </li>
 
                     <li class="sidebar-title">Management</li>
-                    <li class="{{ Request::is('kategori*') ? 'active-page' : '' }}">
+                    <li class="{{ Request::routeIs('kategori.*') || Request::routeIs('galeri.*') ? 'active-page' : '' }}">
                         <a href="#"><i class="material-icons">apps</i>Data<i
                                 class="material-icons has-sub-menu">add</i></a>
                         <ul class="sub-menu">
-                            <li class="{{ Request::is('kategori*') ? 'active-page' : '' }}">
+                            <li class="{{ Request::routeIs('kategori.*') ? 'active-page' : '' }}">
                                 <a href="{{ url('/kategori') }}"
-                                    class="{{ Request::is('kategori*') ? 'active' : '' }}">Kategori</a>
+                                    class="{{ Request::routeIs('kategori.*') ? 'active' : '' }}">Kategori</a>
                             </li>
-                            <li><a href="{{ url('/galeri') }}">Galeri</a></li>
+                            <li class="{{ Request::routeIs('galeri.*') ? 'active-page' : '' }}">
+                                <a href="{{ url('/galeri') }}"
+                                    class="{{ Request::routeIs('galeri.*') ? 'active' : '' }}">Galeri</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -139,14 +143,16 @@
     <script src="{{ asset('assets/plugins/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/js/connect.min.js') }}"></script>
     <script src="{{ asset('assets/js/pages/datatables.js') }}"></script>
+    <script src="{{ asset('assets/CROP/croppie.min.js') }}"></script>
+    <script src="{{ asset('assets/js/category.js') }}"></script>
 
     {{-- untuk tiny  --}}
     @stack('scripts')
 
-<!-- Form Logout (untuk keamanan di Laravel) -->
-<form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-    @csrf
-</form>
+    <!-- Form Logout (untuk keamanan di Laravel) -->
+    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 </body>
 
 </html>

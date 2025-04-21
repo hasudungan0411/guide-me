@@ -6,6 +6,7 @@ use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\GaleriController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,12 +32,14 @@ Route::middleware(['admin'])->group(function() {
     Route::post('/destinasi/store', [DestinasiController::class, 'store'])->name('destinasi.store');
     Route::get('/destinasi/detail/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
     Route::get('/destinasi/edit/{id}', [DestinasiController::class, 'edit'])->name('destinasi.edit');
-    Route::put('/destinasi/update/{id}', [DestinasiController::class, 'update'])->name('destinasi.update');
+    Route::put('/destinasi/{id}', [DestinasiController::class, 'update'])->name('destinasi.update');
     Route::delete('/destinasi/delete/{id}', [DestinasiController::class, 'destroy'])->name('destinasi.destroy');
 
     Route::resource('kategori', KategoriController::class);
 
     Route::resource('blog', BlogController::class);
+
+    Route::resource('galeri', GaleriController::class);
 });
 
 

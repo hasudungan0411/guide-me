@@ -34,24 +34,32 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Detail destinasi {{ $destination->tujuan }}</h5>
-                            <form>
+                            <form action="{{ route('destinasi.update', $destination->id) }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
                                 <div class="form-group">
-                                    <label>Destinasi</label>
-                                    <input type="text" class="form-control" value="{{ $destination->tujuan }}">
+                                    <label>Destinasi</label> 
+                                    <input type="text" name="tujuan" class="form-control" value="{{ $destination->tujuan }}">
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label>Latitude</label>
-                                        <input type="text" class="form-control" value="{{ $destination->latitude }}">
+                                        <input type="text" name="latitude" class="form-control" value="{{ $destination->latitude }}">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Longitude</label>
-                                        <input type="text" class="form-control" value="{{ $destination->longitude }}">
+                                        <input type="text" name="longitude" class="form-control" value="{{ $destination->longitude }}">
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Kategori</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $destination->kategori->nama_kategori ?? '-' }}">
+                                        <select name="kategori_id" class="form-control custom-select">
+                                            @foreach ($categories as $kategori)
+                                                <option value="{{ $kategori->id_kategori }}"
+                                                    @selected($kategori->id_kategori == $destination->kategori_id)>
+                                                    {{ $kategori->nama_kategori }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -93,8 +101,8 @@
                                 <div class="form-row mt-4">
                                     <div class="form-group col-md-8">
                                         <label>Peta</label>
-                                        <div id="map" data-lng="{{ $destination->latitude }}"
-                                            data-lat="{{ $destination->longitude }}"></div>
+                                        <div id="map" data-lat="{{ $destination->latitude }}"
+                                            data-lng="{{ $destination->longitude }}"></div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Navigasi</label>

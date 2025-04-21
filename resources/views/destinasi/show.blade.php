@@ -92,8 +92,8 @@
                                 <div class="form-row mt-4">
                                     <div class="form-group col-md-8">
                                         <label>Peta</label>
-                                        <div id="map" data-lng="{{ $destination->latitude }}"
-                                            data-lat="{{ $destination->longitude }}" disabled></div>
+                                        <div id="map" data-lat="{{ $destination->latitude }}"
+                                            data-lng="{{ $destination->longitude }}" disabled></div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Navigasi</label>
@@ -121,19 +121,19 @@
         referrerpolicy="origin"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        tinymce.init({
-            selector: 'textarea[name=desk], textarea[name=long_desk]',
-            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
-            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
-            readonly: true,  // Pastikan editor dalam mode hanya-baca
-            setup: function(editor) {
-                // Pastikan hanya bisa dibaca dan tidak ada pengeditan
-                editor.on('init', function() {
-                    editor.getBody().setAttribute('contenteditable', 'false');
-                });
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            tinymce.init({
+                selector: 'textarea[name=desk], textarea[name=long_desk]',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+                readonly: true, // Pastikan editor dalam mode hanya-baca
+                setup: function(editor) {
+                    // Pastikan hanya bisa dibaca dan tidak ada pengeditan
+                    editor.on('init', function() {
+                        editor.getBody().setAttribute('contenteditable', 'false');
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 @endpush

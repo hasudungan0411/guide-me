@@ -18,7 +18,7 @@ class KategoriController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource..
      */
     public function create()
     {
@@ -35,14 +35,11 @@ class KategoriController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $gambar = null;
+        // ambil dan simpan gambar nya 
+        $gambar = $request->file('gambar')->hashName();
+        $request->file('gambar')->storeAs('images/kategori', $gambar, 'public');
 
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $gambar = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('kategori'), $gambar);
-        }
-
+        // simpan ke database 
         kategori::create([
             'nama_kategori' => $request->nama_kategori,
             'gambar' => $gambar
@@ -81,20 +78,15 @@ class KategoriController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        if ($request->hasFile('gambar')) {
-            // Hapus gambar lama jika ada
-            $oldImage = public_path('kategori/' . $kategori->gambar);
-            if (File::exists($oldImage)) {
-                File::delete($oldImage);
-            }
+        // update data 
+        $kategori->nama_kategori = $request->nama_kategori;
 
-            $file = $request->file('gambar');
-            $gambar = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('kategori'), $gambar);
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar')->hashName();
+            $request->file('gambar')->storeAs('images/kategori', $gambar, 'public');
             $kategori->gambar = $gambar;
         }
 
-        $kategori->nama_kategori = $request->nama_kategori;
         $kategori->save();
 
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui!');
@@ -105,12 +97,8 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
+        // mencari kategori berdasarkan ID 
         $kategori = kategori::findOrFail($id);
-
-        $gambar = public_path('kategori/' . $kategori->gambar);
-        if (File::exists($gambar)) {
-            File::delete($gambar);
-        }
 
         $kategori->delete();
 
