@@ -165,7 +165,7 @@
     <div class="right">
       <a class="back-link" href="#">&lt; Kembali</a>
       <h2>Daftar Akun!</h2>
-      <form method="POST" action="/register">
+      <form method="POST" action="{{ route('register') }}">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
         <div class="form-group">
@@ -185,7 +185,7 @@
         <div id="nama-lengkap-container" class="hidden">
           <div class="form-group">
             <label for="nama">Nama Lengkap:</label>
-            <input type="text" id="nama" name="name" placeholder="Nama lengkap" required />
+            <input type="text" id="nama" name="nama" placeholder="Nama lengkap" required />
           </div>
         </div>
 
@@ -197,8 +197,13 @@
         </div>       
 
         <div class="form-group">
+          <label for="no_hp">Nomor HP:</label>
+          <input type="text" id="no_hp" name="no_hp" placeholder="Nomor HP" required />
+        </div>
+
+        <div class="form-group">
           <label for="password">Kata Sandi:</label>
-          <input type="password" id="password" name="password" placeholder="Kata Sandi" required />
+          <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required />
         </div>
 
         <div class="form-group">
@@ -210,6 +215,26 @@
       </form>
 
       <script>
+        function register() {
+          const nama = document.getElementById("nama").value;
+          const peran = document.getElementById("peran").value;
+          const email = document.getElementById("email").value;
+          const kata_sandi = document.getElementById("kata_sandi").value;
+          const confirmPassword = document.getElementById("confirm-password").value;
+
+          if (!nama || !peran || !email || !password || !confirmPassword) {
+            alert("Mohon lengkapi semua field.");
+            return;
+          }
+
+          if (password !== confirmPassword) {
+            alert("Konfirmasi kata sandi tidak cocok.");
+            return;
+          }
+
+          alert("Pendaftaran berhasil!\nSelamat datang, " + nama + "!");
+        }
+
         const peranSelect = document.getElementById('peran');
         const namaLengkapContainer = document.getElementById('nama-lengkap-container');
         const lokasiContainer = document.getElementById('lokasi-container');

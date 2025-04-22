@@ -58,6 +58,10 @@ Route::middleware(['admin'])->group(function () {
 });
 
 
+// Rute register user dan pemilik wisata
+Route::get('/register', [AuthController::class, 'showregister']);
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
 // Rute login user
 
 
@@ -66,7 +70,6 @@ Route::middleware(['admin'])->group(function () {
 
 // Rute login pemilik destinasi wisata
 
-Route::get('/pemilik/register', [AuthController::class, 'showregister'])->name('pemilik.register');
 Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
 Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
 
