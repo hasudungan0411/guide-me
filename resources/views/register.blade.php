@@ -202,8 +202,8 @@
         </div>
 
         <div class="form-group">
-          <label for="password">Kata Sandi:</label>
-          <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required />
+          <label for="kata_sandi">Kata Sandi:</label>
+          <input type="password" id="password" name="password" placeholder="Kata Sandi" required />
         </div>
 
         <div class="form-group">
@@ -211,30 +211,11 @@
           <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required />
         </div>
 
+
         <button class="btn-submit" type="submit">Daftar</button>
       </form>
 
       <script>
-        function register() {
-          const nama = document.getElementById("nama").value;
-          const peran = document.getElementById("peran").value;
-          const email = document.getElementById("email").value;
-          const kata_sandi = document.getElementById("kata_sandi").value;
-          const confirmPassword = document.getElementById("confirm-password").value;
-
-          if (!nama || !peran || !email || !password || !confirmPassword) {
-            alert("Mohon lengkapi semua field.");
-            return;
-          }
-
-          if (password !== confirmPassword) {
-            alert("Konfirmasi kata sandi tidak cocok.");
-            return;
-          }
-
-          alert("Pendaftaran berhasil!\nSelamat datang, " + nama + "!");
-        }
-
         const peranSelect = document.getElementById('peran');
         const namaLengkapContainer = document.getElementById('nama-lengkap-container');
         const lokasiContainer = document.getElementById('lokasi-container');

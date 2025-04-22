@@ -25,11 +25,12 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name'     => 'nullable|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6|confirmed',
             'peran'    => 'required|in:wisatawan,pemilik_wisata',
-            'nama_wisata'  => 'nullable|string|max:255'
+            'nama'     => 'nullable|string|max:255',
+            'email'    => 'required|email|unique:users,email',
+            'no_hp'    => 'required|string|max:15',
+            'password' => 'required|string|min:6|confirmed',
+            'nama_wisata'  => 'nullable|string|max: 255'
         ]);
 
         if ($validator->fails()) {
@@ -41,14 +42,14 @@ class AuthController extends Controller
                 'Nama'     => $request->nama,
                 'Email'    => $request->email,
                 'Nomor_HP'   => $request->no_hp,
-                'Kata_Sandi' => Hash::make($request->kata_sandi)
+                'Kata_Sandi' => Hash::make($request->password)
             ]);
         } else {
             $user = PemilikWisata::create([
                 'Email'    => $request->email,
                 'Lokasi'    => $request->lokasi,
                 'Nomor_HP'   => $request->no_hp,
-                'Kata_Sandi' => Hash::make($request->kata_sandi),
+                'Kata_Sandi' => Hash::make($request->password),
             ]);
         }
 
