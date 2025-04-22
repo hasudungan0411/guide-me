@@ -34,18 +34,40 @@
             <div class="page-sidebar-inner slimscroll">
                 <ul class="accordion-menu">
                     <li class="sidebar-title">Apps</li>
-                    <li class="active-page">
-                        <a href="" class="active"><i class="material-icons-outlined">dashboard</i>Dashboard</a>
+                    <li class="{{ Request::routeIs('pemilik.index') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.index') }}"
+                            class="{{ Request::routeIs('pemilik.index') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">dashboard</i>Dashboard
+                        </a>
                     </li>
-                    <li class="sidebar-title">Management</li>
-                    <li>
-                        <a href="#"><i class="material-icons">apps</i>Data<i class="material-icons has-sub-menu">add</i></a>
-                        <ul class="sub-menu">
-                            <li><a href="{{ route('pemilik.tempatwisata', ['id' => '38']) }}">Tempat Wisata</a></li>
-                            <li><a href="">Acara</a></li>
-                            <li><a href="">Tiket</a></li>
-                        </ul>
+                    <li class="{{ Request::routeIs('pemilik.tempatwisata') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.tempatwisata', ['id' => '38']) }}"
+                            class="{{ Request::routeIs('pemilik.tempatwisata') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">map</i>Tempat Wisata
+                        </a>
                     </li>
+                    <li class="{{ Request::routeIs('pemilik.acara') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.acara', ['id' => '38']) }}"
+                            class="{{ Request::routeIs('pemilik.acara') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">event</i>Acara
+                        </a>
+                    </li>
+                    <li class="{{ Request::routeIs('pemilik.tiket') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.tiket', ['id' => '38']) }}"
+                            class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">confirmation_number</i>Tiket
+                        </a>
+                    </li>
+                    <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.transaksi', ['id' => '38']) }}"
+                            class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
+                            <i class="material-icons-outlined">payments </i>Transaksi
+                        </a>
+                    </li>
+                        <!-- <li><a href="{{ route('pemilik.tempatwisata', ['id' => '38']) }}">Tempat Wisata</a></li>
+                                <li><a href="{{ route('pemilik.acara', ['id' => '38']) }}">Acara</a></li>
+                                <li><a href="{{ route('pemilik.tempatwisata', ['id' => '38']) }}">Tiket</a></li> -->
+                   
                 </ul>
             </div>
         </div>

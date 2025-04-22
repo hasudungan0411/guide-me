@@ -64,4 +64,14 @@ class PemilikController extends Controller
 
         return view('pemilik.acara', compact('Acara'));
     }
+
+    public function showtiketpemilik($id)
+    {
+        return view('pemilik.tiket');
+    }
+
+    public function showtransaksipemilik($id)
+    {
+        return view('pemilik.transaksi');
+    }
 }

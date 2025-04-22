@@ -10,6 +10,7 @@ use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\SaranController;
 use App\Http\Controllers\WisatawanController;
 use App\Http\Controllers\PemilikwisataController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,8 +66,16 @@ Route::middleware(['admin'])->group(function () {
 
 // Rute login pemilik destinasi wisata
 
+Route::get('/pemilik/register', [AuthController::class, 'showregister'])->name('pemilik.register');
 Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
 Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
+
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
 Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
 Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+
+
+
+

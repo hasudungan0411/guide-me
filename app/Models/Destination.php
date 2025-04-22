@@ -27,7 +27,7 @@ class Destination extends Model
         'long_desk',
         'click_count',
     ];
-    
+
     public function kategori()
     {
         return $this->belongsTo(kategori::class,'kategori_id', 'id_kategori');

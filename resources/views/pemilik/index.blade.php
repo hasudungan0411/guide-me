@@ -7,7 +7,6 @@
     <div class="page-info">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Apps</a></li>
                 <li class="breadcrumb-item"><a href="#">Pemilik</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
             </ol>
@@ -20,7 +19,7 @@
                     <div class="card-body">
                         <div class="stats-info">
                             <h5 class="card-title"><span class="stats-change stats-change-success"> Acara</span></h5>
-                            <p class="stats-text">Acara saat ini</p>
+                            <p class="stats-text">Total Pembelian Tiket</p>
                         </div>
                     </div>
                 </div>
@@ -30,7 +29,7 @@
                     <div class="card-body">
                         <div class="stats-info">
                             <h5 class="card-title"><span class="stats-change stats-change-success"> Tiket</span></h5>
-                            <p class="stats-text">Total tiket</p>
+                            <p class="stats-text">Stok Tiket</p>
                         </div>
                     </div>
                 </div>
