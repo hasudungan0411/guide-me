@@ -10,6 +10,7 @@ class Blog extends Model
     use HasFactory;
 
     protected $table = 'blog';
+    protected $primaryKey = 'id_blog';
 
     protected $fillable = [
         'kategori_id',

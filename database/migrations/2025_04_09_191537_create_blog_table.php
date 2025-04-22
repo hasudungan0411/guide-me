@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('gambar')->nullable();
             $table->date('tanggal')->nullable();
             $table->string('slug')->nullable();
+            $table->timestamps();
 
             // relasi ke dalam blog 
             $table->foreign('kategori_id')->references('id_kategori')->on('kategori')->onDelete('cascade');
