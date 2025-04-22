@@ -10,4 +10,9 @@ class layoutscontroller extends Controller
     {
         return view('layouts.admin');
     }
+
+    public function wisatawan() 
+    {
+        return view('layouts.wisatawan');
+    }
 }

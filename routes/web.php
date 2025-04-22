@@ -11,6 +11,7 @@ use App\Http\Controllers\SaranController;
 use App\Http\Controllers\WisatawanController;
 use App\Http\Controllers\PemilikwisataController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -58,8 +59,10 @@ Route::middleware(['admin'])->group(function () {
 });
 
 
-// Rute login user
+// Rute login wisatawan
+Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
 
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
 
