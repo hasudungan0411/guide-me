@@ -184,25 +184,21 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" placeholder="Contoh: email@gmail.com" required />
         </div>
 
-        <!-- Password -->
         <div class="form-group">
           <label for="password">Kata Sandi:</label>
           <input type="password" id="password" name="password" placeholder="Kata Sandi" required />
         </div>
 
-        <!-- Konfirmasi Password -->
         <div class="form-group">
           <label for="password_confirmation">Konfirmasi Kata Sandi:</label>
           <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required />
         </div>
 
-        <!-- Lokasi (Hanya muncul jika Pemilik Wisata) -->
         <div id="lokasi-container" class="hidden">
           <div class="form-group">
             <label for="lokasi">Lokasi:</label>
@@ -210,18 +206,15 @@
           </div>
         </div>
 
-        <!-- Tombol Daftar -->
         <button class="btn-submit" type="submit">Daftar</button>
       </form>
 
       <script>
-        // Menangani perubahan pada field peran
         const peranSelect = document.getElementById('peran');
         const namaLengkapContainer = document.getElementById('nama-lengkap-container');
         const lokasiContainer = document.getElementById('lokasi-container');
 
         peranSelect.addEventListener('change', function () {
-          // Menyembunyikan Nama Lengkap dan Lokasi sesuai dengan peran
           if (this.value === 'wisatawan') {
             namaLengkapContainer.classList.remove('hidden');
             lokasiContainer.classList.add('hidden');
@@ -229,7 +222,6 @@
             namaLengkapContainer.classList.add('hidden');
             lokasiContainer.classList.remove('hidden');
           } else {
-            // Jika tidak ada peran yang dipilih, sembunyikan keduanya
             namaLengkapContainer.classList.add('hidden');
             lokasiContainer.classList.add('hidden');
           }
