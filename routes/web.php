@@ -58,9 +58,14 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('pemilik-wisata', PemilikwisataController::class);
 });
 
-
 // Rute login wisatawan
 Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
+
+// Rute register user dan pemilik wisata
+Route::get('/register', [AuthController::class, 'showregister']);
+Route::post('/register', [AuthController::class, 'register'])->name('register');
+
+// Rute login user
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -69,7 +74,6 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // Rute login pemilik destinasi wisata
 
-Route::get('/pemilik/register', [AuthController::class, 'showregister'])->name('pemilik.register');
 Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
 Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
 
@@ -78,7 +82,4 @@ Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempat
 Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
 Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
 Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
-
-
-
 

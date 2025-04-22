@@ -98,7 +98,7 @@
       font-size: 14px;
       margin-top: 10px;
       border-radius: 20px;
-      background:rgb(255, 255, 255);
+      background: rgb(255, 255, 255);
       border: 1.5px solid #4CAF50;
       font-weight: bold;
       font-size: 14px;
@@ -119,7 +119,7 @@
     }
 
     .hidden {
-      display: none;
+      display: none !important; /* Menyembunyikan elemen dengan display: none */
     }
 
     .btn-submit {
@@ -165,71 +165,92 @@
     <div class="right">
       <a class="back-link" href="#">&lt; Kembali</a>
       <h2>Daftar Akun!</h2>
-      <div class="form-group">
-        <label for="nama">Nama Lengkap:</label>
-        <input type="text" id="nama" placeholder="Nama lengkap" />
-      </div>
-      <div class="form-group">
-        <label for="peran">Peran:</label>
-        <select id="peran" name="peran">
-          <option value="">-- Pilih salah satu --</option>
-          <option value="wisatawan">Wisatawan</option>
-          <option value="pemilikwisata">Pemilik Wisata</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="Contoh: email@gmail.com" />
-      </div>
-      <div class="form-group">
-        <label for="password">Kata Sandi:</label>
-        <input type="password" id="password" placeholder="Kata Sandi">
-      </div>
-      <div class="form-group">
-        <label for="confirm-password">Konfirmasi Kata Sandi:</label>
-        <input type="password" id="confirm-password" placeholder="Konfirmasi Kata Sandi">
-      </div>
-      <div id="inputTambahan" class="hidden">
-        <div class="input-group">
-          <label>Lokasi:</label>
-          <input type="text" placeholder="Lokasi">
+      <form method="POST" action="{{ route('register') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+        <div class="form-group">
+          <label for="peran">Peran:</label>
+          <select id="peran" name="peran" required>
+            <option value="">-- Pilih salah satu --</option>
+            <option value="wisatawan">Wisatawan</option>
+            <option value="pemilikwisata">Pemilik Wisata</option>
+          </select>
         </div>
-      </div>
-      <button class="btn-submit" onclick="register()">Daftar</button>
-    </div>
-  </div>
 
-  <script>
-    function register() {
-      const nama = document.getElementById("nama").value;
-      const peran = document.getElementById("peran").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirm-password").value;
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Contoh: email@gmail.com" required />
+        </div>
 
-      if (!nama || !peran || !email || !password || !confirmPassword) {
-        alert("Mohon lengkapi semua field.");
-        return;
-      }
+        <div id="nama-lengkap-container" class="hidden">
+          <div class="form-group">
+            <label for="nama">Nama Lengkap:</label>
+            <input type="text" id="nama" name="nama" placeholder="Nama lengkap" required />
+          </div>
+        </div>
 
-      if (password !== confirmPassword) {
-        alert("Konfirmasi kata sandi tidak cocok.");
-        return;
-      }
+        <div id="lokasi-container" class="hidden">
+          <div class="form-group">
+            <label for="lokasi">Lokasi:</label>
+            <input type="text" id="lokasi" name="lokasi" placeholder="Lokasi" />
+          </div>
+        </div>       
 
-      alert("Pendaftaran berhasil!\nSelamat datang, " + nama + "!");
-    }
+        <div class="form-group">
+          <label for="no_hp">Nomor HP:</label>
+          <input type="text" id="no_hp" name="no_hp" placeholder="Nomor HP" required />
+        </div>
 
-    const selectElement = document.getElementById('peran');
-    const inputTambahan = document.getElementById('inputTambahan');
+        <div class="form-group">
+          <label for="password">Kata Sandi:</label>
+          <input type="password" id="kata_sandi" name="kata_sandi" placeholder="Kata Sandi" required />
+        </div>
 
-    selectElement.addEventListener('change', function () {
-      if (this.value === 'pemilikwisata') {
-        inputTambahan.classList.remove('hidden');
-      } else {
-        inputTambahan.classList.add('hidden');
-      }
-    });
-  </script>
+        <div class="form-group">
+          <label for="password_confirmation">Konfirmasi Kata Sandi:</label>
+          <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required />
+        </div>
+
+        <button class="btn-submit" type="submit">Daftar</button>
+      </form>
+
+      <script>
+        function register() {
+          const nama = document.getElementById("nama").value;
+          const peran = document.getElementById("peran").value;
+          const email = document.getElementById("email").value;
+          const kata_sandi = document.getElementById("kata_sandi").value;
+          const confirmPassword = document.getElementById("confirm-password").value;
+
+          if (!nama || !peran || !email || !password || !confirmPassword) {
+            alert("Mohon lengkapi semua field.");
+            return;
+          }
+
+          if (password !== confirmPassword) {
+            alert("Konfirmasi kata sandi tidak cocok.");
+            return;
+          }
+
+          alert("Pendaftaran berhasil!\nSelamat datang, " + nama + "!");
+        }
+
+        const peranSelect = document.getElementById('peran');
+        const namaLengkapContainer = document.getElementById('nama-lengkap-container');
+        const lokasiContainer = document.getElementById('lokasi-container');
+
+        peranSelect.addEventListener('change', function () {
+          if (this.value === 'wisatawan') {
+            namaLengkapContainer.classList.remove('hidden');
+            lokasiContainer.classList.add('hidden');
+          } else if (this.value === 'pemilikwisata') {
+            namaLengkapContainer.classList.add('hidden');
+            lokasiContainer.classList.remove('hidden');
+          } else {
+            namaLengkapContainer.classList.add('hidden');
+            lokasiContainer.classList.add('hidden');
+          }
+        });
+      </script>
 </body>
 </html>
