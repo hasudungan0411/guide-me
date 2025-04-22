@@ -24,11 +24,12 @@
       display: flex;
       width: 1000px;
       max-width: 95%;
-      height: 550px;
       background-color: white;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      flex-direction: row; 
+      flex-wrap: wrap;     
     }
 
     .left {
@@ -91,12 +92,34 @@
       margin-bottom: 5px;
     }
 
+    select {
+      width: 100%;
+      padding: 10px;
+      font-size: 14px;
+      margin-top: 10px;
+      border-radius: 20px;
+      background:rgb(255, 255, 255);
+      border: 1.5px solid #4CAF50;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    select:hover {
+      border-color: #888;
+      background-color: #4CAF50;
+    }
+
     input {
       width: 100%;
       padding: 10px;
       border-radius: 20px;
       border: 1.5px solid #4CAF50;
       outline: none;
+    }
+
+    .hidden {
+      display: none;
     }
 
     .btn-submit {
@@ -148,7 +171,11 @@
       </div>
       <div class="form-group">
         <label for="peran">Peran:</label>
-        <input type="text" id="peran" placeholder="Contoh: Wisatawan/Pemilik Destinasi Wisata" />
+        <select id="peran" name="peran">
+          <option value="">-- Pilih salah satu --</option>
+          <option value="wisatawan">Wisatawan</option>
+          <option value="pemilikwisata">Pemilik Wisata</option>
+        </select>
       </div>
       <div class="form-group">
         <label for="email">Email:</label>
@@ -156,11 +183,17 @@
       </div>
       <div class="form-group">
         <label for="password">Kata Sandi:</label>
-        <input type="password" id="password" />
+        <input type="password" id="password" placeholder="Kata Sandi">
       </div>
       <div class="form-group">
         <label for="confirm-password">Konfirmasi Kata Sandi:</label>
-        <input type="password" id="confirm-password" />
+        <input type="password" id="confirm-password" placeholder="Konfirmasi Kata Sandi">
+      </div>
+      <div id="inputTambahan" class="hidden">
+        <div class="input-group">
+          <label>Lokasi:</label>
+          <input type="text" placeholder="Lokasi">
+        </div>
       </div>
       <button class="btn-submit" onclick="register()">Daftar</button>
     </div>
@@ -186,6 +219,17 @@
 
       alert("Pendaftaran berhasil!\nSelamat datang, " + nama + "!");
     }
+
+    const selectElement = document.getElementById('peran');
+    const inputTambahan = document.getElementById('inputTambahan');
+
+    selectElement.addEventListener('change', function () {
+      if (this.value === 'pemilikwisata') {
+        inputTambahan.classList.remove('hidden');
+      } else {
+        inputTambahan.classList.add('hidden');
+      }
+    });
   </script>
 </body>
 </html>

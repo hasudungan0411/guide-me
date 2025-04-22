@@ -7,8 +7,8 @@
     <div class="page-info">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Apps</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Tempat Wisa</li>
+                <li class="breadcrumb-item"><a href="#">Pemilik</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Tempat Wisata</li>
             </ol>
         </nav>
     </div>
@@ -18,7 +18,7 @@
             <div class="col">
                 <div class="card" >
                     <div class="card-body">
-                        <table border="1" cellpadding="10" cellspacing="0">
+                        <table id="zero-conf" class="display" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>ID</th>
