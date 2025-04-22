@@ -27,12 +27,12 @@ class Destination extends Model
         'long_desk',
         'click_count',
     ];
-
-<<<<<<< HEAD
+    
     public function kategori()
     {
         return $this->belongsTo(kategori::class,'kategori_id', 'id_kategori');
-=======
+    }
+
     public function acara()
     {
         return $this->hasMany(Acara::class, 'ID_Wisata');
@@ -41,6 +41,5 @@ class Destination extends Model
     public function pemilikwisata()
     {
         return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata','tujuan');
->>>>>>> 75ee8f1 (Commit pertama)
     }
 }

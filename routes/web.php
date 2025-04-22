@@ -7,6 +7,9 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GaleriController;
+use App\Http\Controllers\SaranController;
+use App\Http\Controllers\WisatawanController;
+use App\Http\Controllers\PemilikwisataController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,9 +27,9 @@ Route::get('/', [AdminController::class, 'showlogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.proses');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-Route::middleware(['admin'])->group(function() {
+Route::middleware(['admin'])->group(function () {
     Route::get('/admin', [layoutscontroller::class, 'admin'])->name('layouts.admin');
-    
+
     Route::get('/destinasi/index', [DestinasiController::class, 'index'])->name('destinasi.index');
     Route::get('/destinasi/create', [DestinasiController::class, 'create'])->name('destinasi.create');
     Route::post('/destinasi/store', [DestinasiController::class, 'store'])->name('destinasi.store');
@@ -37,9 +40,20 @@ Route::middleware(['admin'])->group(function() {
 
     Route::resource('kategori', KategoriController::class);
 
-    Route::resource('blog', BlogController::class);
+    Route::resource('blog', BlogController::class)->parameters([
+        'blog' => 'slug'
+    ]);
 
     Route::resource('galeri', GaleriController::class);
+
+    // Routes untuk Saran Tempat Wisata
+    Route::resource('saran', SaranController::class);
+
+    // Routes untuk Kelola Wisatawan
+    Route::resource('wisatawan', WisatawanController::class);
+
+    // Routes untuk Kelola Pemilik Wisata
+    Route::resource('pemilik-wisata', PemilikwisataController::class);
 });
 
 
@@ -56,6 +70,3 @@ Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logo
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
 Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
 Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
-
-
-

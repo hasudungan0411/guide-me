@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\kategori;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -38,7 +39,7 @@ class BlogController extends Controller
             'deskripsi' => 'required|string',
             'gambar' => 'required|image',
             'tanggal' => 'required|date',
-            'slug' => 'required|string|max:255'
+            // 'slug' => 'required|string|max:255'
         ]);
 
         // simpan gambar dan ambil nama file nya
@@ -52,7 +53,7 @@ class BlogController extends Controller
             'deskripsi' => $validatedData['deskripsi'],
             'gambar' => $gambar,
             'tanggal' => $validatedData['tanggal'],
-            'slug' => $validatedData['slug']
+            'slug' => Str::slug($validatedData['judul'])
         ]);
 
         return redirect()->route('blog.index')->with('success', 'Berhasil Menambahkan Blog');
@@ -61,9 +62,9 @@ class BlogController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        $blog = Blog::with('kategori')->findOrFail($id);
+        $blog = Blog::with('kategori')->where('slug', $slug)->firstOrFail();
         return view('blog.show', compact('blog'));
     }
 
@@ -89,7 +90,7 @@ class BlogController extends Controller
             'deskripsi' => 'required|string',
             'gambar' => 'required|image',
             'tanggal' => 'required|date',
-            'slug' => 'required|string|max:255'
+            // 'slug' => 'required|string|max:255'
         ]);
 
         // mencari blog berdasarkan id 
@@ -100,7 +101,7 @@ class BlogController extends Controller
         $blog->short_desk = $validatedData['short_desk'];
         $blog->deskripsi = $validatedData['deskripsi'];
         $blog->tanggal = $validatedData['tanggal'];
-        $blog->slug = $validatedData['slug'];
+        $blog->slug = Str::slug($validatedData['judul']);
 
         // mengambil gambarnya 
         if ($request->hasfile('gambar')) {
