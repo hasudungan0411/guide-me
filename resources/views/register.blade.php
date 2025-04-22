@@ -177,6 +177,11 @@
           </select>
         </div>
 
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Contoh: email@gmail.com" required />
+        </div>
+
         <div id="nama-lengkap-container" class="hidden">
           <div class="form-group">
             <label for="nama">Nama Lengkap:</label>
@@ -184,10 +189,12 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder="Contoh: email@gmail.com" required />
-        </div>
+        <div id="lokasi-container" class="hidden">
+          <div class="form-group">
+            <label for="lokasi">Lokasi:</label>
+            <input type="text" id="lokasi" name="lokasi" placeholder="Lokasi" />
+          </div>
+        </div>       
 
         <div class="form-group">
           <label for="password">Kata Sandi:</label>
@@ -197,13 +204,6 @@
         <div class="form-group">
           <label for="password_confirmation">Konfirmasi Kata Sandi:</label>
           <input type="password" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Kata Sandi" required />
-        </div>
-
-        <div id="lokasi-container" class="hidden">
-          <div class="form-group">
-            <label for="lokasi">Lokasi:</label>
-            <input type="text" id="lokasi" name="lokasi" placeholder="Lokasi" />
-          </div>
         </div>
 
         <button class="btn-submit" type="submit">Daftar</button>
