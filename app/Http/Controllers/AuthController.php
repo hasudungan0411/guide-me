@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'peran'    => 'required|in:wisatawan,pemilik_wisata',
+            'peran'    => 'required|in:wisatawan,pemilikwisata',
             'nama'     => 'nullable|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'no_hp'    => 'required|string|max:15',
@@ -53,9 +53,11 @@ class AuthController extends Controller
             ]);
         }
 
-        return response()->json([
-            'message' => 'User registered successfully as ' . $request->peran,
-            'user'    => $user
-        ], 201);
+        return view('register');
+
+        // return response()->json([
+        //     'message' => 'User registered successfully as ' . $request->peran,
+        //     'user'    => $user
+        // ], 201);
     }
 }

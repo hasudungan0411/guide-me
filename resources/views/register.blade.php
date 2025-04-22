@@ -185,7 +185,7 @@
         <div id="nama-lengkap-container" class="hidden">
           <div class="form-group">
             <label for="nama">Nama Lengkap:</label>
-            <input type="text" id="nama" name="nama" placeholder="Nama lengkap" required />
+            <input type="text" id="nama" name="nama" placeholder="Nama lengkap" />
           </div>
         </div>
 
