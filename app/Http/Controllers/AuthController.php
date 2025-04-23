@@ -27,7 +27,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'peran'    => 'required|in:wisatawan,pemilikwisata',
             'nama'     => 'nullable|string|max:255',
-            'email'    => 'required|email|unique:users,email',
+            'email'    => 'required|email|max:255',
             'no_hp'    => 'required|string|max:15',
             'password' => 'required|string|min:6|confirmed',
             'nama_wisata'  => 'nullable|string|max: 255'
@@ -50,6 +50,7 @@ class AuthController extends Controller
                 'Lokasi'    => $request->lokasi,
                 'Nomor_HP'   => $request->no_hp,
                 'Kata_Sandi' => Hash::make($request->password),
+                'Nama_Wisata'  => $request->nama_wisata
             ]);
         }
 
