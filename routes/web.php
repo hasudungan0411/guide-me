@@ -7,23 +7,13 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GaleriController;
-use App\Http\Controllers\SaranController;
-use App\Http\Controllers\WisatawanController;
-use App\Http\Controllers\PemilikwisataController;
+use App\Http\Controllers\KelolaSaranController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KelolaAkunController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
 // Rute login admin
 Route::get('/', [AdminController::class, 'showlogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.proses');
@@ -48,33 +38,30 @@ Route::middleware(['admin'])->group(function () {
 
     Route::resource('galeri', GaleriController::class);
 
-    // Routes untuk Saran Tempat Wisata
-    Route::resource('saran', SaranController::class);
+    // Routes untuk kolola Saran Tempat Wisata
+    Route::get('/kelola-saran-wisata', [KelolaSaranController::class, 'saran'])->name('kelola_saranwisata.index');
 
-    // Routes untuk Kelola Wisatawan
-    Route::resource('wisatawan', WisatawanController::class);
-
-    // Routes untuk Kelola Pemilik Wisata
-    Route::resource('pemilik-wisata', PemilikwisataController::class);
+    // Rute Kelola Akun 
+    Route::get('/kelola-akun-pemilik-wisata', [KelolaAkunController::class, 'pemilik_wisata'])->name('akun_pemilik-wisata.index');
+    Route::get('/kelola-akun-wisatawan', [KelolaAkunController::class, 'wisatawan'])->name('akun_wisatawan.index');
 });
 
 // Rute login wisatawan
-Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
+Route::get('/wisatawan', [HomeController::class, 'wisatawan'])->name('layouts.wisatawan');
+Route::get('/wisatawan/home', [HomeController::class, 'index'])->name('wisatawan.home');
+Route::get('/wisatawan/destinasi', [HomeController::class, 'destinasi'])->name('wisatawan.destinasi');
+Route::get('/wisatawan/destinasi/detail_destinasi/{id}', [HomeController::class, 'detail_destinasi'])->name('wisatawan.detail_destinasi');
+Route::get('/wisatawan/blog', [HomeController::class, 'blog'])->name('wisatawan.blog');
+Route::get('/wisatawan//blog/   blog-kategori/{id}', [HomeController::class, 'kategori'])->name('wisatawan.blog-kategori');
+Route::get('/wisatawan/galeri', [HomeController::class, 'galeri'])->name('wisatawan.galeri');
 
-// Rute register user dan pemilik wisata
+// Rute register wisatawan dan pemilik wisata
 Route::get('/register', [AuthController::class, 'showregister']);
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
-// Rute login user
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-
-
 
 // Rute login pemilik destinasi wisata
-
-Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
+Route::get('/pemilik/login', [PemilikController::class, 'showlogin'])->name('pemilik.login');
 Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
 
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
