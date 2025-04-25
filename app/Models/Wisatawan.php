@@ -14,6 +14,7 @@ class Wisatawan extends Authenticatable implements MustVerifyEmail
 
     
     protected $table = 'wisatawan';
+    protected $guard = 'wisatawan';
     protected $fillable = [
         'Email',
         'Nama',

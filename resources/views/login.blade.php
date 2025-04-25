@@ -24,7 +24,7 @@
       display: flex;
       max-width: 900px;
       width: 95%;
-      height: 500px;
+      height: 650px;
       background-color: white;
       border-radius: 12px;
       overflow: hidden;
@@ -75,7 +75,8 @@
     }
 
     input[type="email"],
-    input[type="password"] {
+    input[type="password"], 
+    select {
       width: 100%;
       padding: 12px 20px;
       border-radius: 20px;
@@ -244,19 +245,30 @@
     <div class="left">
       <a href="#">&lt; Kembali</a>
       <h2>Masuk!</h2>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input type="email" id="email" placeholder="email@example.com" />
-        <div class="error-message" id="email-error"></div>
-      </div>
-      <div class="form-group">
-        <label for="password">Kata Sandi:</label>
-        <input type="password" id="password" placeholder="********" />
-        <div class="error-message" id="password-error"></div>
-      </div>
-      <div class="forgot-password">Lupa Kata Sandi?</div>
-      <button onclick="login()">Masuk</button>
-      <div class="register">Belum Punya Akun? <a href="#">Daftar</a></div>
+      <form method="POST" action="{{ route('login') }}">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="email@example.com" />
+          <div class="error-message" id="email-error"></div>
+        </div>
+        <div class="form-group">
+          <label for="password">Kata Sandi:</label>
+          <input type="password" id="password" placeholder="********" />
+          <div class="error-message" id="password-error"></div>
+        </div>
+        <div class="form-group">
+            <label for="peran">Peran:</label>
+            <select id="peran" name="peran" required>
+              <option value="">-- Pilih salah satu --</option>
+              <option value="wisatawan">Wisatawan</option>
+              <option value="pemilikwisata">Pemilik Wisata</option>
+            </select>
+          </div>
+        <div class="forgot-password">Lupa Kata Sandi?</div>
+        <button class="btn-submit" type="submit">Masuk</button>
+      </form>
+      <div class="register">Belum Punya Akun? <a href="{{ route('register') }}">Daftar</a></div>
       <div class="google-login" onclick="googleLogin()">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" alt="Google logo" />
         Login dengan Google

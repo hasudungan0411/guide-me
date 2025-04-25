@@ -58,30 +58,37 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('pemilik-wisata', PemilikwisataController::class);
 });
 
-// Rute login wisatawan
-Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
 
 // Rute register user dan pemilik wisata
 Route::get('/user/register', [AuthController::class, 'showregister']);
 Route::post('/user/register', [AuthController::class, 'register'])->name('register');
 
 // Rute login user
+Route::get('/pengguna', [AuthController::class, 'showlogin'])->name('user.login');
+Route::post('/pengguna/login', [AuthController::class, 'login'])->name('login');
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 
+//rute wisatawan
+Route::prefix('wisatawan')->middleware(['auth:wisatawan'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
 
 
 // Rute login pemilik destinasi wisata
 
-Route::get('/pemilik', [PemilikController::class, 'showlogin'])->name('pemilik.login');
-Route::get('/pemilik', [PemilikController::class, 'logout'])->name('pemilik.logout');
 
-Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
-Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
-Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
-Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
-Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+
+Route::prefix('pemilik')->middleware(['auth:pemilikwisata'])->group(function () {
+    Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
+    Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+    Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+    Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+    Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+    Route::get('/logout', [PemilikController::class, 'logout'])->name('pemilik.logout');
+});
+
+
 
 
 Auth::routes(['verify' => true]);

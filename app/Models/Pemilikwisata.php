@@ -14,6 +14,8 @@ class Pemilikwisata extends Authenticatable implements MustVerifyEmail
 
     protected $table = 'pemilik_wisata';
 
+    protected $guard = 'pemilik_wisata';
+
     protected $fillable = [
         'Email',
         'Kata_Sandi',
