@@ -17,10 +17,12 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        $guards = empty($guards) ? [null] : $guards;
+        $guards = empty($guards) ? ['pemilik_wisata', 'wisatawan'] : $guards;
 
+        // Looping untuk memeriksa jika sudah ada yang terautentikasi
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                // Jika sudah login dengan salah satu guard, redirect ke halaman yang sesuai
                 return redirect(RouteServiceProvider::HOME);
             }
         }

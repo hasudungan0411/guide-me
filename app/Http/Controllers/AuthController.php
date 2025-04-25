@@ -8,6 +8,7 @@ use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 
 class AuthController extends Controller
@@ -44,6 +45,8 @@ class AuthController extends Controller
                 'Nomor_HP'   => $request->no_hp,
                 'Kata_Sandi' => Hash::make($request->password)
             ]);
+
+            Auth::guard('wisatawan')->login($user);
         } else {
             $user = PemilikWisata::create([
                 'Email'    => $request->email,
@@ -52,6 +55,8 @@ class AuthController extends Controller
                 'Kata_Sandi' => Hash::make($request->password),
                 'Nama_Wisata'  => $request->nama_wisata
             ]);
+
+            Auth::guard('pemilik_wisata')->login($user);
         }
 
         return view('register');

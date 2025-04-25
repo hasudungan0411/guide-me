@@ -62,8 +62,8 @@ Route::middleware(['admin'])->group(function () {
 Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
 
 // Rute register user dan pemilik wisata
-Route::get('/register', [AuthController::class, 'showregister']);
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/user/register', [AuthController::class, 'showregister']);
+Route::post('/user/register', [AuthController::class, 'register'])->name('register');
 
 // Rute login user
 
@@ -83,3 +83,5 @@ Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik']
 Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
 Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
+
+Auth::routes(['verify' => true]);

@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'wisatawan',
         'passwords' => 'users',
     ],
 
@@ -36,9 +36,13 @@ return [
     */
 
     'guards' => [
-        'web' => [
+        'wisatawan' => [
+        'driver' => 'session',
+        'provider' => 'wisatawan',
+        ],
+        'pemilik_wisata' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'pemilik_wisata',
         ],
     ],
 
@@ -60,9 +64,13 @@ return [
     */
 
     'providers' => [
-        'users' => [
+        'wisatawan' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'model' => App\Models\Wisatawan::class,
+        ],
+        'pemilik_wisata' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\PemilikWisata::class,
         ],
 
         // 'users' => [
