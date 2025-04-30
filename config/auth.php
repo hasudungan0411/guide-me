@@ -14,7 +14,11 @@ return [
     */
 
     'defaults' => [
+<<<<<<< HEAD
         'guard' => 'wisatawan',
+=======
+        'guard' => null,
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
         'passwords' => 'wisatawan',
     ],
 
@@ -39,6 +43,13 @@ return [
         'wisatawan' => [
             'driver' => 'session',
             'provider' => 'wisatawan',
+<<<<<<< HEAD
+=======
+        ],
+        'pemilik_wisata' => [
+            'driver' => 'session',
+            'provider' => 'pemilik_wisata',
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
         ],
         'pemilik_wisata' => [
             'driver' => 'session',
@@ -70,7 +81,11 @@ return [
         ],
         'pemilik_wisata' => [
             'driver' => 'eloquent',
+<<<<<<< HEAD
             'table' => App\Models\Pemilikwisata::class,
+=======
+            'model' => App\Models\PemilikWisata::class,
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
         ],
     ],
 
@@ -96,9 +111,21 @@ return [
     'passwords' => [
         'wisatawan' => [
             'provider' => 'wisatawan',
+<<<<<<< HEAD
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
+=======
+            'table' => 'password_resets',  
+            'expire' => 60,  
+            'throttle' => 60,  
+        ],
+        'pemilikwisata' => [
+            'provider' => 'pemilikwisata',
+            'table' => 'password_resets', 
+            'expire' => 60,  
+            'throttle' => 60, 
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
         ],
     ],
 

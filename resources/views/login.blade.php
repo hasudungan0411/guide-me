@@ -245,6 +245,7 @@
     <div class="left">
       <a href="#">&lt; Kembali</a>
       <h2>Masuk!</h2>
+<<<<<<< HEAD
 
       @if ($errors->any())
         @foreach ($errors->all() as $error)
@@ -264,11 +265,22 @@
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" placeholder="email@example.com" />
+=======
+      <form method="POST" action="{{ route('login') }}">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" placeholder="email@example.com" />
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
           <div class="error-message" id="email-error"></div>
         </div>
         <div class="form-group">
           <label for="password">Kata Sandi:</label>
+<<<<<<< HEAD
           <input type="password" id="password" name="password" placeholder="********" />
+=======
+          <input type="password" id="password" placeholder="********" />
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
           <div class="error-message" id="password-error"></div>
         </div>
         <div class="form-group">

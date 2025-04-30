@@ -58,17 +58,26 @@ Route::middleware(['admin'])->group(function () {
     Route::resource('pemilik-wisata', PemilikwisataController::class);
 });
 
-// Rute login wisatawan
-Route::get('/wisatawan', [layoutscontroller::class, 'wisatawan'])->name('layouts.wisatawan');
 
 // Rute register user dan pemilik wisata
-Route::get('/register', [AuthController::class, 'showregister']);
-Route::post('/register', [AuthController::class, 'register'])->name('register');
+Route::get('/user/register', [AuthController::class, 'showregister']);
+Route::post('/user/register', [AuthController::class, 'register'])->name('register');
 
+<<<<<<< HEAD
 
 // Rute pengguna
+=======
+// Rute login user
+Route::get('/pengguna', [AuthController::class, 'showlogin'])->name('user.login');
+Route::post('/pengguna/login', [AuthController::class, 'login'])->name('login');
+>>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
 
 
+
+//rute wisatawan
+Route::prefix('wisatawan')->middleware(['auth:wisatawan'])->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+});
 
 
 Route::get('/login', [AuthController::class, 'showlogin'])->name('login');
@@ -99,3 +108,16 @@ Route::prefix('pemilik')->middleware('pemilikwisata')->group(function () {
 
 
 
+Route::prefix('pemilik')->middleware(['auth:pemilikwisata'])->group(function () {
+    Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
+    Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+    Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+    Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+    Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+    Route::get('/logout', [PemilikController::class, 'logout'])->name('pemilik.logout');
+});
+
+
+
+
+Auth::routes(['verify' => true]);
