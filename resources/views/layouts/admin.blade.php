@@ -53,25 +53,25 @@
                         </a>
                     </li>
 
-                    <li class="{{ Request::routeIs('saran.*') ? 'active-page' : '' }}">
-                        <a href="{{ url('/saran') }}" class="{{ Request::routeIs('saran.*') ? 'active' : '' }}">
+                    <li class="{{ Request::routeIs('kelola_saranwisata.*') ? 'active-page' : '' }}">
+                        <a href="{{ url('/kelola-saran-wisata') }}" class="{{ Request::routeIs('kelola-saranwisata.*') ? 'active' : '' }}">
                             <i class="material-icons-outlined">feedback</i>Kelola Saran Wisata
                         </a>
                     </li>
 
                     <li class="sidebar-title">Akun Pengguna</li>
                     <li
-                        class="{{ Request::routeIs('wisatawan.*') || Request::routeIs('pemilik-wisata.*') ? 'active-page' : '' }}">
+                        class="{{ Request::routeIs('akun_wisatawan.*') || Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
                         <a href="#"><i class="material-icons">people</i>Kelola Akun<i
                                 class="material-icons has-sub-menu">add</i></a>
                         <ul class="sub-menu">
-                            <li class="{{ Request::routeIs('wisatawan.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/wisatawan') }}"
-                                    class="{{ Request::routeIs('wisatawan.*') ? 'active' : '' }}">Wisatawan</a>
+                            <li class="{{ Request::routeIs('akun_wisatawan.*') ? 'active-page' : '' }}">
+                                <a href="{{ url('/kelola-akun-wisatawan') }}"
+                                    class="{{ Request::routeIs('akun_wisatawan.*') ? 'active' : '' }}">Wisatawan</a>
                             </li>
-                            <li class="{{ Request::routeIs('pemilik-wisata.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/pemilik-wisata') }}"
-                                    class="{{ Request::routeIs('pemilik-wisata.*') ? 'active' : '' }}">Pemilik Wisata</a>
+                            <li class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
+                                <a href="{{ url('/kelola-akun-pemilik-wisata') }}"
+                                    class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active' : '' }}">Pemilik Wisata</a>
                             </li>
                         </ul>
                     </li>
@@ -95,7 +95,6 @@
                     </li>
                 </ul>
             </div>
-
         </div>
 
         <!-- Page Container -->

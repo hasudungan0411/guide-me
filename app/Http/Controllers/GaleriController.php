@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\galeri;
+use Illuminate\Support\Facades\Storage;
 
 class GaleriController extends Controller
 {
@@ -60,7 +61,18 @@ class GaleriController extends Controller
     {
         // mengambil dan menghapus gambar 
         $galeri = galeri::findOrFail($id);
+
+        // hapus gambar dari storage 
+        $gambarfileds = ['gambar'];
+        foreach ($gambarfileds as $gambar) {
+            if ($galeri->$gambar) {
+                Storage::disk('public')->delete('images/galeri/' . $galeri->$gambar);
+            }
+        }
+
+        // hapus galeri dari db 
         $galeri->delete();
+        
         return redirect()->route('galeri.index')->with('success', 'Berhasil menghapus gambar');
     }
 }

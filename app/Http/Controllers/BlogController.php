@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\kategori;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class BlogController extends Controller
 {
@@ -121,7 +122,17 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
+        // ambil ID nya 
         $blog = Blog::findOrFail($id);
+
+        // hapus gambar dari storage 
+        $gambarfields = ['gambar'];
+        foreach ($gambarfields as $gambar) {
+            if ($blog->$gambar) {
+                Storage::disk('public')->delete('images/blog/' . $blog->$gambar);
+            }
+        }
+
         $blog->delete();
         return redirect()->route('blog.index')->with('success', 'Berhasil Menghapus Blog');
     }

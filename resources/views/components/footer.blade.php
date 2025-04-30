@@ -14,7 +14,8 @@
                 <div class="col-lg-9 col-md-6">
                     <!--=== Footer Nav ===-->
                     <div class="footer-nav float-lg-end">
-                        <p>Copy&copy;2023 <span style="color: #F7921E;">GuideME</span>, All Rights Reserved</p>
+                        <p>Copy&copy;2025 <span style="color: #F7921E;">GuideME</span>, All Rights Reserved</p>
+                        <p><span style="color: aqua"><i>Version</i> 1.2</span></p>
                     </div>
                 </div>
             </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\kategori;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class KategoriController extends Controller
 {
@@ -99,6 +100,14 @@ class KategoriController extends Controller
     {
         // mencari kategori berdasarkan ID 
         $kategori = kategori::findOrFail($id);
+
+        // hapus gambar dari storage 
+        $gambarfields = ['gambar'];
+        foreach ($gambarfields as $gambar) {
+            if ($kategori->$gambar) {
+                Storage::disk('public')->delete('images/kategori/'. $kategori->$gambar);
+            }
+        }
 
         $kategori->delete();
 

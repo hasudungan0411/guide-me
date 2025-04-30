@@ -22,6 +22,10 @@ class Blog extends Model
         'slug'
     ];
 
+    protected $casts = [
+        'tanggal' => 'datetime', # casting tanggal
+    ];
+
     public function kategori()
     {
         return $this->belongsTo(kategori::class, 'kategori_id', 'id_kategori');

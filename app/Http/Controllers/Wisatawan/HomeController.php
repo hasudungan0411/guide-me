@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\wisatawan;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Destination;
 use App\Models\Blog;
 use App\Models\galeri;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,6 @@ class HomeController extends Controller
         // ambil galerinya 
         $galery = Galeri::all();
 
-        return view('home', compact('destinations', 'popularDestinations', 'blogs', 'galery'));
+        return view('wisatawan.home', compact('destinations', 'popularDestinations', 'blogs', 'galery'));
     }
 }

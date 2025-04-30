@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Destination;
 use App\Models\kategori;
 use App\Models\Blog;
+use Illuminate\Support\Facades\Storage;
 
 class DestinasiController extends Controller
 {
@@ -220,6 +221,15 @@ class DestinasiController extends Controller
         // mencari destinasi menggunakan ID  
         $destination = Destination::findOrFail($id);
 
+        // hapus gambar dari storage 
+        $gambarFields = ['gambar', 'gambar2', 'gambar3', 'gambar4', 'gambar5', 'gambarM'];
+        foreach ($gambarFields as $gambar) {
+            if ($destination->$gambar) {
+                Storage::disk('public')->delete('images/destinasi/' . $destination->$gambar);
+            }
+        }
+
+        // Hapus destinasi dari database
         $destination->delete();
 
         return redirect()->route('destinasi.index')->with('Success', 'Destinasi Berhasil Dihapus');
