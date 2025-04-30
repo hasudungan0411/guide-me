@@ -1,4 +1,4 @@
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -245,7 +245,6 @@
     <div class="left">
       <a href="#">&lt; Kembali</a>
       <h2>Masuk!</h2>
-<<<<<<< HEAD
 
       @if ($errors->any())
         @foreach ($errors->all() as $error)
@@ -258,43 +257,23 @@
       @if (Session::has('success'))
         <li>{{ Session::get('success') }}</li>
       @endif
-      
 
-      <form method="POST" action="{{ route('login.submit') }}">
+      <form method="POST" action="{{ route('pemilik.login_submit') }}">
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" placeholder="email@example.com" />
-=======
-      <form method="POST" action="{{ route('login') }}">
-      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <input type="email" id="email" placeholder="email@example.com" />
->>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
           <div class="error-message" id="email-error"></div>
         </div>
         <div class="form-group">
           <label for="password">Kata Sandi:</label>
-<<<<<<< HEAD
           <input type="password" id="password" name="password" placeholder="********" />
-=======
-          <input type="password" id="password" placeholder="********" />
->>>>>>> e85c0c8fc7ed4c07599dd37703c0e7f6d0794de3
           <div class="error-message" id="password-error"></div>
         </div>
-        <div class="form-group">
-            <label for="peran">Peran:</label>
-            <select id="peran" name="peran" required>
-              <option value="">-- Pilih salah satu --</option>
-              <option value="wisatawan">Wisatawan</option>
-              <option value="pemilikwisata">Pemilik Wisata</option>
-            </select>
-          </div>
         <div class="forgot-password">Lupa Kata Sandi?</div>
         <button class="btn-submit" type="submit">Masuk</button>
       </form>
-      <div class="register">Belum Punya Akun? <a href="{{ url('pengguna/register') }}">Daftar</a></div>
+      <div class="register">Belum Punya Akun? <a href="">Daftar</a></div>
       <div class="google-login" onclick="googleLogin()">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" alt="Google logo" />
         Login dengan Google
@@ -345,4 +324,4 @@
     }
   </script>
 </body>
-</html> --}}
+</html>

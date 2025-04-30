@@ -3,19 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Pemilikwisata extends Authenticatable implements MustVerifyEmail
+class Pemilikwisata extends Authenticatable
 {
     use HasFactory;
 
     protected $table = 'pemilik_wisata';
-
-    protected $guard = 'pemilik_wisata';
-
+    protected $primaryKey = 'ID_Pemilik_Wisata';
     protected $fillable = [
         'Email',
         'Kata_Sandi',
@@ -38,4 +33,3 @@ class Pemilikwisata extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Destination::class, 'tujuan', 'nama_wisata');
     }
 }
-

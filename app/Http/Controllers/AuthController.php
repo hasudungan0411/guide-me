@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-
 class AuthController extends Controller
 {
     public function showlogin()
@@ -45,6 +44,7 @@ class AuthController extends Controller
         ]);
     }
 
+
     public function showregister()
     {
         return view('register');
@@ -62,12 +62,12 @@ class AuthController extends Controller
             'nama_wisata'  => 'nullable|string|max:255',
             'lokasi'   => 'nullable|string|max:255', // Menambahkan lokasi untuk pemilik wisata
         ]);
-    
+
         // Jika validasi gagal
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
-    
+
         // Proses registrasi berdasarkan peran yang dipilih
         if ($request->peran === 'wisatawan') {
             // Menyimpan data wisatawan
@@ -77,13 +77,13 @@ class AuthController extends Controller
                 'Nomor_HP' => $request->no_hp,
                 'Kata_Sandi' => Hash::make($request->password),
             ]);
-    
+
             // Login sebagai wisatawan
             Auth::guard('wisatawan')->login($user);
-    
+
             // Mengarahkan setelah login
             return redirect()->route('home'); // Ganti dengan rute yang sesuai
-    
+
         } else {
             // Menyimpan data pemilik wisata
             $user = PemilikWisata::create([
@@ -93,13 +93,28 @@ class AuthController extends Controller
                 'Kata_Sandi' => Hash::make($request->password),
                 'Nama_Wisata' => $request->nama_wisata,
             ]);
-    
+
             // Login sebagai pemilik wisata
             Auth::guard('pemilik_wisata')->login($user);
-    
+
             // Mengarahkan setelah login
             return redirect()->route('home'); // Ganti dengan rute yang sesuai
         }
     }
-    
+
+    public function logout(Request $request)
+    {
+        // Ambil peran dari session
+        $peran = $request->session()->get('peran', 'wisatawan'); // Default ke wisatawan jika tidak ada
+
+        // Logout menggunakan guard berdasarkan peran
+        Auth::guard($peran)->logout();
+
+        // Hapus semua data session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect ke halaman login
+        return redirect()->route('login');
+    }
 }

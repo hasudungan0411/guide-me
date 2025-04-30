@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\KategoriController;
@@ -8,7 +9,6 @@ use App\Http\Controllers\layoutscontroller;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\KelolaSaranController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
@@ -18,10 +18,9 @@ use App\Http\Controllers\Wisatawan\ChatbotController as wisatawanChatbotControll
 use App\Http\Controllers\Wisatawan\AcaraController as wisatawanAcaraController;
 use App\Http\Controllers\Wisatawan\KategoriController as wisatawanKategoriController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 
 // Rute login admin
-Route::get('/', [AdminController::class, 'showlogin'])->name('admin.login');
+Route::get('/admin-login', [AdminController::class, 'showlogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.proses');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
@@ -60,36 +59,23 @@ Route::get('/wisatawan/blog', [wisatawanBlogController::class, 'blog'])->name('w
 Route::get('/wisatawan/blog/{slug}', [WisatawanBlogController::class, 'blogdetail'])->name('wisatawan.blog-detail');
 Route::get('/wisatawan/blog/blog-kategori/{id_kategori}', [WisatawanBlogController::class, 'blogKategori'])->name('wisatawan.blog-kategori');
 Route::get('/wisatawan/galeri', [wisatawanGaleriController::class, 'galeri'])->name('wisatawan.galeri');
-Route::get('//wisatawan/chatbot', [wisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
-Route::get('//wisatawan/acara', [wisatawanAcaraController::class, 'acara'])->name('wisatawan.acara');
-Route::get('//wisatawan/kategori/kategori-destinasi', [wisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
+Route::get('/wisatawan/chatbot', [wisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
+Route::get('/wisatawan/acara', [wisatawanAcaraController::class, 'acara'])->name('wisatawan.acara');
+Route::get('/wisatawan/kategori/kategori-destinasi', [wisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
 Route::get('/wisatawan/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
-Route::get('//wisatawan/kategori/kategori-blog', [wisatawanKategoriController::class, 'blog'])->name('wisatawan.kategori-blog');
-
-// Rute register wisatawan dan pemilik wisata
-Route::get('/register', [AuthController::class, 'showregister']);
-Route::post('/register/pengguna', [AuthController::class, 'register'])->name('register');
-
-// Rute login user
-Route::get('/login', [AuthController::class, 'showlogin'])->name('user.login');
-Route::post('/login/pengguna', [AuthController::class, 'login'])->name('login');
+Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::class, 'blog'])->name('wisatawan.kategori-blog');
 
 
 
-//rute wisatawan
-Route::prefix('wisatawan')->middleware(['auth:wisatawan'])->group(function () {
-    // Route::get('/home', [HomeController::class, 'index'])->name('home');
-});
+// Rute pemilik wisata
+Route::get('/pemilik/login', [PemilikController::class, 'login'])->name('pemilik.login');
+Route::post('/pemilik/login_submit', [PemilikController::class, 'login_submit'])->name('pemilik.login_submit');
+Route::get('/pemilik/logout', [PemilikController::class, 'logout'])->name('pemilik.logout');
 
+Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
+Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
-// Rute login pemilik destinasi wisata
-Route::prefix('pemilik')->middleware(['auth:pemilikwisata'])->group(function () {
-    Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
-    Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
-    Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
-    Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
-    Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
-    Route::get('/logout', [PemilikController::class, 'logout'])->name('pemilik.logout');
-});
-
-Auth::routes(['verify' => true]);
+Route::prefix('pemilik')->middleware('pemilikwisata')->group(function () {});
