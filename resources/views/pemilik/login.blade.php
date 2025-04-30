@@ -257,9 +257,8 @@
       @if (Session::has('success'))
         <li>{{ Session::get('success') }}</li>
       @endif
-      
 
-      <form method="POST" action="{{ route('login.submit') }}">
+      <form method="POST" action="{{ route('pemilik.login_submit') }}">
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <div class="form-group">
           <label for="email">Email:</label>
@@ -271,14 +270,6 @@
           <input type="password" id="password" name="password" placeholder="********" />
           <div class="error-message" id="password-error"></div>
         </div>
-        <div class="form-group">
-            <label for="peran">Peran:</label>
-            <select id="peran" name="peran" required>
-              <option value="">-- Pilih salah satu --</option>
-              <option value="wisatawan">Wisatawan</option>
-              <option value="pemilikwisata">Pemilik Wisata</option>
-            </select>
-          </div>
         <div class="forgot-password">Lupa Kata Sandi?</div>
         <button class="btn-submit" type="submit">Masuk</button>
       </form>

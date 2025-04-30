@@ -11,6 +11,8 @@ class Wisatawan extends Model
 
     
     protected $table = 'wisatawan';
+    protected $guard = 'wisatawan';
+    protected $primaryKey = 'ID_Wisatawan';
     protected $fillable = [
         'Email',
         'Nama',

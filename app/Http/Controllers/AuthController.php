@@ -8,14 +8,16 @@ use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Auth;
 
 
 class AuthController extends Controller
 {
-    public function login()
+    public function showlogin()
     {
-
+        return view('login');
     }
+    
 
     public function showregister()
     {
@@ -61,4 +63,21 @@ class AuthController extends Controller
         //     'user'    => $user
         // ], 201);
     }
+
+    public function logout(Request $request){
+        // Ambil peran dari session
+        $peran = $request->session()->get('peran', 'wisatawan'); // Default ke wisatawan jika tidak ada
+
+        // Logout menggunakan guard berdasarkan peran
+        Auth::guard($peran)->logout();
+
+        // Hapus semua data session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect ke halaman login
+        return redirect()->route('login');
 }
+}
+
+

@@ -10,7 +10,8 @@ class Pemilikwisata extends Model
     use HasFactory;
 
     protected $table = 'pemilik_wisata';
-
+    protected $guard = 'pemilik_wisata';
+    protected $primaryKey = 'ID_Pemilik_Wisata';
     protected $fillable = [
         'Email',
         'Kata_Sandi',
