@@ -72,10 +72,14 @@ Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::cl
 
 
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
-Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
-Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
-Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
-Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+
+Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+
+Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+Route::get('/pemilik/acara/create', [PemilikController::class, 'createacara'])->name('acara.create');
+
+Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
 
 // ======== AUTH WISATAWAN ========
