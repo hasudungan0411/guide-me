@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Pemilik Wisata</title>
+    <title>Login Wisatawan</title>
 </head>
 <body>
-    <h2>Login Pemilik Wisata</h2>
+    <h2>Login Wisatawan</h2>
 
-    <form action="{{ route('pemilikwisata.login') }}" method="POST">
+    <form action="{{ route('wisatawan.login') }}" method="POST">
         @csrf
         <div>
             <label for="email">Email</label>
@@ -31,6 +31,6 @@
         </div>
     </form>
 
-    <p>Belum punya akun? <a href="{{ route('pemilikwisata.register') }}">Daftar di sini</a></p>
+    <p>Belum punya akun? <a href="{{ route('wisatawan.register') }}">Daftar di sini</a></p>
 </body>
 </html>

@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Wisatawan extends Authenticatable implements MustVerifyEmail
+class Wisatawan extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -22,7 +21,6 @@ class Wisatawan extends Authenticatable implements MustVerifyEmail
     ];
 
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'Kata_Sandi' => 'hashed', // Untuk hashing password secara otomatis
     ];
 

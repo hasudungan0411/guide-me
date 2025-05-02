@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PemilikController;
@@ -18,6 +19,10 @@ use App\Http\Controllers\Wisatawan\ChatbotController as wisatawanChatbotControll
 use App\Http\Controllers\Wisatawan\AcaraController as wisatawanAcaraController;
 use App\Http\Controllers\Wisatawan\KategoriController as wisatawanKategoriController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\WisatawanAuthController as WisatawanAuthController;
+use App\Http\Controllers\Auth\PemilikWisataAuthController as PemilikWisataAuthController;
+use App\Http\Controllers\Auth\PemilikEmailVerificationController;
+use Illuminate\Support\Facades\Auth;
 
 // Rute login admin
 Route::get('/admin-login', [AdminController::class, 'showlogin'])->name('admin.login');
@@ -46,7 +51,7 @@ Route::middleware(['admin'])->group(function () {
     // Routes untuk kolola Saran Tempat Wisata
     Route::get('/kelola-saran-wisata', [KelolaSaranController::class, 'saran'])->name('kelola_saranwisata.index');
 
-    // Rute Kelola Akun 
+    // Rute Kelola Akun
     Route::get('/kelola-akun-pemilik-wisata', [KelolaAkunController::class, 'pemilik_wisata'])->name('akun_pemilik-wisata.index');
     Route::get('/kelola-akun-wisatawan', [KelolaAkunController::class, 'wisatawan'])->name('akun_wisatawan.index');
 });
@@ -66,16 +71,76 @@ Route::get('/wisatawan/kategori/destinasi/{id_kategori}', [WisatawanKategoriCont
 Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::class, 'blog'])->name('wisatawan.kategori-blog');
 
 
-
-// Rute pemilik wisata
-Route::get('/pemilik/login', [PemilikController::class, 'login'])->name('pemilik.login');
-Route::post('/pemilik/login_submit', [PemilikController::class, 'login_submit'])->name('pemilik.login_submit');
-Route::get('/pemilik/logout', [PemilikController::class, 'logout'])->name('pemilik.logout');
-
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
 Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
 Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
 Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
 Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
-Route::prefix('pemilik')->middleware('pemilikwisata')->group(function () {});
+
+// ======== AUTH WISATAWAN ========
+Route::prefix('wisatawan')->group(function () {
+    Route::get('/login', [WisatawanAuthController::class, 'showLogin'])->name('wisatawan.login');
+    Route::post('/login', [WisatawanAuthController::class, 'login']);
+    Route::get('/register', [WisatawanAuthController::class, 'showRegister'])->name('wisatawan.register');
+    Route::post('/register', [WisatawanAuthController::class, 'register']);
+    Route::post('/logout', [WisatawanAuthController::class, 'logout'])->name('wisatawan.logout');
+
+    Route::middleware(['auth:wisatawan'])->group(function () {
+        Route::get('/dashboard', fn() => view('wisatawan.dashboard'))->name('wisatawan.dashboard');
+    });
+});
+
+Route::prefix('pemilik')->group(function () {
+    // Login
+    Route::get('/login', [PemilikWisataAuthController::class, 'showLogin'])->name('pemilikwisata.login');
+    Route::post('/login', [PemilikWisataAuthController::class, 'login']);
+
+    // Register
+    Route::get('/register', [PemilikWisataAuthController::class, 'showRegister'])->name('pemilikwisata.register');
+    Route::post('/register', [PemilikWisataAuthController::class, 'register']);
+
+    // Logout
+    Route::post('/logout', [PemilikWisataAuthController::class, 'logout'])->name('pemilikwisata.logout');
+
+    // Verifikasi Email
+    Route::get('/verifikasi', function () {
+        return view('pemilik.verify-email');
+    })->name('pemilikwisata.verifikasi');
+
+    Route::post('/verifikasi/kirim-ulang', function (Request $request) {
+        // Mendapatkan pengguna yang sedang login
+        $user = Auth::guard('pemilikwisata')->user();
+
+        // Cek apakah pengguna sudah login
+        if (!$user) {
+            return back()->with('error', 'Anda belum login.');
+        }
+
+        // Cek apakah email sudah diverifikasi
+        if ($user->hasVerifiedEmail()) {
+            return back()->with('info', 'Email Anda sudah diverifikasi.');
+        }
+
+        // Jika email belum diverifikasi, kirimkan email verifikasi ulang
+        try {
+            $user->sendEmailVerificationNotification();
+            return back()->with('success', 'Link verifikasi telah dikirim ulang.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal mengirim email verifikasi. Silakan coba lagi.');
+        }
+    })->middleware('pemilikwisata')->name('pemilikwisata.verifikasi.resend');
+
+    // Verifikasi URL untuk mengonfirmasi email
+    Route::get('/email/verify/{id}/{hash}', [PemilikEmailVerificationController::class, 'verify'])
+        ->middleware(['signed'])
+        ->name('verification.verify');
+
+    // Verifikasi Berhasil
+    Route::get('/verifikasi/berhasil', fn() => view('pemilik.verified-success'))->name('pemilikwisata.verified');
+
+    // Middleware untuk memeriksa login dan verifikasi email
+    Route::middleware(['pemilikwisata', 'verified.p'])->group(function () {
+        Route::get('/dashboard', fn() => view('pemilik.dashboard'))->name('pemilik.index');
+    });
+});

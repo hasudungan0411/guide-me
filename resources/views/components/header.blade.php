@@ -107,7 +107,7 @@
 
                     {{-- Icon Login desktop --}}
                     <div class="menu-button d-none d-xl-block ms-2">
-                        <a href="{{ route('pemilik.login') }}"
+                        <a href=""
                             class="btn btn-outline-primary d-flex align-items-center px-2 py-2">
                             <i class="fas fa-sign-in-alt me-2"></i> Masuk
                         </a>
@@ -115,7 +115,7 @@
 
                     {{-- Icon Login mobile --}}
                     <div class="menu-button d-block d-xl-none ms-2">
-                        <a href="{{ route('pemilik.login') }}"
+                        <a href=""
                             class="btn btn-outline-primary d-flex align-items-center justify-content-center"
                             style="height: 40px; width: 50px;">
                             <i class="fas fa-user-circle"></i>

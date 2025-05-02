@@ -10,37 +10,37 @@ return [
     'guards' => [
         'wisatawan' => [
             'driver' => 'session',
-            'provider' => 'wisatawan',
+            'provider' => 'wisatawans',
         ],
-
-        'pemilik_wisata' => [
+        'pemilikwisata' => [
             'driver' => 'session',
-            'provider' => 'pemilik_wisata',
+            'provider' => 'pemilikwisatas',
         ],
     ],
+
 
     'providers' => [
-        'wisatawan' => [
+        'wisatawans' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Wisatawan::class, // Pastikan model Wisatawan sudah ada
+            'model' => App\Models\Wisatawan::class,
         ],
-
-        'pemilik_wisata' => [
+        'pemilikwisatas' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Pemilikwisata::class, // Pastikan model Pemilikwisata sudah ada
+            'model' => App\Models\Pemilikwisata::class,
         ],
     ],
+
 
     'passwords' => [
         'wisatawan' => [
-            'provider' => 'wisatawan',
+            'provider' => 'wisatawans',
             'table' => 'password_resets', // Tabel password reset untuk wisatawan
             'expire' => 60,  // Expired setelah 1 jam
             'throttle' => 60, // Batasi percobaan pengiriman reset password
         ],
 
         'pemilik_wisata' => [
-            'provider' => 'pemilik_wisata',
+            'provider' => 'pemilikwisatas',
             'table' => 'password_resets', // Tabel password reset untuk pemilik wisata
             'expire' => 60,  // Expired setelah 1 jam
             'throttle' => 60, // Batasi percobaan pengiriman reset password

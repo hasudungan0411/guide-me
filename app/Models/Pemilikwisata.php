@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
 
-class Pemilikwisata extends Authenticatable
+class Pemilikwisata extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $table = 'pemilik_wisata';
     protected $primaryKey = 'ID_Pemilik_Wisata';
@@ -21,7 +23,6 @@ class Pemilikwisata extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'Kata_Sandi' => 'hashed',
     ];
 
     protected $hidden = [
@@ -31,5 +32,15 @@ class Pemilikwisata extends Authenticatable
     public function destination()
     {
         return $this->belongsTo(Destination::class, 'tujuan', 'nama_wisata');
+    }
+
+    public function getEmailForVerification()
+    {
+        return $this->Email;
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->Kata_Sandi;
     }
 }

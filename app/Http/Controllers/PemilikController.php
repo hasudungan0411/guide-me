@@ -13,32 +13,32 @@ use App\Mail\Websitemail;
 
 class PemilikController extends Controller
 {
-    public function login()
-    {
-        return view('pemilik.login');
-    }
+    // public function login()
+    // {
+    //     return view('pemilik.login');
+    // }
 
-    public function login_submit(Request $request)
-    {
-        // dd($request->all());
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
+    // public function login_submit(Request $request)
+    // {
+    //     // dd($request->all());
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required|min:8',
+    //     ]);
 
-        $check = $request->all();
-        $data = [
-            'email' => $check['email'],
-            'password' => $check['password']
-        ];
-        if(Auth::guard('pemilik_wisata')->attempt($data)) {
-            return redirect()->route('pemilik.index')->with('success', 'Login Successfull');
-        } else {
-            return redirect()->route('pemilik.login')->with('error', 'Data Salah');
-        }
+    //     $check = $request->all();
+    //     $data = [
+    //         'email' => $check['email'],
+    //         'password' => $check['password']
+    //     ];
+    //     if(Auth::guard('pemilik_wisata')->attempt($data)) {
+    //         return redirect()->route('pemilik.index')->with('success', 'Login Successfull');
+    //     } else {
+    //         return redirect()->route('pemilik.login')->with('error', 'Data Salah');
+    //     }
 
-        // return redirect()->route('pemilik.login')->with('error','Akun Salah');
-    }
+    //     // return redirect()->route('pemilik.login')->with('error','Akun Salah');
+    // }
 
     public function logout()
     {
