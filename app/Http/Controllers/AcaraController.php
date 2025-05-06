@@ -38,6 +38,12 @@ class AcaraController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
+
+        // mencari berdasarkan ID
+        $acara = Acara::findOrFail($id);
+
+        // Update data
+
         // mencari berdasarkan ID
         $acara = Acara::findOrFail($id);
 
@@ -58,6 +64,11 @@ class AcaraController extends Controller
 
         // Hapus dari database
         $acara->delete();
+        // mencari menggunakan ID
+        $acara = Acara::findOrFail($id);
+
+        // Hapus dari database
+        $Acara->delete();
 
         return redirect()->route('pemilik.acara')->with('Success', 'Acara Berhasil Dihapus');
     }

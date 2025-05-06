@@ -8,8 +8,8 @@ use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\MustVerifyEmail;
 
+use Illuminate\Auth\MustVerifyEmail;
 class PemilikWisataAuthController extends Controller
 {
     public function showRegister()

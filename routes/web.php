@@ -24,8 +24,7 @@ use App\Http\Controllers\Auth\WisatawanAuthController as WisatawanAuthController
 use App\Http\Controllers\Auth\PemilikWisataAuthController as PemilikWisataAuthController;
 use App\Http\Controllers\Auth\PemilikEmailVerificationController;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\MustVerifyEmail;
-use function Laravel\Prompts\search;
+
 
 // Rute login admin
 Route::get('/admin-login', [AdminController::class, 'showlogin'])->name('admin.login');
@@ -76,7 +75,6 @@ Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::cl
 // Route untuk pencarian wisata
 Route::get('/wisata/search', [WisataSearchController::class, 'search']);
 
-
 Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
 
 Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
@@ -85,6 +83,7 @@ Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik']
 Route::get('/pemilik/acara/create', [PemilikController::class, 'createacara'])->name('acara.create');
 Route::delete('/pemilik/acara/delete/{id}', [PemilikController::class, 'createacara'])->name('acara.create');
 Route::put('/pemilik/acara/edit/{id}', [PemilikController::class, 'createacara'])->name('acara.create');
+
 
 Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
 Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
@@ -121,6 +120,7 @@ Route::prefix('pemilik')->group(function () {
     })->name('pemilikwisata.verifikasi');
 
     // [PemilikEmailVerificationController::class, 'verify']
+
 
     Route::post('/verifikasi/kirim-ulang', function (Request $request) {
         // Mendapatkan pengguna yang sedang login
