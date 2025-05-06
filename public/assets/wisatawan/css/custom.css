@@ -1,0 +1,9 @@
+.menu-item.active a {
+    color: #63AB45 !important;
+}
+
+.menu-item.active a,
+.menu-item.active a:hover,
+.menu-item.active a:focus {
+    color: #63AB45;
+}

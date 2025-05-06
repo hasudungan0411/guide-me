@@ -1,0 +1,81 @@
+#map {
+    width: 100%;
+    height: 400px;
+    /* Sesuaikan tinggi peta sesuai kebutuhan */
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    /* Menambahkan bayangan tipis */
+}
+
+.mapbox-directions-route-summary h1 {
+
+    color: white;
+    height: 300px;
+}
+
+#directions-container {
+    margin-top: 5px;
+    /* Atur jarak antara peta dan kontainer arah */
+    cursor: pointer;
+
+}
+
+.mapbox-directions-component-keyline {
+    box-shadow: none !important;
+    /* border: solid; */
+}
+
+.mapboxgl-ctrl-bottom-right,
+.mapboxgl-ctrl-bottom-left {
+    display: none !important;
+}
+
+.mapboxgl-ctrl-directions {
+    width: 100%;
+    min-width: 100% !important;
+    max-width: 100%;
+    border-radius: 5px;
+
+}
+
+.mapboxgl-ctrl {
+    clear: both;
+    pointer-events: auto;
+    transform: translate(0);
+
+}
+
+.mapbox-directions-profile input[type=radio]:checked+label:hover,
+.mapbox-directions-profile input[type=radio]:checked+label {
+    background: #000 !important;
+    color: rgb(255 255 255 / 75%);
+    color: #ffff !important;
+}
+.mapbox-directions-profile {
+    background: #ffff !important;
+    margin: 7px 0 0;
+    color: #ffff !important;
+    padding-top: 6px !important;
+    border-radius: 15px;
+    vertical-align: middle;
+}
+
+.directions-control.directions-control-directions {
+    background: rgba(0,0,0,0.75);
+    margin: 7px 0 0;
+    color: #fff;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    overflow-x: hidden;
+    display: none !important;
+}
+.mapbox-directions-profile {
+    background: #fff;
+    margin: 7px 0 0;
+    padding: 2px;
+    border-radius: 15px;
+    vertical-align: middle;
+    display: none !important;
+}
