@@ -75,18 +75,6 @@ Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::cl
 // Route untuk pencarian wisata
 Route::get('/wisata/search', [WisataSearchController::class, 'search']);
 
-Route::get('/pemilik/index', [PemilikController::class, 'index'])->name('pemilik.index');
-
-Route::get('/pemilik/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
-
-Route::get('/pemilik/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
-Route::get('/pemilik/acara/create', [PemilikController::class, 'createacara'])->name('acara.create');
-Route::delete('/pemilik/acara/delete/{id}', [PemilikController::class, 'createacara'])->name('acara.create');
-Route::put('/pemilik/acara/edit/{id}', [PemilikController::class, 'createacara'])->name('acara.create');
-
-
-Route::get('/pemilik/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
-Route::get('/pemilik/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
 
 // ======== AUTH WISATAWAN ========
@@ -112,7 +100,7 @@ Route::prefix('pemilik')->group(function () {
     Route::post('/register', [PemilikWisataAuthController::class, 'register']);
 
     // Logout
-    Route::post('/logout', [PemilikWisataAuthController::class, 'logout'])->name('pemilikwisata.logout');
+    Route::post('/logout', [PemilikWisataAuthController::class, 'logout'])->name('pemilik.logout');
 
     // Verifikasi Email
     Route::get('/verifikasi', function () {
@@ -157,4 +145,29 @@ Route::prefix('pemilik')->group(function () {
     Route::middleware(['pemilikwisata', 'verified.p'])->group(function () {
         Route::get('/dashboard', fn() => view('pemilik.dashboard'))->name('pemilik.index');
     });
+
+    Route::middleware(['pemilikwisata', 'verified.p'])->group(function () {
+        // Dashboard
+        Route::get('/dashboard', fn() => view('pemilik.dashboard'))->name('pemilik.dashboard');
+    
+        // Index
+        Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
+    
+        // Tempat Wisata
+        Route::get('/tempat_wisata/{id}', [PemilikController::class, 'showtempatwisata'])->name('pemilik.tempatwisata');
+    
+        // Acara
+        Route::get('/acara/{id}', [PemilikController::class, 'showacarapemilik'])->name('pemilik.acara');
+        Route::get('/acara/create', [AcaraController::class, 'create'])->name('acara.create');
+        Route::post('/acara/store', [AcaraController::class, 'store'])->name('acara.store');
+        Route::delete('/acara/delete/{id}', [AcaraController::class, 'delete'])->name('acara.delete');
+        Route::put('/acara/edit/{id}', [AcaraController::class, 'update'])->name('acara.update');
+    
+        // Tiket
+        Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+    
+        // Transaksi
+        Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+    });
+
 });

@@ -49,10 +49,10 @@
             <div class="col">
                 <div class="card" >
                     <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <h1 style="font-size: clamp(30px, 5vw, 50px);">Welcome</h1>
-                        <h2 style="font-size: clamp(20px, 4vw, 34px);">Pemilik Wisata Nguhaha</h>
+                        <h1 style="font-size: clamp(30px, 5vw, 50px);">Welcome {{ $pemilik->Email }}</h1>
+                        <h2 style="font-size: clamp(20px, 4vw, 34px);">Pemilik Wisata {{ $destinasi->tujuan }}</h>
                         
-                        <h4 style="font-size: clamp(14px, 4vw, 24px); text-align: justify;"><br>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sunt eius nesciunt debitis ipsa provident rem eum praesentium voluptatum alias quos, minus dicta qui perferendis aspernatur accusamus! Voluptates quibusdam necessitatibus adipisci?</h>
+                        <h4 style="font-size: clamp(14px, 4vw, 24px); text-align: justify;"><br>{{ $destinasi->long_desk ?? 'Deskripsi wisata belum tersedia.' }}</h>
                     </div>
                 </div>
             </div>

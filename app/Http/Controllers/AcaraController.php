@@ -12,6 +12,10 @@ use App\Models\pemilikwisata;
 
 class AcaraController extends Controller
 {
+    public function create(){
+        return view('acara.create');
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([
@@ -38,11 +42,6 @@ class AcaraController extends Controller
             'deskripsi' => 'nullable|string',
         ]);
 
-
-        // mencari berdasarkan ID
-        $acara = Acara::findOrFail($id);
-
-        // Update data
 
         // mencari berdasarkan ID
         $acara = Acara::findOrFail($id);
