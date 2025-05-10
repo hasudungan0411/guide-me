@@ -27,6 +27,9 @@
 
     <div class="connect-container align-content-stretch d-flex flex-wrap">
         <!-- Sidebar -->
+        @php
+            $destination = auth()->guard('pemilikwisata')->user()?->destination;
+        @endphp
         <div class="page-sidebar">
             <div class="logo-box">
                 <a href="#" class="logo-text">MeGuide</a>
@@ -41,25 +44,25 @@
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.tempatwisata') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.tempatwisata', ['id' => '38']) }}"
+                        <a href="{{ $destination ? route('pemilik.acara', ['id' => $destination->id]) : '#' }}"
                             class="{{ Request::routeIs('pemilik.tempatwisata') ? 'active' : '' }}">
                             <i class="material-icons-outlined">map</i>Tempat Wisata
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.acara') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.acara', ['id' => '38']) }}"
+                        <a href="{{ $destination ? route('pemilik.acara', ['id' => $destination->id]) : '#' }}"
                             class="{{ Request::routeIs('pemilik.acara') ? 'active' : '' }}">
                             <i class="material-icons-outlined">event</i>Acara
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.tiket') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.tiket', ['id' => '38']) }}"
+                        <a href="{{ $destination ? route('pemilik.acara', ['id' => $destination->id]) : '#' }}"
                             class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
                             <i class="material-icons-outlined">confirmation_number</i>Tiket
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.transaksi', ['id' => '38']) }}"
+                        <a href="{{ $destination ? route('pemilik.acara', ['id' => $destination->id]) : '#' }}"
                             class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
                             <i class="material-icons-outlined">payments </i>Transaksi
                         </a>

@@ -42,13 +42,16 @@ class PemilikController extends Controller
 
     public function logout()
     {
-        Auth::guard('pemilik_wisata')->logout();
+        Auth::guard('pemilikwisata')->logout();
         return redirect()->route('pemilik.login')->with('success','Logout berhasil');
     }
   
     public function index()
     {
-        return view('pemilik.index');
+        $pemilik = Auth::guard('pemilikwisata')->user();
+        $destinasi = $pemilik->destination;
+    
+        return view('pemilik.index', compact('pemilik', 'destinasi'));
     }
 
     public function showtempatwisata($id)
@@ -64,15 +67,16 @@ class PemilikController extends Controller
 
     public function showacarapemilik($id)
     {
-        $Destinasi = Destination::with('acara')->where('id', $id)->first();
-
+        $pemilik = Auth::guard('pemilikwisata')->user();
+        $Destinasi = $pemilik->destination;
+        
         if (!$Destinasi) {
-            return redirect()->route('pemilik.index')->with('error', 'Wisata tidak ditemukan!');
+            return redirect()->route('pemilik.index')->with('error', 'Destinasi tidak ditemukan!');
         }
 
         $Acara = $Destinasi->acara;
 
-        return view('pemilik.acara', compact('Acara'));
+        return view('pemilik.acara', compact('Acara', 'Destinasi'));
     }
 
     public function showtiketpemilik($id)

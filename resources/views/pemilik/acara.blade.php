@@ -18,7 +18,7 @@
             <div class="col">
                 <div class="card" >
                     <div class="card-body">
-                        <a href="" class="btn btn-primary mb-3">Tambah Destinasi</a>
+                        <a href="{{ route('acara.create') }}" class="btn btn-primary mb-3">Tambah Acara</a>
                         <table id="zero-conf" class="display" style="width:100%">
                             <thead>
                                 <tr>

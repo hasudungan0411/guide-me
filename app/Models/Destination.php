@@ -40,6 +40,6 @@ class Destination extends Model
 
     public function pemilikwisata()
     {
-        return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata','tujuan');
+        return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata', 'tujuan');
     }
 }

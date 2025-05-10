@@ -31,9 +31,9 @@ class Pemilikwisata extends Authenticatable implements MustVerifyEmail
 
     public function destination()
     {
-        return $this->belongsTo(Destination::class, 'tujuan', 'nama_wisata');
+        return $this->belongsTo(Destination::class, 'Nama_Wisata', 'tujuan');
     }
-
+    
     public function getEmailForVerification()
     {
         return $this->Email;
