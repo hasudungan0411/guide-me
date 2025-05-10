@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Wisatawan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
@@ -66,11 +67,13 @@ Route::get('/wisatawan/blog', [wisatawanBlogController::class, 'blog'])->name('w
 Route::get('/wisatawan/blog/{slug}', [WisatawanBlogController::class, 'blogdetail'])->name('wisatawan.blog-detail');
 Route::get('/wisatawan/blog/blog-kategori/{id_kategori}', [WisatawanBlogController::class, 'blogKategori'])->name('wisatawan.blog-kategori');
 Route::get('/wisatawan/galeri', [wisatawanGaleriController::class, 'galeri'])->name('wisatawan.galeri');
-Route::get('/wisatawan/chatbot', [wisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
 Route::get('/wisatawan/acara', [wisatawanAcaraController::class, 'acara'])->name('wisatawan.acara');
 Route::get('/wisatawan/kategori/kategori-destinasi', [wisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
 Route::get('/wisatawan/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
 Route::get('/wisatawan/kategori/kategori-blog', [wisatawanKategoriController::class, 'blog'])->name('wisatawan.kategori-blog');
+
+Route::get('/wisatawan/chatbot', [wisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
+Route::post('/send', [WisatawanChatbotController::class,'sendChat']);
 
 // Route untuk pencarian wisata
 Route::get('/wisata/search', [WisataSearchController::class, 'search']);

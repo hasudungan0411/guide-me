@@ -1,4 +1,4 @@
-<footer class="main-footer black-bg pt-230">
+<footer class="main-footer black-bg pt-200">
     <div class="container">
         <!--=== Footer Copyright ===-->
         <div class="footer-copyright">

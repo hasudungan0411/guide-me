@@ -14,7 +14,7 @@
 
                 <div class="nav-menu">
                     <nav class="main-menu">
-                        <ul class="d-flex flex-column flex-xl-row align-items-xl-center">
+                        <ul class="d-flex flex-column flex-xl-row align-items-xl-center ">
                             <li class="me-0">
                                 <a class="d-none d-xl-block" style="width: 120px;" href="">
                                     <img src="{{ asset('assets/wisatawan/images/logo/logo-black.png') }}"
@@ -45,6 +45,12 @@
                                 <a href="{{ url('/wisatawan/acara') }}"
                                     class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">Acara</a>
                             </li>
+                            <li
+                                class="menu-item has-children {{ Request::is('wisatawan/chatbot') ? 'active' : '' }} d-block d-xl-none">
+                                <a href="{{ route('wisatawan.chatbot') }}"
+                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0">Teman
+                                    Wisata</a>
+                            </li>
                             <li class="me-0 menu-item has-children">
                                 <a class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}"
                                     href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown"
@@ -58,30 +64,21 @@
                                             href="{{ route('wisatawan.kategori-blog') }}">Blog</a></li>
                                 </ul>
                             </li>
-                            <li
-                                class="menu-item has-children {{ Request::is('wisatawan/chatbot') ? 'active' : '' }} d-block d-xl-none">
-                                <a href="{{ route('wisatawan.chatbot') }}"
-                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0">Teman
-                                    Wisata</a>
+                            <li class="me-0 menu-item has-children d-block d-xl-none">
+                                <a class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}"
+                                    href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Masuk
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
+                                    <li><a class="dropdown-item px-1 py-2"
+                                            href="">Favorit</a></li>
+                                    <li><a class="dropdown-item px-1 py-2"
+                                            href="">Keluar</a></li>
+                                </ul>
                             </li>
                         </ul>
                     </nav>
-
-                    <!-- Tombol Masuk (mobile, di bawah) -->
-                    <div class="btn-group dropend d-block d-xl-none">
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Masuk
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item d-flex justify-content-between align-items-center"
-                                    href="#">Favorit <i class="far fa-bookmark"></i></a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Keluar</a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="nav-right-item d-flex align-items-center">
@@ -127,7 +124,7 @@
                         </div>
                     </div>
 
-                    {{-- Tombol Teman Wisata desktop --}}
+                    {{-- Tombol Teman Wisata desktopp --}}
                     <div class="menu-button d-none d-xl-block">
                         <a href="{{ route('wisatawan.chatbot') }}" class="main-btn primary-btn px-3 py-2 text-right">
                             Teman Wisata <i class="fas fa-comments ms-1"></i>

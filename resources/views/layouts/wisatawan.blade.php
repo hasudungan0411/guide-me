@@ -6,6 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="description" content="Adventure, Tours, Travel, Explore, Wisata, Batam, Jalan-Jalan, Liburan">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>MeGuide - @yield('title', 'Destination')</title>
     @stack('styles')
 
@@ -62,7 +63,7 @@
     @include('components.footer')
 
     {{-- Scripts --}}
-    
+
     <!--====== Jquery js ======-->
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>
 
