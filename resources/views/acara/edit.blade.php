@@ -33,21 +33,21 @@
                 <div class="col-xl">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Detail Acara {{ $acara->Nama_acara }}</h5>
-                            <form action="{{ route('acara.update', $acara->id) }}" method="POST" enctype="multipart/form-data">
+                            <h5 class="card-title">Detail Acara {{ $Acara->Nama_acara }}</h5>
+                            <form action="{{ route('acara.update', $Acara->ID_Acara) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
                                     <label>Tanggal</label>
-                                    <input name="tanggal_acara" type="date" class="form-control" value="{{ $acara->Tanggal_acara }}">
+                                    <input name="tanggal_acara" type="date" class="form-control" value="{{ $Acara->Tanggal_acara }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Nama Acara</label>
-                                    <input name="nama_acara" type="text" class="form-control" value="{{ $acara->Nama_acara }}">
+                                    <input name="nama_acara" type="text" class="form-control" value="{{ $Acara->Nama_acara }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Deskripsi</label>
-                                    <textarea name="deskripsi" class="form-control" value="{{ $acara->Deskripsi }}"></textarea>
+                                    <textarea name="deskripsi" class="form-control" value="{{ $Acara->Deskripsi }}"></textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-4">Simpan Perubahan</button>
                             </form>

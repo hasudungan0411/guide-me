@@ -61,8 +61,8 @@ class AcaraController extends Controller
     // Menampilkan form edit acara
     public function edit($id)
     {
-        $acara = Acara::findOrFail($id);
-        return view('acara.edit', compact('acara'));
+        $Acara = Acara::findOrFail($id);
+        return view('acara.edit', compact('Acara'));
     }
 
     // Menyimpan perubahan acara
