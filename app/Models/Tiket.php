@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Destination extends Model
+class Tiket extends Model
 {
     use HasFactory;
 
-    protected $table = 'destinations';
+    protected $table = 'tiket';
 
     // Kolom yang boleh diisi (mass assignable)
     protected $fillable = [
@@ -35,7 +35,7 @@ class Destination extends Model
 
     public function acara()
     {
-        return $this->hasMany(Acara::class, 'ID_Wisata');
+        return $this->hasMany(Acara::class, 'destination_id');
     }
 
     public function pemilikwisata()

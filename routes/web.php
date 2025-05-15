@@ -117,12 +117,12 @@ Route::prefix('pemilik')->group(function () {
         Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
 
         // Acara
-        Route::get('/acara', [AcaraController::class, 'index'])->name('acara.index');
+        Route::get('/acara', [AcaraController::class, 'index'])->name('pemilik.acara');
         Route::get('/acara/create', [AcaraController::class, 'create'])->name('acara.create');
-        Route::post('/acara', [AcaraController::class, 'store'])->name('acara.store');
-        Route::get('/edit/{id}', [AcaraController::class, 'edit'])->name('acara.edit');
-        Route::post('/update/{id}', [AcaraController::class, 'update'])->name('acara.update');
-        Route::get('/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
+        Route::post('/acara/create', [AcaraController::class, 'store'])->name('acara.store');
+        Route::get('/acara/edit/{id}', [AcaraController::class, 'edit'])->name('acara.edit');
+        Route::post('/acara/update/{id}', [AcaraController::class, 'update'])->name('acara.update');
+        Route::get('/acara/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
 
         // Tiket
         Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
