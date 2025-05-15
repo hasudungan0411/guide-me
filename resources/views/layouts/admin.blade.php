@@ -7,6 +7,7 @@
     <title>@yield('title', 'Halaman Admin')</title>
     @stack('styles')
     <!-- Styles -->
+    <link rel="shortcut icon" href="{{ asset('assets/admin/images/favico-admin.ico') }}" type="image/png">
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap" rel="stylesheet">
     <link
@@ -24,6 +25,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <div class="loader">
         <div class="spinner-grow text-primary" role="status">
             <span class="sr-only">Loading...</span>
@@ -50,12 +52,6 @@
                     <li class="{{ Request::routeIs('blog.*') ? 'active-page' : '' }}">
                         <a href="{{ url('/blog') }}" class="{{ Request::routeIs('blog.*') ? 'active' : '' }}">
                             <i class="material-icons-outlined">rss_feed</i>Blog
-                        </a>
-                    </li>
-
-                    <li class="{{ Request::routeIs('kelola_saranwisata.*') ? 'active-page' : '' }}">
-                        <a href="{{ url('/kelola-saran-wisata') }}" class="{{ Request::routeIs('kelola-saranwisata.*') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">feedback</i>Kelola Saran Wisata
                         </a>
                     </li>
 

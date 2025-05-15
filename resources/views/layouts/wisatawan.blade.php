@@ -11,7 +11,8 @@
     @stack('styles')
 
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/fonts/flaticon/flaticon_gowilds.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/fonts/fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/bootstrap/css/bootstrap.min.css') }}">
@@ -19,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/slick/slick.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/jquery-ui/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/nice-select/css/nice-select.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/calendar/calendar.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/calendar/calendar.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/animate.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/css/default.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/wisatawan/css/style.css') }}">
@@ -27,6 +28,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <!-- Start Preloader -->
     <div class="preloader">
         <div class="loader">
@@ -62,8 +64,8 @@
     <!-- Footer -->
     @include('components.footer')
 
-    {{-- Scripts --}}
 
+    {{-- Scripts --}}
     <!--====== Jquery js ======-->
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>
 
@@ -103,7 +105,36 @@
 
     <!--====== Main js ======-->
     <script src="{{ asset('assets/wisatawan/js/theme.js') }}" defer></script>
+    <!-- Tambahkan di bagian akhir sebelum </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: @json(session('success')),
+                    confirmButtonColor: '#3085d6'
+                });
+            });
+        </script>
+    @endif
+
+    @if (session('error'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: @json(session('error')),
+                    confirmButtonColor: '#d33'
+                });
+            });
+        </script>
+    @endif
+
     @stack('scripts')
+
 </body>
 
 </html>

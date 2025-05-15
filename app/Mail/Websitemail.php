@@ -13,15 +13,16 @@ class Websitemail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject, $body;
+    public $mailMessage;
+    public $subject;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($subject, $body)
+    public function __construct($message, $subject)
     {
+        $this->mailMessage = $message;
         $this->subject = $subject;
-        $this->body = $body;
     }
 
     /**
@@ -40,7 +41,7 @@ class Websitemail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email',
+            view: 'wisatawan.welcome-email',
         );
     }
 

@@ -20,8 +20,7 @@
                                         <h1 data-animation="fadeInDown" data-delay=".4s">Penunjuk arah tempat wisata Batam
                                         </h1>
                                         <div class="hero-button" data-animation="fadeInRight" data-delay=".6s">
-                                            <a href="{{ route('wisatawan.destinasi') }}"
-                                                class="main-btn primary-btn">
+                                            <a href="{{ route('wisatawan.destinasi') }}" class="main-btn primary-btn">
                                                 Lihat Destinasi <i class="fas fa-paper-plane"></i>
                                             </a>
                                         </div>
@@ -135,8 +134,8 @@
                             <p>{{ Str::limit(strip_tags($dest->desk), 150) }}</p>
                             <div class="meta">
                                 <span class="rate">
-                                    <a href="{{ route('wisatawan.detail_destinasi', $dest->id)}}" class="btn-link">Selengkapnya <i
-                                            class="far fa-long-arrow-right"></i></a>
+                                    <a href="{{ route('wisatawan.detail_destinasi', $dest->id) }}"
+                                        class="btn-link">Selengkapnya <i class="far fa-long-arrow-right"></i></a>
                                 </span>
                             </div>
                         </div>
@@ -221,7 +220,8 @@
                                 <div class="post-meta">
                                     <span><i class="far fa-calendar-alt"></i> {{ $row->tanggal }}</span>
                                     <h3 class="title">
-                                        <a href="{{ route('wisatawan.blog-detail', $row->slug) }}">{{ $row->judul }}</a>
+                                        <a
+                                            href="{{ route('wisatawan.blog-detail', $row->slug) }}">{{ $row->judul }}</a>
                                     </h3>
                                     <a href="{{ route('wisatawan.blog-detail', $row->slug) }}"
                                         class="main-btn filled-btn">Selengkapnya<i class="far fa-paper-plane"></i></a>

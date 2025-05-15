@@ -51,31 +51,47 @@
                                     class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0">Teman
                                     Wisata</a>
                             </li>
-                            <li class="me-0 menu-item has-children">
-                                <a class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}"
-                                    href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
+                            <li class="me-0 menu-item">
+                                <a href="{{ route('wisatawan.kategori-destinasi') }}"
+                                    class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0
+                                    {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">
                                     Kategori
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
-                                    <li><a class="dropdown-item px-1 py-2"
-                                            href="{{ route('wisatawan.kategori-destinasi') }}">Destinasi</a></li>
-                                    <li><a class="dropdown-item px-1 py-2"
-                                            href="{{ route('wisatawan.kategori-blog') }}">Blog</a></li>
-                                </ul>
                             </li>
                             <li class="me-0 menu-item has-children d-block d-xl-none">
-                                <a class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}"
-                                    href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown"
-                                    aria-expanded="false">
-                                    Masuk
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
-                                    <li><a class="dropdown-item px-1 py-2"
-                                            href="">Favorit</a></li>
-                                    <li><a class="dropdown-item px-1 py-2"
-                                            href="">Keluar</a></li>
-                                </ul>
+                                @auth('wisatawan')
+                                    @php
+                                        $user = auth('wisatawan')->user();
+                                        $nama = $user->Nama ?? 'Wisatawan';
+                                        $foto =
+                                            $user->Foto_Profil ?? asset('assets/images/avatars/profile-image-2.png');
+                                    @endphp
+
+                                    <button type="button"
+                                        class="btn btn-outline-dark dropdown-toggle px-2 py-2 d-flex align-items-center"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img src="{{ $foto }}" alt="Foto Profil"
+                                            style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; margin-right: 6px;">
+                                        {{-- {{ Str::limit($nama, 10) }} --}}
+                                    </button>
+
+                                    <ul class="dropdown-menu mt-2">
+                                        <li><a class="dropdown-item" href="#">Favorit</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li>
+                                            <form method="POST" action="{{ route('wisatawan.logout') }}">
+                                                @csrf
+                                                <button type="submit" class="dropdown-item text-danger">Keluar</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                @else
+                                    <a href="{{ route('wisatawan.login') }}" class="btn btn-warning px-3 py-2">
+                                        <i class="fas fa-sign-in-alt me-1"></i>
+                                    </a>
+                                @endauth
                             </li>
                         </ul>
                     </nav>
@@ -92,7 +108,6 @@
                             style="left: 12px; top: 50%; transform: translateY(-50%); color: #57ef0c;">
                             <i class="fas fa-search"></i>
                         </span>
-
                         <div id="searchResults" class="dropdown-menu show d-none mt-1"
                             style="position: absolute; width: 100%; max-height: 300px; overflow-y: auto; border-radius: 10px;">
                         </div>
@@ -131,24 +146,41 @@
                         </a>
                     </div>
 
-                    <!-- login -->
-                    <div class="btn-group">
-                        {{-- versi desktop --}}
-                        <button type="button"
-                            class="btn btn-warning d-none d-xl-inline dropdown-toggle px-2 py-2 ms-3"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-sign-in-alt"></i>
-                        </button>
-                        <ul class="dropdown-menu mt-3">
-                            <li><a class="dropdown-item d-flex justify-content-between align-items-center"
-                                    href="#">Favorit</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Keluar</a></li>
-                        </ul>
-                    </div>
+                    <!-- Login Wisatawan -->
+                    <div class="btn-group d-none d-xl-inline ms-3">
+                        @auth('wisatawan')
+                            @php
+                                $user = auth('wisatawan')->user();
+                                $nama = $user->Nama ?? 'Wisatawan';
+                                $foto = $user->Foto_Profil ?? asset('assets/images/avatars/profile-image-2.png');
+                            @endphp
 
+                            <button type="button"
+                                class="btn btn-outline-dark dropdown-toggle px-2 py-2 d-flex align-items-center"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ $foto }}" alt="Foto Profil"
+                                    style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; margin-right: 6px;">
+                                {{-- {{ Str::limit($nama, 10) }} --}}
+                            </button>
+
+                            <ul class="dropdown-menu mt-2">
+                                <li><a class="dropdown-item" href="#">Favorit</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <form method="POST" action="{{ route('wisatawan.logout') }}">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item text-danger">Keluar</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        @else
+                            <a href="{{ route('wisatawan.login') }}" class="btn btn-warning px-3 py-2">
+                                <i class="fas fa-sign-in-alt me-1"></i>
+                            </a>
+                        @endauth
+                    </div>
 
                     {{-- Hamburger Menu --}}
                     <div class="navbar-toggler">
@@ -173,7 +205,7 @@
 
         // Fungsi ambil data
         function fetchSearchResults(query = '', targetBox) {
-            fetch(`/wisata/search?q=${query}`)
+            fetch(`/wisatawan/search?q=${query}`)
                 .then(res => res.json())
                 .then(data => {
                     targetBox.innerHTML = data.length === 0 ?

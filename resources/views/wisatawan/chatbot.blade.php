@@ -71,8 +71,8 @@
                     <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="">
                 </div>
                 <div class="text-white px-3 py-2"
-                    style="background: #13254b; border-radius: 10px; font-size: 85%; max-width: 270px;">
-                    Hai, saya chatbot
+                    style="background: #13254b; border-radius: 10px; font-size: 85%; max-width: 270px; line-height: 20px;">
+                    Hai , saya Teman Wisata sebagai asisten virtual kamu
                 </div>
             </div>
             <div class="d-flex mb-3 align-items-start">
@@ -98,6 +98,7 @@
         </div>
     </div>
 
+    @guest('wisatawan')
     {{-- Modal --}}
     <div class="modal fade show" id="chatModal" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
         aria-modal="true" role="dialog">
@@ -124,6 +125,19 @@
             </div>
         </div>
     </div>
+    {{-- Script Modal --}}
+    <script>
+        function closeModal() {
+            const modal = document.getElementById('chatModal');
+            modal.style.display = 'none';
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+        }
+
+        // Lock scroll while modal is open
+        document.body.classList.add('modal-open');
+    </script>
+    @endguest
 
     {{-- script cdn  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
@@ -149,8 +163,8 @@
 
             // Menambah chat ke tampilan
             $('#content-box').append(`
-            <div class="d-flex justify-content-end mb-3 align-items-center">
-                <div class="px-3 py-2 text-white" style="background:#4acfee; border-radius: 10px; font-size: 85%; max-width: 270px;">
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="px-3 py-2 text-white" style="background:#4acfee; border-radius: 10px; font-size: 85%; max-width: 270px; line-height: 20px;">
                     ${value}
                 </div>
                 <div class="ms-2" style="width: 45px; height: 45px;">
@@ -201,21 +215,5 @@
         $(document).ready(function() {
             scrollToBottom();
         });
-    </script>
-
-
-
-
-    {{-- Script Modal --}}
-    <script>
-        function closeModal() {
-            const modal = document.getElementById('chatModal');
-            modal.style.display = 'none';
-            modal.classList.remove('show');
-            document.body.classList.remove('modal-open');
-        }
-
-        // Lock scroll while modal is open
-        document.body.classList.add('modal-open');
     </script>
 @endsection

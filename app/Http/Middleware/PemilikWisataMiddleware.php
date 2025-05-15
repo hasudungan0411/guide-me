@@ -21,7 +21,7 @@ class PemilikWisataMiddleware
         // Cek apakah pengguna sudah login dengan guard 'pemilikwisata'
         if (!Auth::guard('pemilikwisata')->check()) {
             // Jika tidak, redirect ke halaman login dan kirimkan pesan error
-            return redirect()->route('pemilikwisata.login')->with('error', 'Anda bukan pemilik wisata, silakan login sebagai pemilik.');
+            return redirect()->route('pemilik.login')->with('error', 'Anda bukan pemilik wisata, silakan login sebagai pemilik.');
         }
 
         // Jika pengguna sudah login sebagai pemilik wisata, lanjutkan request

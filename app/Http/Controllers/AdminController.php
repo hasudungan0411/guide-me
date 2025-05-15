@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
 {
@@ -45,15 +46,17 @@ class AdminController extends Controller
             // simpan sesi login
             Session::put('admin', $admin);
 
+            alert::success('Success','Anda berhasil login');
             return redirect()->route('destinasi.index');
         } else {
             return back()->with('error', 'username dan password salah');
         }
     }
 
-    public function logout() 
+    public function logout()
     {
         Session::forget('admin');
-        return redirect()->route('admin.login')->with('Success', 'Logout berhasil');
+        alert::success('Success','Anda berhasil Keluar');
+        return redirect()->route('admin.login');
     }
 }

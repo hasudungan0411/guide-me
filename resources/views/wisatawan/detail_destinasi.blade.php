@@ -8,31 +8,10 @@
         rel="stylesheet" />
 @endpush
 
-<style>
-    html,
-    body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }
-
-    #directions-container {
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 25%;
-        height: 100%;
-        background: white;
-        overflow-y: auto;
-        z-index: 1;
-    }
-</style>
-
-
 @section('content')
     <section class="place-details-section">
         <!-- Map Slider -->
-        <div class="place-slider-area overflow-hidden wow fadeInUp">
+        <div class="place-slider-area overflow-hidden wow fadeInUp" >
             <div class="place-slider">
                 @foreach (['gambar', 'gambar2', 'gambar3', 'gambar4', 'gambar5'] as $gambar)
                     @if (!empty($destination->$gambar))
@@ -49,7 +28,7 @@
         </div>
 
         <!-- Details and Map Section -->
-        <div class="container" style="height: auto; margin-bottom: 350px">
+        <div class="container" style="height: auto; margin-bottom: 200px;">
             <div class="tour_details-wrapper pt-80">
                 <div class="tour-title-wrapper pb-12 wow fadeInUp">
                     <div class="row">
@@ -64,13 +43,32 @@
                     </div>
                 </div>
 
-                <!-- Main Content -->
+                <!-- Main Contentt -->
                 <div class="row">
                     <div class="col-xl-8">
                         <div class="place-content-wrap pt-10 wow fadeInUp" style="margin-top: -51px !important;">
                             <p>{!! strip_tags($destination->desk) !!}</p>
                             <h4 class="mt-4">Deskripsi</h4>
                             <p class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
+
+                            <!--=== Acara Section ===-->
+                            <h4 class="mt-4">Event di {{ $destination->tujuan }}</h4>
+                            @if ($acara->isEmpty())
+                                <p>Tidak ada event yang tersedia untuk destinasi ini.</p>
+                            @else
+                                <ul>
+                                    @foreach ($acara as $event)
+                                        <li>
+                                            <h5>{{ $event->Nama_acara }}</h5>
+                                            <p>{{ \Carbon\Carbon::parse($event->Tanggal_acara)->format('d F Y') }}</p>
+                                            <a href="{{ route('wisatawan.acara', ['id' => $event->destination_id]) }}"
+                                                class="btn btn-primary">Lihat
+                                                Detail</a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+
                             <h4 class="mt-4">Navigasi</h4>
                             <p class="mb-3">Berikut ini adalah navigasi ke <b>{{ $destination->tujuan }}</b>, anda dapat
                                 melihat peta di bagian bawah dan navigasi di bagian sisi kanan.</p>
@@ -78,18 +76,27 @@
 
                         <!--=== Map Box ===-->
                         <div class="map-box mb-60 wow fadeInUp">
-                            <div class="map-box">
+                            <!-- Bungkus map dan directions dalam satu flex container -->
+                            <div id="map-wrapper"
+                                style="display: flex; flex-direction: row; height: 600px; width: 100%; position: relative;">
+
+                                <!-- MAP AREA -->
                                 <div id="map" data-lng="{{ $destination->latitude }}"
                                     data-lat="{{ $destination->longitude }}"
-                                    style="height: 600px; width: 100%; border-radius: 8px; position: relative;">
+                                    style="flex: 3; border-radius: 8px; height: 100%;">
                                 </div>
-                                <div id="directions-container" style="margin-top: 20px;"></div>
-                                <p>Asal: <span id="origin-name">Menunggu lokasi...</span></p>
-                                <div class="mt-3">
-                                    <button id="show-route-btn" class="btn btn-primary">Tampilkan Rute</button>
-                                    <button id="start-navigation-btn" class="btn btn-success" style="display:none;">Mulai
-                                        Perjalanan</button>
+
+                                <!-- DIRECTIONS PANEL -->
+                                <div id="directions-container"
+                                    style="flex: 1; display: none; background: white; overflow-y: auto; padding: 10px;">
                                 </div>
+                            </div>
+
+                            <p class="mt-3">Asal: <span id="origin-name">Menunggu lokasi...</span></p>
+                            <div class="mt-3">
+                                <button id="show-route-btn" class="btn btn-primary">Tampilkan Rute</button>
+                                <button id="start-navigation-btn" class="btn btn-success" style="display:none;">Mulai
+                                    Perjalanan</button>
                             </div>
                         </div>
 
@@ -153,8 +160,10 @@
                         <div class="gallery-img">
                             <img src="{{ asset('storage/images/galeri/' . $gallery->gambar) }}" style="height: 300px">
                             <div class="hover-overlay">
-                                <a href="{{ asset('images/galeri/' . $gallery->gambar) }}" class="icon-btn img-popup"><i
-                                        class="far fa-plus"></i></a>
+                                <a href="{{ asset('storage/images/galeri/' . $gallery->gambar) }}"
+                                    class="icon-btn img-popup">
+                                    <i class="far fa-plus"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -162,7 +171,6 @@
             </div>
         </div>
     </section>
-
 @endsection
 
 @push('scripts')

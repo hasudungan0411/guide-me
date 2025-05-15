@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Notifications\Notifiable;
+use App\Notifications\PemilikVerifyEmail;
 
-class Pemilikwisata extends Authenticatable implements MustVerifyEmail
+class Pemilikwisata extends Authenticatable
 {
     use HasFactory, Notifiable;
 
@@ -33,7 +33,7 @@ class Pemilikwisata extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsTo(Destination::class, 'Nama_Wisata', 'tujuan');
     }
-    
+
     public function getEmailForVerification()
     {
         return $this->Email;

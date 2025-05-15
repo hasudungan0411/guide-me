@@ -1,14 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Wisatawan;
+namespace App\Http\Controllers\wisatawan;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\Acara;
+use App\Models\Destination;
+use App\Models\galeri;
 
 class AcaraController extends Controller
 {
+    // Menampilkan acara berdasarkan destinasi
     public function acara()
+{
+    // Ambil destinasi yang memiliki minimal satu acara
+    $destinations = Destination::whereHas('acara')->with('acara')->paginate(6);
+
+    $galleries = Galeri::all();
+
+    return view('wisatawan.acara', compact('destinations', 'galleries'));
+}
+
+    // Menampilkan detail acara
+    public function show($id)
     {
-        return view('wisatawan.acara');
+        $acara = Acara::findOrFail($id); // Menampilkan acara berdasarkan ID
+
+        return view('wisatawan.acara_detail', compact('acara'));
     }
 }
+

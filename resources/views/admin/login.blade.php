@@ -10,6 +10,7 @@
         <title>Admin Login</title>
 
         <!-- Styles -->
+        <link rel="shortcut icon" href="{{ asset('assets/admin/images/favico-admin.ico') }}" type="image/png">
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
@@ -20,7 +21,7 @@
         <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
     </head>
     <body class="auth-page sign-in">
-        
+        @include('sweetalert::alert')
         <div class='loader'>
             <div class='spinner-grow text-primary' role='status'>
                 <span class='sr-only'>Loading...</span>
@@ -34,7 +35,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="logo-box"><a href="#" class="logo-text">Connect</a></div>
-                                    
+
                                     @if(session('error'))
                                         <div class="alert alert-danger">
                                             {{ session('error') }}
@@ -61,7 +62,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Javascripts -->
         <script src="{{ asset('assets/plugins/jquery/jquery-3.4.1.min.js') }}"></script>
         <script src="{{ asset('assets/plugins/bootstrap/popper.min.js') }}"></script>

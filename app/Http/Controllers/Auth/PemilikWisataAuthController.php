@@ -4,47 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Pemilikwisata;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Events\Registered;
+use RealRashid\SweetAlert\Facades\Alert;
 
-use Illuminate\Auth\MustVerifyEmail;
 class PemilikWisataAuthController extends Controller
 {
-    public function showRegister()
+    public function showLoginForm()
     {
-        return view('pemilik.register');
-    }
-
-    public function register(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email|unique:pemilik_wisata,Email',
-            'password' => 'required|confirmed|min:6',
-            'no_hp' => 'required',
-            'nama_wisata' => 'required|string|max:255',
-            'lokasi' => 'required|string|max:255',
-        ]);
-
-        $user = Pemilikwisata::create([
-            'Email' => $request->email,
-            'Kata_Sandi' => Hash::make($request->password),
-            'Nomor_HP' => $request->no_hp,
-            'Nama_Wisata' => $request->nama_wisata,
-            'Lokasi' => $request->lokasi,
-        ]);
-
-        Auth::guard('pemilikwisata')->login($user);
-
-        event(new Registered($user));
-        return redirect()->route('pemilikwisata.verifikasi');
-    }
-
-
-    public function showLogin()
-    {
-        return view('pemilik.login');
+        return view('pemilik.login'); // Pastikan view ini ada
     }
 
     public function login(Request $request)
@@ -57,13 +24,24 @@ class PemilikWisataAuthController extends Controller
         if (Auth::guard('pemilikwisata')->attempt($credentials)) {
             $request->session()->regenerate();
 
-            if (!Auth::guard('pemilikwisata')->user()->hasVerifiedEmail()) {
-                return redirect()->route('pemilikwisata.verifikasi')->with('info', 'Silakan verifikasi email Anda terlebih dahulu.');
-            }
+            $user = Auth::guard('pemilikwisata')->user();
+            $namawisata = $user->Nama_Wisata;
 
-            return redirect()->intended(route('pemilik.index'));
+            Alert::success('Success','Selamat datang pemilik wisata, ' . $namawisata );
+            return redirect()->route('pemilik.index');
         }
 
-        return back()->withErrors(['email' => 'Email atau password salah']);
+        Alert::error('Login Gagal', 'Email atau password salah.');
+        return back()->withErrors(['email' => 'Email atau password salah'])->withInput();
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::guard('pemilikwisata')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        alert::success('Success','Anda berhasil keluar');
+        return redirect()->route('pemilik.login');
     }
 }

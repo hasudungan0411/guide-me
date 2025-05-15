@@ -7,6 +7,7 @@ use App\Models\Destination;
 use App\Models\kategori;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DestinasiController extends Controller
 {
@@ -21,7 +22,7 @@ class DestinasiController extends Controller
         $totalBlog = Blog::count();
         $totalDestinasi = $destinations->count();
 
-        // menghitung total gambar dari semua destinasi 
+        // menghitung total gambar dari semua destinasi
         $totalGambar = $destinations->reduce(function ($carry, $item)
         {
             $gambarFields = ['gambar', 'gambar2', 'gambar3', 'gambar4', 'gambar5', 'gambarM'];
@@ -35,7 +36,7 @@ class DestinasiController extends Controller
             return $carry;
         }, 0);
 
-        // kirim datanya ke view 
+        // kirim datanya ke view
         return view('destinasi.index', compact('destinations', 'totalBlog', 'totalDestinasi', 'totalGambar'));
     }
 
@@ -68,7 +69,7 @@ class DestinasiController extends Controller
             'gambarM' => 'nullable|image',
         ]);
 
-        // simpan file gambar dan ambil nama filenya 
+        // simpan file gambar dan ambil nama filenya
         $gambarName = $request->file('gambar')->hashName();
         $request->file('gambar')->storeAs('images/destinasi', $gambarName, 'public');
 
@@ -103,7 +104,8 @@ class DestinasiController extends Controller
             'gambarM' => $gambarMName,
         ]);
 
-        return redirect()->route('destinasi.index')->with('Success', 'Destinasi berhasil ditambahkan');
+        alert::success('Success','Destinasi berhasil ditambahkan');
+        return redirect()->route('destinasi.index');
     }
 
     /**
@@ -111,7 +113,7 @@ class DestinasiController extends Controller
      */
     public function show(string $id)
     {
-        // mencari destinasi berdasarkan ID 
+        // mencari destinasi berdasarkan ID
         $destination = Destination::findOrFail($id);
 
         // karna dia kebalik jadi Cek dan swap koordinat kalau terbalik (data lama)
@@ -134,7 +136,7 @@ class DestinasiController extends Controller
      */
     public function edit(string $id)
     {
-        // mencari destinasi dan kategori berdasarkan ID 
+        // mencari destinasi dan kategori berdasarkan ID
         $destination = Destination::findOrFail($id);
         $categories = kategori::all();
         return view('destinasi.edit', compact('destination', 'categories'));
@@ -160,10 +162,10 @@ class DestinasiController extends Controller
             'gambarM' => 'nullable|image',
         ]);
 
-        // mencari destinasi berdasarkan ID 
+        // mencari destinasi berdasarkan ID
         $destination = Destination::findOrFail($id);
 
-        // Update data 
+        // Update data
         $destination->tujuan = $validatedData['tujuan'];
         $destination->latitude = $validatedData['latitude'];
         $destination->longitude = $validatedData['longitude'];
@@ -171,7 +173,7 @@ class DestinasiController extends Controller
         $destination->desk = $validatedData['desk'];
         $destination->long_desk = $validatedData['long_desk'];
 
-        // untuk gambar 
+        // untuk gambar
         if ($request->hasFile('gambar')) {
             $gambarName = $request->file('gambar')->hashName();
             $request->file('gambar')->storeAs('images/destinasi', $gambarName, 'public');
@@ -210,7 +212,8 @@ class DestinasiController extends Controller
 
         $destination->save();
 
-        return redirect()->route('destinasi.index')->with('Success', 'Destinasi Berhasil diUpdate');
+        alert::success('Success','Destinasi berhasil diubah');
+        return redirect()->route('destinasi.index');
     }
 
     /**
@@ -218,10 +221,10 @@ class DestinasiController extends Controller
      */
     public function destroy(string $id)
     {
-        // mencari destinasi menggunakan ID  
+        // mencari destinasi menggunakan ID
         $destination = Destination::findOrFail($id);
 
-        // hapus gambar dari storage 
+        // hapus gambar dari storage
         $gambarFields = ['gambar', 'gambar2', 'gambar3', 'gambar4', 'gambar5', 'gambarM'];
         foreach ($gambarFields as $gambar) {
             if ($destination->$gambar) {
@@ -232,6 +235,7 @@ class DestinasiController extends Controller
         // Hapus destinasi dari database
         $destination->delete();
 
-        return redirect()->route('destinasi.index')->with('Success', 'Destinasi Berhasil Dihapus');
+        alert::success('Success','Destinasi berhasil dihapus');
+        return redirect()->route('destinasi.index');
     }
 }

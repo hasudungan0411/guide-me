@@ -30,12 +30,12 @@ class Destination extends Model
 
     public function kategori()
     {
-        return $this->belongsTo(kategori::class,'kategori_id', 'id_kategori');
+        return $this->belongsTo(kategori::class, 'kategori_id', 'id_kategori');
     }
 
     public function acara()
     {
-        return $this->hasMany(Acara::class, 'ID_Wisata');
+        return $this->hasMany(Acara::class, 'destination_id');
     }
 
     public function pemilikwisata()

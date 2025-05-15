@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Destination;
 use App\Models\Galeri;
 Use App\Models\Blog;
+Use App\Models\Acara;
 
 class DestinasiController extends Controller
 {
@@ -32,6 +33,9 @@ class DestinasiController extends Controller
         // Ambil semua blog terbaru
         $blogs = Blog::orderBy('id_blog', 'desc')->limit(3)->get();
 
+        // Ambil acara yang terkait dengan destinasi ini
+        $acara = Acara::where('destination_id', $destination->id)->get();
+
         // Buat array isi gambar-gambar yang tersedia
         $galleryImages = collect([
             $destination->gambar,
@@ -41,6 +45,6 @@ class DestinasiController extends Controller
             $destination->gambar5,
         ])->filter(); // filter buat buang yang null
 
-        return view('wisatawan.detail_destinasi', compact('destination', 'galleryImages', 'blogs', 'galleries'));
+        return view('wisatawan.detail_destinasi', compact('destination', 'galleryImages', 'blogs', 'galleries', 'acara'));
     }
 }

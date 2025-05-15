@@ -19,15 +19,22 @@ class Authenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        // Jika tidak ada guard yang diberikan, gunakan guard default
         $guard = count($guards) > 0 ? $guards[0] : null;
 
-        // Cek apakah pengguna sudah login dengan guard yang dipilih
         if (Auth::guard($guard)->check()) {
             return $next($request);
         }
 
-        // Redirect ke halaman login jika pengguna belum terautentikasi
-        return redirect()->route('pemilik.login');
+        // Redirect sesuai guard
+        switch ($guard) {
+            case 'admin':
+                return redirect()->route('admin.login');
+            case 'wisatawan':
+                return redirect()->route('wisatawan.login');
+            case 'pemilikwisata':
+                return redirect()->route('pemilik.login');
+            default:
+                return redirect('/'); // fallback jika tidak dikenali
+        }
     }
 }

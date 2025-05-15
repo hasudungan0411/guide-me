@@ -3,73 +3,96 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Destination;
 use App\Models\Acara;
-use App\Models\pemilikwisata;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class AcaraController extends Controller
 {
-    public function create(){
+    // Menampilkan semua acara milik pemilik wisata yang login
+    public function index()
+    {
+        // Ambil pemilik destinasi yang login
+        $pemilik = Auth::guard('pemilikwisata')->user();
+
+        // Ambil destinasi yang dimiliki oleh pemilik
+        $destinasi = $pemilik->destination;
+
+        // Pastikan hanya acara dari destinasi miliknya yang diambil
+        $acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_acara')->get() : [];
+
+        return view('acara.index', compact('acara', 'destinasi'));
+    }
+
+
+    // Menampilkan form tambah acara
+    public function create()
+    {
         return view('acara.create');
     }
 
+    // Menyimpan acara baru
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'tanggal_acara' => 'required|date_format:d-m-Y',
-            'nama_acara' => 'required|numeric',
-            'deskripsi' => 'nullable|string',
+        $request->validate([
+            'Nama_acara' => 'required|string|max:255',
+            'Tanggal_acara' => 'required|date',
+            'Deskripsi' => 'required|string',
         ]);
 
-        // simpan ke database
-        Destination::create([
-            'Tanggal_acara' => $validatedData['tanggal_acara'],
-            'Nama_acara' => $validatedData['nama_acara'],
-            'Deskripsi' => $validatedData['deskripsi'],
+        $pemilik = Auth::guard('pemilikwisata')->user();
+        $destinasi = $pemilik->destination;
+
+        if (!$destinasi) {
+            return redirect()->back()->with('error', 'Destinasi tidak ditemukan.');
+        }
+
+        Acara::create([
+            'destination_id' => $destinasi->id,
+            'Nama_acara' => $request->Nama_acara,
+            'Tanggal_acara' => $request->Tanggal_acara,
+            'Deskripsi' => $request->Deskripsi,
         ]);
 
-        return redirect()->route('pemilik.acara')->with('Success', 'Acara berhasil ditambahkan');
+        Alert::success('Success','Acara berhasil ditambahkan');
+        return redirect()->route('acara.index');
     }
 
-    public function update(Request $request, string $id)
+    // Menampilkan form edit acara
+    public function edit($id)
     {
-        $validatedData = $request->validate([
-            'tanggal_acara' => 'required|date_format:d-m-Y',
-            'nama_acara' => 'required|numeric',
-            'deskripsi' => 'nullable|string',
-        ]);
-
-
-        // mencari berdasarkan ID
         $acara = Acara::findOrFail($id);
-
-        // Update data
-        $acara->Tanggal_acara = $validatedData['tanggal_acara'];
-        $acara->Nama_acara = $validatedData['nama_acara'];
-        $acara->Deskripsi = $validatedData['deskripsi'];
-
-        $acara->save();
-
-        return redirect()->route('pemilik.acara')->with('Success', 'Acara Berhasil diUpdate');
+        return view('acara.edit', compact('acara'));
     }
 
-    public function destroy(string $id)
+    // Menyimpan perubahan acara
+    public function update(Request $request, $id)
     {
-        // mencari menggunakan ID
+        $request->validate([
+            'Nama_acara' => 'required|string|max:255',
+            'Tanggal_acara' => 'required|date',
+            'Deskripsi' => 'required|string',
+        ]);
+
         $acara = Acara::findOrFail($id);
 
-        // Hapus dari database
+        $acara->update([
+            'Nama_acara' => $request->Nama_acara,
+            'Tanggal_acara' => $request->Tanggal_acara,
+            'Deskripsi' => $request->Deskripsi,
+        ]);
+
+        Alert::success('Success','Acara berhasil diubah');
+        return redirect()->route('acara.index');
+    }
+
+    // Menghapus acara
+    public function destroy($id)
+    {
+        $acara = Acara::findOrFail($id);
         $acara->delete();
-        // mencari menggunakan ID
-        $acara = Acara::findOrFail($id);
 
-        // Hapus dari database
-        $Acara->delete();
-
-        return redirect()->route('pemilik.acara')->with('Success', 'Acara Berhasil Dihapus');
+        Alert::success('Success','Acara berhasil dihapus');
+        return redirect()->route('acara.index');
     }
-
 }

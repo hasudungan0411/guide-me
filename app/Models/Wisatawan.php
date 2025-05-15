@@ -18,13 +18,16 @@ class Wisatawan extends Authenticatable
         'Nama',
         'Kata_Sandi',
         'Nomor_HP',
-    ];
-
-    protected $casts = [
-        'Kata_Sandi' => 'hashed', // Untuk hashing password secara otomatis
+        'Foto_Profil',
     ];
 
     protected $hidden = [
         'Kata_Sandi', // Sembunyikan kata sandi dari array (misalnya saat ditampilkan)
     ];
+
+    public function getAuthPassword()
+    {
+        return $this->Kata_Sandi;
+    }
+
 }
