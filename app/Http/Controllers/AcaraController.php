@@ -21,14 +21,14 @@ class AcaraController extends Controller
         // Pastikan hanya acara dari destinasi miliknya yang diambil
         $Acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_acara')->get() : [];
 
-        return view('pemilik.acara', compact('Acara', 'destinasi'));
+        return view('pemilik.acara.index', compact('Acara', 'destinasi'));
     }
 
 
     // Menampilkan form tambah acara
     public function create()
     {
-        return view('acara.create');
+        return view('pemilik.acara.create');
     }
 
     // Menyimpan acara baru
@@ -55,14 +55,14 @@ class AcaraController extends Controller
         ]);
 
         Alert::success('Success','Acara berhasil ditambahkan');
-        return redirect()->route('pemilik.acara');
+        return redirect()->route('pemilik.acara.index');
     }
 
     // Menampilkan form edit acara
     public function edit($id)
     {
         $Acara = Acara::findOrFail($id);
-        return view('acara.edit', compact('Acara'));
+        return view('pemilik.acara.edit', compact('Acara'));
     }
 
     // Menyimpan perubahan acara
@@ -83,7 +83,7 @@ class AcaraController extends Controller
         ]);
 
         Alert::success('Success','Acara berhasil diubah');
-        return redirect()->route('pemilik.acara');
+        return redirect()->route('pemilik.acara.index');
     }
 
     // Menghapus acara
@@ -93,6 +93,6 @@ class AcaraController extends Controller
         $acara->delete();
 
         Alert::success('Success','Acara berhasil dihapus');
-        return redirect()->route('pemilik.acara');
+        return redirect()->route('pemilik.acara.index');
     }
 }

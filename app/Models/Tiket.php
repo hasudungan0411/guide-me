@@ -10,22 +10,13 @@ class Tiket extends Model
     use HasFactory;
 
     protected $table = 'tiket';
-
+    protected $primaryKey = 'ID_Tiket';
     // Kolom yang boleh diisi (mass assignable)
     protected $fillable = [
-        'latitude',
-        'longitude',
-        'tujuan',
-        'gambar',
-        'gambar2',
-        'gambar3',
-        'gambar4',
-        'gambar5',
-        'gambarM',
-        'kategori_id',
-        'desk',
-        'long_desk',
-        'click_count',
+        'ID_Wisata',
+        'ID_Wisatawan',
+        'Persediaan',
+        'Harga',
     ];
 
     public function kategori()
