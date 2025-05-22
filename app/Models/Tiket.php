@@ -11,26 +11,22 @@ class Tiket extends Model
 
     protected $table = 'tiket';
     protected $primaryKey = 'ID_Tiket';
-    // Kolom yang boleh diisi (mass assignable)
+    public $timestamps = false; 
+
     protected $fillable = [
         'ID_Wisata',
-        'ID_Wisatawan',
+        'ID_Pemilik',
         'Persediaan',
         'Harga',
     ];
 
-    public function kategori()
-    {
-        return $this->belongsTo(kategori::class, 'kategori_id', 'id_kategori');
-    }
-
-    public function acara()
-    {
-        return $this->hasMany(Acara::class, 'destination_id');
-    }
-
     public function pemilikwisata()
     {
-        return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata', 'tujuan');
+        return $this->belongsTo(Pemilikwisata::class, 'ID_Pemilik', 'ID_Pemilik_Wisata');
+    }
+
+    public function destinasi()
+    {
+        return $this->belongsTo(Destination::class, 'ID_Wisata', 'id'); 
     }
 }

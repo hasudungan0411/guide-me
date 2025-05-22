@@ -42,4 +42,9 @@ class Destination extends Model
     {
         return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata', 'tujuan');
     }
+
+    public function tiket()
+{
+    return $this->hasMany(Tiket::class, 'ID_Wisata', 'id');
+}
 }

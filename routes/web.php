@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TiketController;
 use App\Models\Wisatawan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
@@ -125,7 +126,9 @@ Route::prefix('pemilik')->group(function () {
         Route::get('/acara/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
 
         // Tiket
-        Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+        Route::get('/tiket', [TiketController::class, 'index'])->name('pemilik.tiket');
+        Route::put('/tiket/update', [TiketController::class, 'update'])->name('tiket.update');
+
 
         // Transaksi
         Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
