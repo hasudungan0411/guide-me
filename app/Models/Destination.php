@@ -42,4 +42,9 @@ class Destination extends Model
     {
         return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata', 'tujuan');
     }
+
+    public function favoritwisatawan()
+    {
+        return $this->belongsTo(Wisatawan::class,'favorit','destination_id','wisatawan_id');
+    }
 }

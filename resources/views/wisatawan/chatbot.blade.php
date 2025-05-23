@@ -99,51 +99,63 @@
     </div>
 
     @guest('wisatawan')
-    {{-- Modal --}}
-    <div class="modal fade show" id="chatModal" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
-        aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content shadow">
-                <div class="modal-body text-center">
-                    <p class="fs-5 text-success fw-semibold mb-4">
-                        👋 Halo, Selamat Datang di <strong>Teman Wisata</strong>!
-                    </p>
-                    <p class="text-secondary fw-semibold mb-3">
-                        Saya adalah asisten virtual kamu, siap membantu menemukan destinasi terbaik, tips perjalanan, dan
-                        info wisata menarik lainnya yang ada diBatam.
-                    </p>
-                    <p class="text-dark fw-bold mt-3">
-                        Pilih salah satu untuk mulai berbagi cerita:)
-                    </p>
+        {{-- Modal --}}
+        <div class="modal fade show" id="chatModal" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
+            aria-modal="true" role="dialog">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content shadow">
+                    <div class="modal-body text-center">
+                        <p class="fs-5 text-success fw-semibold mb-4">
+                            👋 Halo, Selamat Datang di <strong>Teman Wisata</strong>!
+                        </p>
+                        <p class="text-secondary fw-semibold mb-3">
+                            Saya adalah asisten virtual kamu, siap membantu menemukan destinasi terbaik, tips perjalanan, dan
+                            info wisata menarik lainnya yang ada diBatam.
+                        </p>
+                        <p class="text-dark fw-bold mt-3">
+                            Pilih salah satu untuk mulai berbagi cerita:)
+                        </p>
 
-                    <div class="d-grid gap-2 mt-4">
-                        <a href="" class="btn btn-primary">Masuk</a>
-                        <a href="" class="btn btn-outline-primary">Daftar Gratis</a>
-                        <button class="btn btn-secondary" onclick="closeModal()">Tetap Keluar</button>
+                        <div class="d-grid gap-2 mt-4">
+                            <a href="{{ route('wisatawan.login') }}" class="btn btn-primary">Masuk</a>
+                            <a href="{{ route('wisatawan.register') }}" class="btn btn-outline-primary">Daftar</a>
+                            <button class="btn btn-secondary" onclick="closeModal()">Tetap Keluar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    {{-- Script Modal --}}
-    <script>
-        function closeModal() {
-            const modal = document.getElementById('chatModal');
-            modal.style.display = 'none';
-            modal.classList.remove('show');
-            document.body.classList.remove('modal-open');
-        }
+        {{-- Script Modal --}}
+        <script>
+            function closeModal() {
+                const modal = document.getElementById('chatModal');
+                modal.style.display = 'none';
+                modal.classList.remove('show');
+                document.body.classList.remove('modal-open');
+            }
 
-        // Lock scroll while modal is open
-        document.body.classList.add('modal-open');
-    </script>
+            // Lock scroll while modal is open
+            document.body.classList.add('modal-open');
+        </script>
     @endguest
 
     {{-- script cdn  --}}
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
+
+    @php
+        $user = auth('wisatawan')->user();
+
+        // Default foto profil
+        $profileImage = asset('assets/images/avatars/profile-image-1.png');
+
+        // Kalau user login dan punya foto di database
+        if ($user && $user->Foto_Profil) {
+            $profileImage = $user->Foto_Profil;
+        }
+    @endphp
     <script>
-        const profileImage = "{{ asset('assets/images/avatars/profile-image-1.png') }}";
+        const profileImage = "{{ $profileImage }}";
 
         function scrollToBottom() {
             const contentBox = $('#content-box')[0];
@@ -182,7 +194,7 @@
                 url: '{{ url('send') }}',
                 data: {
                     'input': value,
-                    '_token': $('meta[name="csrf-token"]').attr('content') // ← ini tambahan pentingnya
+                    '_token': $('meta[name="csrf-token"]').attr('content')
                 },
 
                 success: function(data) {

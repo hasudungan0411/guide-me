@@ -29,7 +29,7 @@ class WisatawanAuthController extends Controller
         if (Auth::guard('wisatawan')->attempt($credentials)) {
             $request->session()->regenerate();
             // Alert::success('Berhasil', 'Selamat datang DiGuide-Me');
-            return redirect()->route('wisatawan.home')->with('success','Selamat datang di Guide-Me');
+            return redirect()->route('wisatawan.home')->with('success', 'Selamat datang di Guide-Me');
         }
 
         Alert::error('Error', 'Email atau Password tidak sesuai');
@@ -55,7 +55,7 @@ class WisatawanAuthController extends Controller
                 // $existingUser->save();
 
                 // Alert::success('Login Berhasil', 'Selamat datang kembali, ' . $existingUser->Nama . '!');
-                return redirect()->route('wisatawan.home')->with('success','Selamat datang kembali, ' . $existingUser->Nama .'!');
+                return redirect()->route('wisatawan.home')->with('success', 'Selamat datang kembali, ' . $existingUser->Nama . '!');
             }
 
             $newUser = Wisatawan::create([
@@ -70,7 +70,7 @@ class WisatawanAuthController extends Controller
             session()->regenerate();
 
             // Alert::success('Registrasi & Login Berhasil', 'Selamat datang, ' . $newUser->Nama . '!');
-            return redirect()->route('wisatawan.home')->with('success','Selamat datang, ' . $newUser->Nama .'!');
+            return redirect()->route('wisatawan.home')->with('success', 'Selamat datang, ' . $newUser->Nama . '!');
 
         } catch (\Exception $e) {
             Alert::error('Login Gagal', $e->getMessage());
@@ -128,11 +128,16 @@ class WisatawanAuthController extends Controller
 
     public function logout(Request $request)
     {
+        // Mendapatkan data pengguna yang sedang login
+        $user = Auth::guard('wisatawan')->user();
+
         Auth::guard('wisatawan')->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
+        session()->forget('favorit_' . $user->id);
+
         // Alert::success('success', 'Anda Berhasil Keluar');
-        return redirect()->route('wisatawan.home')->with('success','Anda Berhasil Keluar');
+        return redirect()->route('wisatawan.home')->with('success', 'Anda Berhasil Keluar');
     }
 }

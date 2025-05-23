@@ -9,10 +9,10 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="page-banner-content text-center text-white">
-                    <h1 class="page-title">Blog List</h1>
+                    <h1 class="page-title">Daftar Blog</h1>
                     <ul class="breadcrumb-link text-white">
                         <li><a href="{{ route('wisatawan.home') }}">Home</a></li>
-                        <li class="active">Blog List</li>
+                        <li class="active">Blog</li>
                     </ul>
                 </div>
             </div>

@@ -22,28 +22,28 @@
                                 </a>
                             </li>
                             <li
-                                class="me-0 menu-item has-children {{ Request::is('wisatawan/home*') ? 'active' : '' }}">
+                                class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/home') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">Beranda</a>
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/home') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Beranda</a>
                             </li>
                             <li
-                                class="me-0 menu-item has-children {{ Request::is('wisatawan/destinasi*') ? 'active' : '' }}">
+                                class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/destinasi') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">Destinasi</a>
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/destinasi*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Destinasi</a>
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/blog') }}"
                                     class="btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/blog*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Blog</a>
                             </li>
                             <li
-                                class="me-0 menu-item has-children {{ Request::is('wisatawan/galeri') ? 'active' : '' }}">
+                                class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/galeri') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">Galeri</a>
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/galeri') ?'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Galeri</a>
                             </li>
                             <li
-                                class="me-0 menu-item has-children {{ Request::is('wisatawan/acara') ? 'active' : '' }}">
+                                class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/acara') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">Acara</a>
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/acara*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Acara</a>
                             </li>
                             <li
                                 class="menu-item has-children {{ Request::is('wisatawan/chatbot') ? 'active' : '' }} d-block d-xl-none">
@@ -76,7 +76,7 @@
                                     </button>
 
                                     <ul class="dropdown-menu mt-2">
-                                        <li><a class="dropdown-item" href="#">Favorit</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -164,7 +164,7 @@
                             </button>
 
                             <ul class="dropdown-menu mt-2">
-                                <li><a class="dropdown-item" href="#">Favorit</a></li>
+                                <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

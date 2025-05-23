@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Wisatawan;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\DestinasiController;
 use App\Http\Controllers\KategoriController;
@@ -25,6 +23,7 @@ use App\Http\Controllers\Wisatawan\KategoriController as wisatawanKategoriContro
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\WisatawanAuthController as WisatawanAuthController;
 use App\Http\Controllers\Auth\PemilikWisataAuthController as PemilikWisataAuthController;
+use App\Http\Controllers\Wisatawan\FavoritController as wisatawanFavoritController;
 
 // Rute login admin
 Route::get('/admin-login', [AdminController::class, 'showlogin'])->name('admin.login');
@@ -81,7 +80,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/blog/blog-kategori/{id_kategori}', [WisatawanBlogController::class, 'blogKategori'])->name('wisatawan.blog-kategori');
     Route::get('/galeri', [WisatawanGaleriController::class, 'galeri'])->name('wisatawan.galeri');
     Route::get('/acara', [WisatawanAcaraController::class, 'acara'])->name('wisatawan.acara');
-    Route::get('/acara/{id}', [WisatawanAcaraController::class, 'show'])->name('wisatawan.acara-detail');
+    Route::get('/acara/{ID_Acara}', [WisatawanAcaraController::class, 'show'])->name('wisatawan.acara-detail');
     Route::get('/kategori/kategori-destinasi', [WisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
     Route::get('/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
     Route::get('/chatbot', [WisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
@@ -101,7 +100,8 @@ Route::prefix('wisatawan')->group(function () {
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
-        // Route::post('/favorit', [WisatawanReviewController::class, 'favorit'])->name('wisatawan.favorit');
+        Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
+        Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
         // Route::post('/pesan-tiket', [WisatawanBookingController::class, 'pesan'])->name('wisatawan.pesan');
     });
 });

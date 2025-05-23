@@ -11,7 +11,7 @@
 @section('content')
     <section class="place-details-section">
         <!-- Map Slider -->
-        <div class="place-slider-area overflow-hidden wow fadeInUp" >
+        <div class="place-slider-area overflow-hidden wow fadeInUp">
             <div class="place-slider">
                 @foreach (['gambar', 'gambar2', 'gambar3', 'gambar4', 'gambar5'] as $gambar)
                     @if (!empty($destination->$gambar))
@@ -34,6 +34,12 @@
                     <div class="row">
                         <div class="col-xl-6">
                             <div class="tour-title mb-20">
+                                <!-- Favorite Icon -->
+                                <div class="favorite-icon" id="favorite-icon" data-id="{{ $destination->id }}"
+                                    data-logged-in="{{ Auth::guard('wisatawan')->check() ? 'true' : 'false' }}"
+                                    style="cursor: pointer;">
+                                    <i class="far fa-heart" style="font-size: 30px; color: gray;"></i>
+                                </div>
                                 <h3 class="title">
                                     {{ $destination->tujuan }}
                                 </h3>
@@ -52,18 +58,43 @@
                             <p class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
 
                             <!--=== Acara Section ===-->
-                            <h4 class="mt-4">Event di {{ $destination->tujuan }}</h4>
+                            <h4 class="mt-4">Acara di {{ $destination->tujuan }}</h4>
                             @if ($acara->isEmpty())
                                 <p>Tidak ada event yang tersedia untuk destinasi ini.</p>
                             @else
                                 <ul>
                                     @foreach ($acara as $event)
                                         <li>
-                                            <h5>{{ $event->Nama_acara }}</h5>
-                                            <p>{{ \Carbon\Carbon::parse($event->Tanggal_acara)->format('d F Y') }}</p>
-                                            <a href="{{ route('wisatawan.acara', ['id' => $event->destination_id]) }}"
-                                                class="btn btn-primary">Lihat
-                                                Detail</a>
+                                            <h6>{{ $event->Nama_acara }}</h6>
+                                            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
+                                                data-bs-target="#eventModal{{ $event->id }}">
+                                                Lihat
+                                            </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="eventModal{{ $event->id }}" tabindex="-1"
+                                                aria-labelledby="eventModalLabel{{ $event->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="eventModalLabel{{ $event->id }}">
+                                                                {{ $event->Nama_acara }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Tutup"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p><strong>Tanggal:</strong>
+                                                                {{ \Carbon\Carbon::parse($event->Tanggal_acara)->format('d F Y') }}
+                                                            </p>
+                                                            <p><strong>Deskripsi:</strong></p>
+                                                            <p>{!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Tutup</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -279,6 +310,71 @@
                             originNameEl.innerText = placeName;
                         }
                     });
+            }
+        });
+    </script>
+    {{-- script untuk favorit --}}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const favoriteIcon = document.getElementById("favorite-icon");
+
+            if (!favoriteIcon) return;
+
+            const icon = favoriteIcon.querySelector("i");
+            const destinationId = favoriteIcon.dataset.id;
+            const isLoggedIn = favoriteIcon.dataset.loggedIn === "true";
+
+            // Cek status favorit dari localStorage (optional)
+            if (!isLoggedIn) {
+                // Jika tidak login, hapus status favorit dari localStorage
+                localStorage.removeItem("favorit_" + destinationId);
+            }
+
+            let isFavorit = localStorage.getItem("favorit_" + destinationId) === "true";
+
+            updateIcon();
+
+            favoriteIcon.addEventListener("click", function() {
+                if (!isLoggedIn) {
+                    // Redirect ke login jika belum login
+                    window.location.href = "/wisatawan/Masuk";
+                    return;
+                }
+
+                isFavorit = !isFavorit;
+
+                fetch(`/wisatawan/favorit/toggle/${destinationId}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content")
+                        },
+                        body: JSON.stringify({
+                            status: isFavorit
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            localStorage.setItem("favorit_" + destinationId, isFavorit);
+                            updateIcon();
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Gagal toggle favorit:", error);
+                    });
+            });
+
+            function updateIcon() {
+                icon.classList.remove("fa-heart", "far", "fas");
+                if (isFavorit) {
+                    icon.classList.add("fas", "fa-heart");
+                    icon.style.color = "red";
+                } else {
+                    icon.classList.add("far", "fa-heart");
+                    icon.style.color = "gray";
+                }
             }
         });
     </script>

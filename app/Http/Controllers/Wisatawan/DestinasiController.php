@@ -4,10 +4,12 @@ namespace App\Http\Controllers\wisatawan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Destination;
 use App\Models\Galeri;
-Use App\Models\Blog;
-Use App\Models\Acara;
+use App\Models\Blog;
+use App\Models\Acara;
+use App\Models\favorit;
 
 class DestinasiController extends Controller
 {
@@ -35,6 +37,9 @@ class DestinasiController extends Controller
 
         // Ambil acara yang terkait dengan destinasi ini
         $acara = Acara::where('destination_id', $destination->id)->get();
+
+        $user = Auth::guard('wisatawan')->user();
+
 
         // Buat array isi gambar-gambar yang tersedia
         $galleryImages = collect([

@@ -33,10 +33,13 @@
                 <div class="card card-transparent stats-card">
                     <div class="card-body">
                         <div class="stats-info">
-                            <h5 class="card-title">
-                                <span class="stats-change stats-change-success"> {{ $totalDestinasi }} </span>
+                            <h5 class="card-title"> {{ $totalDestinasi }}
+                                <span class="stats-change stats-change-success"> Destinasi </span>
                             </h5>
                             <p class="stats-text">Total destinasi saat ini</p>
+                        </div>
+                        <div class="stats-icon change-success">
+                            <i class="material-icons">trending_up</i>
                         </div>
                     </div>
                 </div>
@@ -45,10 +48,13 @@
                 <div class="card card-transparent stats-card">
                     <div class="card-body">
                         <div class="stats-info">
-                            <h5 class="card-title">
-                                <span class="stats-change stats-change-success"> {{ $totalGambar }} </span>
+                            <h5 class="card-title"> {{ $totalGambar }}
+                                <span class="stats-change stats-change-success"> Gambar </span>
                             </h5>
                             <p class="stats-text">Total gambar saat ini</p>
+                        </div>
+                        <div class="stats-icon change-success">
+                            <i class="material-icons">trending_up</i>
                         </div>
                     </div>
                 </div>
@@ -74,7 +80,7 @@
                                 @php $i = 1; @endphp
                                 @foreach ($destinations as $destination)
                                 <tr>
-                                    <td>{{ $i++ }}</td> 
+                                    <td>{{ $i++ }}</td>
                                     <td>{{ $destination->tujuan }}</td>
                                     <td>{{ $destination->latitude }}</td>
                                     <td>{{ $destination->longitude }}</td>

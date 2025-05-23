@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Wisatawan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Wisatawan;
 use Illuminate\Http\Request;
 use OpenAI\Laravel\Facades\OpenAI;
 

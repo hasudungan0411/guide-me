@@ -11,6 +11,7 @@ class Acara extends Model
     use HasFactory;
 
     protected $table = 'acara';
+    protected $primaryKey = 'ID_Acara';
 
     protected $fillable = [
         'ID_Acara',

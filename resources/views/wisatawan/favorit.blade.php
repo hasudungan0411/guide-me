@@ -1,9 +1,8 @@
 @extends('layouts.wisatawan')
 
-@section('title', 'Halaman Destinasi')
+@section('title', 'Daftar Favorit')
 
 @section('content')
-
     <!-- Start Page Banner -->
     <section class="page-banner overlay pt-170 pb-220 bg_cover"
         style="background-image: url({{ asset('assets/wisatawan/images/bg/page-bg.png') }});">
@@ -11,10 +10,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="page-banner-content text-center text-white">
-                        <h1 class="page-title">Jelajahi Destinasi</h1>
+                        <h1 class="page-title">Jelajahi Favorit</h1>
                         <ul class="breadcrumb-link text-white">
                             <li><a href="{{ route('wisatawan.home') }}">Home</a></li>
-                            <li class="active">Daftar destinasi</li>
+                            <li class="active">Favorit</li>
                         </ul>
                     </div>
                 </div>
@@ -29,7 +28,7 @@
             <div class="booking-form-wrapper p-r z-2">
                 <div class="container">
                     <div class="row justify-content-center">
-                        @foreach ($destinations as $destination)
+                        @forelse ($destinations as $destination)
                             <div class="col-xl-4 col-md-6 col-sm-12 places-column">
                                 <!-- Single Place Item -->
                                 <div class="single-place-item mb-60 wow fadeInUp">
@@ -57,7 +56,11 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Belum ada destinasi di Favorit ini.</p>
+                            </div>
+                        @endforelse
                     </div>
 
                     <!-- Pagination -->
@@ -78,8 +81,7 @@
                                 @endfor
                                 <li>
                                     @if ($destinations->hasMorePages())
-                                        <a href="{{ $destinations->nextPageUrl() }}"><i
-                                                class="far fa-arrow-right"></i></a>
+                                        <a href="{{ $destinations->nextPageUrl() }}"><i class="far fa-arrow-right"></i></a>
                                     @endif
                                 </li>
                             </ul>
@@ -89,7 +91,6 @@
             </div>
         </div>
     </section>
-    <!-- End Booking Section -->
 
     <!-- Start Gallery Section -->
     <section class="gallery-section mbm-150">
@@ -109,4 +110,5 @@
             </div>
         </div>
     </section>
+
 @endsection

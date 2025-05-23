@@ -50,7 +50,7 @@
                                 </h2>
 
                                 <div class="text-justify"
-                                    style="font-size: clamp(16px, 4vw, 24px); line-height: 1.8; color: #333;">
+                                    style="font-size: clamp(16px, 4vw, 24px);">
                                     {{ strip_tags($destinasi->long_desk) }}
                                 </div>
                             </div>

@@ -34,9 +34,10 @@ class KategoriController extends Controller
     public function destinasiByKategori($id_kategori)
     {
         $category = Kategori::findOrFail($id_kategori);
+        $gallery = Galeri::all();
         $destinations = Destination::where('kategori_id', $id_kategori)->get();
 
-        return view('wisatawan.destinasi-by-kategori', compact('category', 'destinations'));
+        return view('wisatawan.destinasi-by-kategori', compact('category', 'destinations' ,'gallery'));
     }
 
     public function blog()

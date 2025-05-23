@@ -30,4 +30,9 @@ class Wisatawan extends Authenticatable
         return $this->Kata_Sandi;
     }
 
+    public function favorit()
+    {
+        return $this->belongsToMany(Destination::class,'favorit','wisatawan_id', 'destination_id');
+    }
+
 }

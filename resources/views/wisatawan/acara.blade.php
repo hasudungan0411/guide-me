@@ -10,10 +10,10 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="page-banner-content text-center text-white">
-                        <h1 class="page-title">Explore Tour Place</h1>
+                        <h1 class="page-title">Jelajahi Acara</h1>
                         <ul class="breadcrumb-link text-white">
                             <li><a href="{{ route('wisatawan.home') }}">Home</a></li>
-                            <li class="active">Explore Tour Place</li>
+                            <li class="active">Acara</li>
                         </ul>
                     </div>
                 </div>
