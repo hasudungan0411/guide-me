@@ -33,6 +33,7 @@ class Pemilikwisata extends Authenticatable
     {
         return $this->belongsTo(Destination::class, 'Nama_Wisata', 'tujuan');
     }
+    
 
     public function getEmailForVerification()
     {
@@ -43,4 +44,6 @@ class Pemilikwisata extends Authenticatable
     {
         return $this->Kata_Sandi;
     }
+
+
 }

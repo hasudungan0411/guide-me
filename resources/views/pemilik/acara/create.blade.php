@@ -17,7 +17,7 @@
                 <div class="col-xl">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('acara.index') }}" class="btn btn-primary mb-3">Kembali</a>
+                            <a href="{{ route('pemilik.acara') }}" class="btn btn-primary mb-3">Kembali</a>
                             <h5 class="card-title">Tambah Acara Baru</h5>
 
                             @if ($errors->any())

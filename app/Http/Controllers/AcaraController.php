@@ -19,16 +19,16 @@ class AcaraController extends Controller
         $destinasi = $pemilik->destination;
 
         // Pastikan hanya acara dari destinasi miliknya yang diambil
-        $acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_acara')->get() : [];
+        $Acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_acara')->get() : [];
 
-        return view('acara.index', compact('acara', 'destinasi'));
+        return view('pemilik.acara.index', compact('Acara', 'destinasi'));
     }
 
 
     // Menampilkan form tambah acara
     public function create()
     {
-        return view('acara.create');
+        return view('pemilik.acara.create');
     }
 
     // Menyimpan acara baru
@@ -48,21 +48,21 @@ class AcaraController extends Controller
         }
 
         Acara::create([
-            'destination_id' => $destinasi->id,
+            'ID_Wisata' => $destinasi->id,
             'Nama_acara' => $request->Nama_acara,
             'Tanggal_acara' => $request->Tanggal_acara,
             'Deskripsi' => $request->Deskripsi,
         ]);
 
         Alert::success('Success','Acara berhasil ditambahkan');
-        return redirect()->route('acara.index');
+        return redirect()->route('pemilik.acara.index');
     }
 
     // Menampilkan form edit acara
     public function edit($id)
     {
-        $acara = Acara::findOrFail($id);
-        return view('acara.edit', compact('acara'));
+        $Acara = Acara::findOrFail($id);
+        return view('pemilik.acara.edit', compact('Acara'));
     }
 
     // Menyimpan perubahan acara
@@ -83,7 +83,7 @@ class AcaraController extends Controller
         ]);
 
         Alert::success('Success','Acara berhasil diubah');
-        return redirect()->route('acara.index');
+        return redirect()->route('pemilik.acara.index');
     }
 
     // Menghapus acara
@@ -93,6 +93,6 @@ class AcaraController extends Controller
         $acara->delete();
 
         Alert::success('Success','Acara berhasil dihapus');
-        return redirect()->route('acara.index');
+        return redirect()->route('pemilik.acara.index');
     }
 }

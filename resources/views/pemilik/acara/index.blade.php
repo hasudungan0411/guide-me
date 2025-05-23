@@ -1,6 +1,6 @@
 @extends('layouts.pemilik')
 
-@section('title', 'Halaman Acara')
+@section('title', 'Data Acara')
 
 @section('content')
     <div class="page-content">
@@ -30,15 +30,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($acara as $Acara)
+                                    @foreach ($Acara as $acara)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $Acara->Nama_acara }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($Acara->Tanggal_acara)->format('d/m/Y') }}</td>
+                                            <td>{{ $acara->Nama_acara }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($acara->Tanggal_acara)->format('d/m/Y') }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-success" tabindex="0" data-toggle="popover"
                                                     data-trigger="focus" title="Deskripsi"
-                                                    data-content="{{ strip_tags($Acara->Deskripsi) }}">Lihat</button>
+                                                    data-content="{{ strip_tags($acara->Deskripsi) }}">Lihat</button>
                                             </td>
                                             <td>
                                                 <div class="btn-group dropleft">
@@ -48,15 +48,15 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                            href="{{ route('acara.edit', $Acara->ID_Acara) }}">Ubah</a>
+                                                            href="{{ route('acara.edit', $acara->ID_Acara) }}">Ubah</a>
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item" href="#" data-toggle="modal"
-                                                            data-target="#modalHapus{{ $Acara->ID_Acara }}">Hapus</a>
+                                                            data-target="#modalHapus{{ $acara->ID_Acara }}">Hapus</a>
                                                     </div>
                                                 </div>
 
                                                 <!-- Modal Konfirmasi Hapus -->
-                                                <div class="modal fade" id="modalHapus{{ $Acara->ID_Acara }}" tabindex="-1"
+                                                <div class="modal fade" id="modalHapus{{ $acara->ID_Acara }}" tabindex="-1"
                                                     role="dialog" aria-labelledby="modalHapusLabel" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
@@ -74,7 +74,7 @@
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-dismiss="modal">Batal</button>
                                                                 <form
-                                                                    action="{{ route('acara.destroy', $Acara->ID_Acara) }}"
+                                                                    action="{{ route('acara.destroy', $acara->ID_Acara) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')
@@ -90,21 +90,12 @@
                                         </tr>
                                     @endforeach
 
-                                    @if ($acara->isEmpty())
+                                    @if ($Acara->isEmpty())
                                         <tr>
                                             <td colspan="5" class="text-center">Belum ada data acara.</td>
                                         </tr>
                                     @endif
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama Acara</th>
-                                        <th>Tanggal</th>
-                                        <th>Deskripsi</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
                             </table>
                         </div>
                     </div>

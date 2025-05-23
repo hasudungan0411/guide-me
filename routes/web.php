@@ -99,6 +99,7 @@ Route::prefix('wisatawan')->group(function () {
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
+        Route::post('/destinasi/detail_destinasi/', [TiketController::class, 'pesan'])->name('pesan.tiket');
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
         Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
         Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
@@ -117,17 +118,21 @@ Route::prefix('pemilik')->group(function () {
         Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
 
         // Acara
-        Route::get('/acara', [AcaraController::class, 'index'])->name('acara.index');
+        Route::get('/acara', [AcaraController::class, 'index'])->name('pemilik.acara');
         Route::get('/acara/create', [AcaraController::class, 'create'])->name('acara.create');
-        Route::post('/acara', [AcaraController::class, 'store'])->name('acara.store');
-        Route::get('/edit/{id}', [AcaraController::class, 'edit'])->name('acara.edit');
-        Route::post('/update/{id}', [AcaraController::class, 'update'])->name('acara.update');
-        Route::get('/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
+        Route::post('/acara/create', [AcaraController::class, 'store'])->name('acara.store');
+        Route::get('/acara/edit/{id}', [AcaraController::class, 'edit'])->name('acara.edit');
+        Route::post('/acara/update/{id}', [AcaraController::class, 'update'])->name('acara.update');
+        Route::get('/acara/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
 
         // Tiket
-        Route::get('/tiket/{id}', [PemilikController::class, 'showtiketpemilik'])->name('pemilik.tiket');
+        Route::get('/tiket', [TiketController::class, 'index'])->name('pemilik.tiket');
+        Route::put('/tiket/update', [TiketController::class, 'update'])->name('tiket.update');
+
 
         // Transaksi
         Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+
+        Route::post('process-payment', PaymentController::class);
     });
 });

@@ -35,7 +35,7 @@ class Destination extends Model
 
     public function acara()
     {
-        return $this->hasMany(Acara::class, 'destination_id');
+        return $this->hasMany(Acara::class, 'ID_Wisata');
     }
 
     public function pemilikwisata()
@@ -43,8 +43,15 @@ class Destination extends Model
         return $this->hasOne(Pemilikwisata::class, 'Nama_Wisata', 'tujuan');
     }
 
+<<<<<<< HEAD
     public function favoritwisatawan()
     {
         return $this->belongsTo(Wisatawan::class,'favorit','destination_id','wisatawan_id');
     }
+=======
+    public function tiket()
+{
+    return $this->hasMany(Tiket::class, 'ID_Wisata', 'id');
+}
+>>>>>>> bb32160fe2f613b3620420b56125ee17eba18f3a
 }
