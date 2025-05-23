@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\TiketController;
 use App\Models\Wisatawan;
 use Illuminate\Http\Request;
@@ -101,6 +102,7 @@ Route::prefix('wisatawan')->group(function () {
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
+        Route::post('/destinasi/detail_destinasi/', [TiketController::class, 'pesan'])->name('pesan.tiket');
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
         // Route::post('/favorit', [WisatawanReviewController::class, 'favorit'])->name('wisatawan.favorit');
         // Route::post('/pesan-tiket', [WisatawanBookingController::class, 'pesan'])->name('wisatawan.pesan');
@@ -132,5 +134,7 @@ Route::prefix('pemilik')->group(function () {
 
         // Transaksi
         Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+
+        Route::post('process-payment', PaymentController::class);
     });
 });

@@ -98,6 +98,21 @@
                                 <button id="start-navigation-btn" class="btn btn-success" style="display:none;">Mulai
                                     Perjalanan</button>
                             </div>
+
+                            <!-- pesantiket -->
+                            <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+
+                                <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
+                                <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
+
+                                <div class="form-group col-md-4">
+                                    <label>Harga Tiket : {{ $tiket->first()->Harga ?? 'Tidak tersedia' }}</label>
+                                    <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0" required>
+                                </div>
+
+                                <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
+                            </form>
                         </div>
 
                         <!--=== Disqus Comments ===-->
