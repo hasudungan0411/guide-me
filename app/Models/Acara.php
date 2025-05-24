@@ -13,8 +13,6 @@ class Acara extends Model
     protected $table = 'acara';
     protected $primaryKey = 'ID_Acara';
 
-    protected $primaryKey = 'ID_Acara';
-
     protected $fillable = [
         'ID_Wisata',
         'Tanggal_acara',
