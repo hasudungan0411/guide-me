@@ -5,18 +5,11 @@ namespace App\Http\Controllers\wisatawan;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Destination;
 use App\Models\Galeri;
-<<<<<<< HEAD
-use App\Models\Blog;
-use App\Models\Acara;
-use App\Models\favorit;
-=======
 Use App\Models\Blog;
 Use App\Models\Acara;
 Use App\Models\Tiket;
->>>>>>> bb32160fe2f613b3620420b56125ee17eba18f3a
 
 class DestinasiController extends Controller
 {

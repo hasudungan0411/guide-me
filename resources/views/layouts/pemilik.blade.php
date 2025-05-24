@@ -58,12 +58,12 @@
                     </li>
 
                     <li class="{{ Request::routeIs('pemilik.tiket') ? 'active-page' : '' }}">
-                        <a href="" class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
+                        <a href="{{ route('pemilik.tiket') }}" class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
                             <i class="material-icons-outlined">confirmation_number</i>Tiket
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
-                        <a href="" class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
+                        <a href="{{ route('pemilik.transaksi') }}" class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
                             <i class="material-icons-outlined">payments </i>Transaksi
                         </a>
                     </li>
