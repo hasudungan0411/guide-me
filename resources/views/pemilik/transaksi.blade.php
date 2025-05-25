@@ -47,10 +47,11 @@
                                     <th>ID</th>
                                     <th>ID Tiket</th>
                                     <th>Pemesan</th>
-                                    <th>Status Pembayaran</th>
+                                    <th>Status</th>
                                     <th>Total Harga</th>
                                     <th>Jumlah Tiket</th>
                                     <th>Tanggal Pesanan</th>
+                                    <th>Bukti Transaksi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -65,6 +66,7 @@
                                     <td>{{ number_format($tiket->total_harga, 0, ',', '.') }}</td>
                                     <td>{{ $tiket->Jumlah_Tiket }}</td>
                                     <td>{{ $tiket->Tanggal_Transaksi }}</td>
+                                    <td><a class="btn btn-success" href="#" data-toggle="modal" data-target="#ModalBukti{{ $tiket->ID_Transaksi }}">Lihat</a></td>
                                     <td>
                                         <div class="btn-group dropleft">
                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,7 +85,7 @@
                                 </tr>
 
                                 <!-- Modal Hapus -->
-                                 <div class="modal fade" id="ModalHapus{{ $tiket->ID_Transaksi }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal fade" id="ModalHapus{{ $tiket->ID_Transaksi }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -147,11 +149,28 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                <form action="{{ route('pemilik.konfirmasi', $tiket->ID_Tiket) }}" method="POST">
+                                                <form action="{{ route('pemilik.gunakan', $tiket->ID_Transaksi) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="btn btn-success">Gunakan</button>
                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Modal Bukti -->
+                                <div class="modal fade" id="ModalBukti{{ $tiket->ID_Transaksi }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalCenterTitle">Bukti Pembayaran</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <i class="material-icons">close</i>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <img src="" alt="Bukti Pembayaran">
                                             </div>
                                         </div>
                                     </div>

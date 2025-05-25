@@ -74,6 +74,7 @@ Route::middleware(['admin'])->group(function () {
 
 
 // Halaman umum wisatawan tanpa login
+Route::get('/', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
 Route::prefix('wisatawan')->group(function () {
     Route::get('/', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
     Route::get('/home', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
@@ -137,7 +138,9 @@ Route::prefix('pemilik')->group(function () {
 
         // Transaksi
         Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
-        Route::get('/transaksi/konfirmasi', [TransaksiController::class, ''])->name('pemilik.konfirmasi');
+        Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('pemilik.konfirmasi');
+        Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('pemilik.gunakan');
+
 
     });
 });

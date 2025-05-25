@@ -131,7 +131,8 @@
                             </div>
 
                             <!-- pesantiket -->
-                            <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
+                            @if($tiket)
+                                <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
 
                                 <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
@@ -144,6 +145,10 @@
 
                                 <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
                             </form>
+                            @else
+                                <p>Tiket belum tersedia untuk destinasi ini.</p>
+                            @endif
+                            
                         </div>
 
                         <!--=== Disqus Comments ===-->

@@ -52,4 +52,47 @@ class TransaksiController extends Controller
 
     return redirect()->back()->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
     }
+
+    public function konfirmasitiket($id)
+{
+    $pesanan = Transaksi::find($id);
+
+    if (!$pesanan) {
+        Alert::error('Error', 'Pesanan tidak ditemukan.');
+        return redirect()->back();
+    }
+
+    if ($pesanan->Status === 'Paid') {
+        Alert::error('Error', 'Pesanan ini sudah dikonfirmasi.');
+        return redirect()->back();
+    }
+
+    $pesanan->Status = 'Paid';
+    $pesanan->save();
+
+    Alert::success('Sukses', 'Tiket berhasil dikonfirmasi.');
+    return redirect()->back();
+}
+
+    public function gunakantiket($id)
+    {
+    $pesanan = Transaksi::find($id);
+
+    if (!$pesanan) {
+        Alert::error('Error', 'Pesanan tidak ditemukan.');
+        return redirect()->back();
+    }
+
+    if ($pesanan->Status !== 'Paid') {
+        Alert::error('Error', 'Pesanan ini belum dikonfirmasi.');
+        return redirect()->back();
+    }
+
+    $pesanan->Status = 'Sudah Digunakan';
+    $pesanan->save();
+
+    Alert::success('Sukses', 'Tiket berhasil digunakan.');
+    return redirect()->back();
+    }
+    
 }
