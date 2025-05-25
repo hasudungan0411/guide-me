@@ -63,7 +63,7 @@
                         </a>
                     </li>
                     <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
-                        <a href="" class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
+                        <a href="{{ route('pemilik.transaksi') }}" class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
                             <i class="material-icons-outlined">payments </i>Transaksi
                         </a>
                     </li>

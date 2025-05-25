@@ -29,4 +29,5 @@ class Tiket extends Model
     {
         return $this->belongsTo(Destination::class, 'ID_Wisata', 'id'); 
     }
+    
 }

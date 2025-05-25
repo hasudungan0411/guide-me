@@ -21,6 +21,7 @@ class Transaksi extends Model
         'total_harga',
         'Jumlah_Tiket',
         'Tanggal_Transaksi',
+        'Bukti_Transaksi',
     ];
 
     public function destinasi()

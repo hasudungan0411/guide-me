@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TransaksiController;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PemilikController;
@@ -73,6 +75,7 @@ Route::middleware(['admin'])->group(function () {
 
 // Halaman umum wisatawan tanpa login
 Route::prefix('wisatawan')->group(function () {
+    Route::get('/', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
     Route::get('/home', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
     Route::get('/destinasi', [WisatawanDestinasiController::class, 'destinasi'])->name('wisatawan.destinasi');
     Route::get('/destinasi/detail_destinasi/{id}', [WisatawanDestinasiController::class, 'detail_destinasi'])->name('wisatawan.detail_destinasi');
@@ -104,7 +107,7 @@ Route::prefix('wisatawan')->group(function () {
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
         Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
         Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
-        // Route::post('/pesan-tiket', [WisatawanBookingController::class, 'pesan'])->name('wisatawan.pesan');
+        Route::post('/pesan-tiket', [TiketController::class, 'pesan'])->name('wisatawan.pesan');
     });
 });
 
@@ -116,6 +119,7 @@ Route::prefix('pemilik')->group(function () {
 
     Route::middleware(['auth:pemilikwisata'])->group(function () {
         // Index
+        Route::get('/', [PemilikController::class, 'index'])->name('pemilik.index');
         Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
 
         // Acara
@@ -132,7 +136,8 @@ Route::prefix('pemilik')->group(function () {
 
 
         // Transaksi
-        Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+        Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+        Route::get('/transaksi/konfirmasi', [TransaksiController::class, ''])->name('pemilik.konfirmasi');
 
     });
 });
