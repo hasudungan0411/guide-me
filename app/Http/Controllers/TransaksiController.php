@@ -54,45 +54,63 @@ class TransaksiController extends Controller
     }
 
     public function konfirmasitiket($id)
-{
-    $pesanan = Transaksi::find($id);
+    {
+        $pesanan = Transaksi::find($id);
 
-    if (!$pesanan) {
-        Alert::error('Error', 'Pesanan tidak ditemukan.');
+        if (!$pesanan) {
+            Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        if ($pesanan->Status === 'Paid') {
+            Alert::error('Error', 'Pesanan ini sudah dikonfirmasi.');
+            return redirect()->back();
+        }
+
+        $pesanan->Status = 'Paid';
+        $pesanan->save();
+
+        Alert::success('Sukses', 'Tiket berhasil dikonfirmasi.');
         return redirect()->back();
     }
-
-    if ($pesanan->Status === 'Paid') {
-        Alert::error('Error', 'Pesanan ini sudah dikonfirmasi.');
-        return redirect()->back();
-    }
-
-    $pesanan->Status = 'Paid';
-    $pesanan->save();
-
-    Alert::success('Sukses', 'Tiket berhasil dikonfirmasi.');
-    return redirect()->back();
-}
 
     public function gunakantiket($id)
     {
-    $pesanan = Transaksi::find($id);
+        $pesanan = Transaksi::find($id);
 
-    if (!$pesanan) {
-        Alert::error('Error', 'Pesanan tidak ditemukan.');
+        if (!$pesanan) {
+            Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        if ($pesanan->Status !== 'Paid') {
+            Alert::error('Error', 'Pesanan ini belum dikonfirmasi.');
+            return redirect()->back();
+        }
+
+        $pesanan->Status = 'Sudah Digunakan';
+        $pesanan->save();
+
+        Alert::success('Sukses', 'Tiket berhasil digunakan.');
         return redirect()->back();
-    }
+    } 
 
-    if ($pesanan->Status !== 'Paid') {
-        Alert::error('Error', 'Pesanan ini belum dikonfirmasi.');
+    public function hapustiket($id)
+    {
+        $pesanan = Transaksi::find($id);
+
+        if (!$pesanan) {
+            Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        if ($pesanan->Status !== 'Batal' && $pesanan->Status !== 'Hangus') {
+            Alert::error('Error', 'Pesanan ini tidak dapat dihapus.');
+            return redirect()->back();
+        }
+
+        $pesanan->delete();
+        Alert::success('Sukses', 'Tiket berhasil dihapus.');
         return redirect()->back();
-    }
-
-    $pesanan->Status = 'Sudah Digunakan';
-    $pesanan->save();
-
-    Alert::success('Sukses', 'Tiket berhasil digunakan.');
-    return redirect()->back();
-    }
-    
+    } 
 }

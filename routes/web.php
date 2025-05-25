@@ -104,11 +104,11 @@ Route::prefix('wisatawan')->group(function () {
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
-        Route::post('/destinasi/detail_destinasi/', [TiketController::class, 'pesan'])->name('pesan.tiket');
+        Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
         Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
         Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
-        Route::post('/pesan-tiket', [TiketController::class, 'pesan'])->name('wisatawan.pesan');
+        Route::post('/pesan-tiket', [TransaksiController::class, 'pesan'])->name('wisatawan.pesan');
     });
 });
 
@@ -138,8 +138,9 @@ Route::prefix('pemilik')->group(function () {
 
         // Transaksi
         Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
-        Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('pemilik.konfirmasi');
-        Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('pemilik.gunakan');
+        Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('tiket.konfirmasi');
+        Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('tiket.gunakan');
+        Route::delete('/transaksi/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('tiket.hapus');
 
 
     });

@@ -62,7 +62,16 @@
                                     <td>{{ $i++ }}</td>
                                     <td>{{ $tiket->ID_Tiket }}</td>
                                     <td>{{ $tiket->wisatawan->Email }}</td>
-                                    <td>{{ $tiket->Status }}</td>
+                                    <td class="
+                                            @if($tiket->Status === 'Paid') text-success 
+                                            @elseif($tiket->Status === 'Sudah Digunakan') text-primary 
+                                            @elseif($tiket->Status === 'Unpaid') text-warning 
+                                            @elseif($tiket->Status === 'Batal' || $tiket->Status === 'Hangus') text-danger 
+                                            @endif
+                                    ">
+                                        {{ $tiket->Status }}
+
+                                    </td>
                                     <td>{{ number_format($tiket->total_harga, 0, ',', '.') }}</td>
                                     <td>{{ $tiket->Jumlah_Tiket }}</td>
                                     <td>{{ $tiket->Tanggal_Transaksi }}</td>
@@ -99,7 +108,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Gak jadi deh</button>
-                                                <form action="{{ route('pemilik.konfirmasi', $tiket->ID_Transaksi) }}" method="POST">
+                                                <form action="{{ route('tiket.hapus', $tiket->ID_Transaksi) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Hapus</button>
@@ -124,7 +133,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                <form action="{{ route('pemilik.konfirmasi', $tiket->ID_Transaksi) }}" method="POST">
+                                                <form action="{{ route('tiket.konfirmasi', $tiket->ID_Transaksi) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="btn btn-success">Konfirmasi</button>
@@ -149,7 +158,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                <form action="{{ route('pemilik.gunakan', $tiket->ID_Transaksi) }}" method="POST">
+                                                <form action="{{ route('tiket.gunakan', $tiket->ID_Transaksi) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <button type="submit" class="btn btn-success">Gunakan</button>
