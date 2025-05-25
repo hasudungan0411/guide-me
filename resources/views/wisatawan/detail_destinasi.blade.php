@@ -130,20 +130,7 @@
                                     Perjalanan</button>
                             </div>
 
-                            <!-- pesantiket -->
-                            <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
 
-                                <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
-                                <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
-
-                                <div class="form-group col-md-4">
-                                    <label>Harga Tiket : {{ $tiket->first()->Harga ?? 'Tidak tersedia' }}</label>
-                                    <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0" required>
-                                </div>
-
-                                <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
-                            </form>
                         </div>
 
                         <!--=== Disqus Comments ===-->
@@ -163,6 +150,21 @@
                     </div>
 
                     <div class="col-xl-4">
+                        <!-- pesantiket -->
+                        <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
+                            <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
+
+                            <div class="form-group col-md-4">
+                                <label>Harga Tiket : {{ $tiket->first()->Harga ?? 'Tidak tersedia' }}</label>
+                                <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0"
+                                    required>
+                            </div>
+
+                            <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
+                        </form>
                         <div class="sidebar-widget-area pt-10 pl-lg-30">
                             <div class="sidebar-widget recent-post-widget mb-40 wow fadeInUp">
                                 <h4 class="widget-title">Recent News</h4>

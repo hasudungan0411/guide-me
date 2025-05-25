@@ -13,6 +13,7 @@ use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\KelolaAkunPemilikController;
 use App\Http\Controllers\WisataSearchController;
+use App\Http\Controllers\TiketController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
 use App\Http\Controllers\Wisatawan\BlogController as wisatawanBlogController;
@@ -133,6 +134,5 @@ Route::prefix('pemilik')->group(function () {
         // Transaksi
         Route::get('/transaksi/{id}', [PemilikController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
 
-        Route::post('process-payment', PaymentController::class);
     });
 });
