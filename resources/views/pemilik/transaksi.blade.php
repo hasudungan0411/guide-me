@@ -8,7 +8,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Pemilik</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Acara</li>
+                <li class="breadcrumb-item active" aria-current="page">Transaksi</li>
             </ol>
         </nav>
     </div>

@@ -139,7 +139,7 @@
                                 <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
 
                                 <div class="form-group col-md-4">
-                                    <label>Harga Tiket : {{ $tiket->first()->Harga ?? 'Tidak tersedia' }}</label>
+                                    <label>Harga Tiket : {{ $tiket->Harga ?? 'Tidak tersedia' }}</label>
                                     <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0" required>
                                 </div>
 

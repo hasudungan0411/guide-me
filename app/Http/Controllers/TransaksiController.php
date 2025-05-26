@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Acara;
+use App\Models\Tiket;
 use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
@@ -58,6 +58,12 @@ class TransaksiController extends Controller
 
     $wisatawan = Auth::guard('wisatawan')->user();
 
+    $tiket = Tiket::where('ID_Wisata', $request->ID_Wisata)->first();
+
+    if ($tiket->Persediaan < $request->Jumlah_Tiket) {
+        return redirect()->back()->with('error', 'Tiket tidak cukup.');
+    }
+
     $kodeInvoice = 'INV-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(5));
 
     $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
@@ -73,7 +79,54 @@ class TransaksiController extends Controller
     $pesanan->Bukti_Transaksi = null;
     $pesanan->save();
 
+
+    $tiket->Persediaan -= $request->Jumlah_Tiket;
+    $tiket->save();
+
     return redirect()->back()->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+    }
+
+    public function showdetailtiket($id)
+    {
+        $wisatawan = Auth::guard('wisatawan')->user();
+
+        $tiket = Transaksi::where('ID_Transaksi', $id)
+                    ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
+                    ->first();
+
+        if (!$tiket) {
+            Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        $destinasi = $tiket->destinasi;
+
+        return view('wisatawan.detail_tiket', compact('tiket', 'destinasi'));
+    }
+
+        public function uploadbukti(Request $request, $id)
+    {
+        // Validasi file
+        $request->validate([
+            'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        // Cari transaksi berdasarkan ID
+        $transaksi = Transaksi::findOrFail($id);
+
+        // Ambil file yang di-upload
+        $file = $request->file('bukti_transaksi');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Pindahkan file ke folder 'bukti' di public
+        $file->move(public_path('bukti'), $filename);
+
+        // Simpan nama file ke dalam database
+        $transaksi->Bukti_Transaksi = $filename;
+        $transaksi->save();
+
+        // Redirect dengan pesan sukses
+        return redirect()->back()->with('success', 'Bukti pembayaran berhasil diunggah.');
     }
 
     public function konfirmasitiket($id)

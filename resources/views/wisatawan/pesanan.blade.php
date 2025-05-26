@@ -36,8 +36,8 @@
                                         btn
                                             @if($item->Status === 'Paid') btn-success 
                                             @elseif($item->Status === 'Sudah Digunakan') btn-primary 
-                                            @elseif($item->Status === 'Unpaid') text-warning 
-                                            @elseif($item->Status === 'Batal' || $item->Status === 'Hangus') text-danger 
+                                            @elseif($item->Status === 'Unpaid') btn-warning 
+                                            @elseif($item->Status === 'Batal' || $item->Status === 'Hangus') btn-danger 
                                             @endif
                                     ">
                                         {{ $item->Status }}</span>
