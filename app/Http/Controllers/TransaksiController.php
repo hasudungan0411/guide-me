@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
@@ -22,6 +23,16 @@ class TransaksiController extends Controller
         }
 
         $transaksi = Transaksi::where('ID_Wisata', $destinasi->id)->get();
+
+        foreach ($transaksi as $item) {
+        if (
+            in_array($item->Status, ['Unpaid', 'Paid']) &&
+            Carbon::parse($item->Tanggal_Transaksi)->addDays(2)->isPast()
+        ) {
+            $item->Status = 'Hangus';
+            $item->save();
+        }
+        }
 
         return view('pemilik.transaksi', compact('transaksi', 'destinasi'));
     }
@@ -72,6 +83,11 @@ class TransaksiController extends Controller
             return redirect()->back();
         }
 
+        if ($pesanan->Status === 'Batal' && $pesanan->Status === 'Hangus') {
+            Alert::error('Error', 'Pesanan ini tidak dapat dikonfirmasi.');
+            return redirect()->back();
+        }
+
         if ($pesanan->Status === 'Paid') {
             Alert::error('Error', 'Pesanan ini sudah dikonfirmasi.');
             return redirect()->back();
@@ -90,6 +106,11 @@ class TransaksiController extends Controller
 
         if (!$pesanan) {
             Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        if ($pesanan->Status === 'Batal' && $pesanan->Status === 'Hangus') {
+            Alert::error('Error', 'Pesanan ini tidak dapat digunakan.');
             return redirect()->back();
         }
 
@@ -118,6 +139,13 @@ class TransaksiController extends Controller
             Alert::error('Error', 'Pesanan ini tidak dapat dihapus.');
             return redirect()->back();
         }
+
+        if ($pesanan->Status === 'Hangus') {
+            if (!Carbon::parse($pesanan->Tanggal_Transaksi)->addDays(3)->isPast()) {
+                Alert::error('Error', 'Pesanan ini belum dapat dihapus.');
+                return redirect()->back();
+            }
+        }   
 
         $pesanan->delete();
         Alert::success('Sukses', 'Tiket berhasil dihapus.');
