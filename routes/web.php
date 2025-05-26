@@ -104,11 +104,15 @@ Route::prefix('wisatawan')->group(function () {
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
-        Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
+
         // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
         Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
         Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
         Route::post('/pesan-tiket', [TransaksiController::class, 'pesan'])->name('wisatawan.pesan');
+        
+        // Tiket Wisatawan
+        Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
+        Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
     });
 });
 

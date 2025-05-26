@@ -25,6 +25,16 @@ class TransaksiController extends Controller
 
         return view('pemilik.transaksi', compact('transaksi', 'destinasi'));
     }
+
+    public function showpesananwisatawan()
+    {
+        $wisatawan = Auth::guard('wisatawan')->user();
+
+        $transaksi = Transaksi::where('ID_Wisatawan', $wisatawan->ID_Wisatawan)->get();
+
+        return view('wisatawan.pesanan', compact('transaksi', 'wisatawan'));
+    }
+
     public function pesan(Request $request)
     {
         $request->validate([
