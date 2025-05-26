@@ -138,13 +138,18 @@ class TransaksiController extends Controller
             return redirect()->back();
         }
 
-        if ($pesanan->Status === 'Batal' && $pesanan->Status === 'Hangus') {
+        if (in_array($pesanan->Status, ['Batal', 'Hangus'])) {
             Alert::error('Error', 'Pesanan ini tidak dapat dikonfirmasi.');
             return redirect()->back();
         }
 
         if ($pesanan->Status === 'Paid') {
             Alert::error('Error', 'Pesanan ini sudah dikonfirmasi.');
+            return redirect()->back();
+        }
+
+        if (!$pesanan->Bukti_Transaksi) {
+            Alert::error('Error', 'Bukti pembayaran belum diunggah.');
             return redirect()->back();
         }
 

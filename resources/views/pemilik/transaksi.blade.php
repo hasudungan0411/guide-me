@@ -75,7 +75,13 @@
                                     <td>{{ number_format($tiket->total_harga, 0, ',', '.') }}</td>
                                     <td>{{ $tiket->Jumlah_Tiket }}</td>
                                     <td>{{ $tiket->Tanggal_Transaksi }}</td>
-                                    <td><a class="btn btn-success" href="#" data-toggle="modal" data-target="#ModalBukti{{ $tiket->ID_Transaksi }}">Lihat</a></td>
+                                    <td>
+                                        @if ($tiket->Bukti_Transaksi)
+                                            <a class="btn btn-success" href="#" data-toggle="modal" data-target="#ModalBukti{{ $tiket->ID_Transaksi }}">Lihat</a>
+                                        @else
+                                            <button class="btn btn-secondary" disabled>Tidak Ada</button>
+                                        @endif
+                                    </td>
                                     <td>
                                         <div class="btn-group dropleft">
                                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -179,7 +185,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <img src="" alt="Bukti Pembayaran">
+                                                <img src="{{ asset('bukti/' . $tiket->Bukti_Transaksi) }}" alt="Bukti Pembayaran" class="img-fluid w-200" style="max-height: 600px; object-fit: contain;">
                                             </div>
                                         </div>
                                     </div>
