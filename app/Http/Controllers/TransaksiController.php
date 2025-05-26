@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Tiket;
 use App\Models\Transaksi;
+use App\Models\Wisatawan;
+use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -13,6 +15,25 @@ use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
+    public function adminIndex() 
+    {
+        $transaksi = Transaksi::all();
+        $totalTransaksi = Transaksi::count();
+        $totalWisatawan = Wisatawan::count();
+        $totalPemilik = Pemilikwisata::count();
+
+        foreach ($transaksi as $item) {
+            if (
+                in_array($item->Status, ['Unpaid', 'Paid']) &&
+                Carbon::parse($item->Tanggal_Transaksi)->addDays(2)->isPast()
+            ) {
+                $item->Status = 'Hangus';
+                $item->save();
+            }
+        }
+
+        return view('admin.data-transaksi', compact('transaksi','totalTransaksi','totalWisatawan','totalPemilik'));
+    }
     public function showtransaksipemilik()
     {
         $pemilik = Auth::guard('pemilikwisata')->user();

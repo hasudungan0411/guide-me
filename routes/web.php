@@ -52,6 +52,8 @@ Route::middleware(['admin'])->group(function () {
 
     Route::resource('galeri', GaleriController::class);
 
+    Route::get('/transaksi', [TransaksiController::class, 'adminIndex'])->name('admin.transaksi');
+
     // Routes untuk kolola Saran Tempat Wisata
     Route::get('/kelola-saran-wisata', [KelolaSaranController::class, 'saran'])->name('kelola_saranwisata.index');
 

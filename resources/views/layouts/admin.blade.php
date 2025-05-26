@@ -87,6 +87,10 @@
                                 <a href="{{ url('/galeri') }}"
                                     class="{{ Request::routeIs('galeri.*') ? 'active' : '' }}">Galeri</a>
                             </li>
+                            <li class="{{ Request::routeIs('transaksi.*') ? 'active-page' : '' }}">
+                                <a href="{{ url('/transaksi') }}"
+                                    class="{{ Request::routeIs('transaksi.*') ? 'active' : '' }}">Transaksi</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
