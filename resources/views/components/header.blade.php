@@ -77,6 +77,7 @@
 
                                     <ul class="dropdown-menu mt-2">
                                         <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('wisatawan.pesanan') }}">Pesanan</a></li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -165,6 +166,7 @@
 
                             <ul class="dropdown-menu mt-2">
                                 <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a></li>
+                                <li><a class="dropdown-item" href="{{ route('wisatawan.pesanan') }}">Pesanan</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

@@ -41,7 +41,9 @@ class TransaksiController extends Controller
     {
         $wisatawan = Auth::guard('wisatawan')->user();
 
-        $transaksi = Transaksi::where('ID_Wisatawan', $wisatawan->ID_Wisatawan)->get();
+        $transaksi = Transaksi::with('destinasi')
+            ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
+            ->get();
 
         return view('wisatawan.pesanan', compact('transaksi', 'wisatawan'));
     }

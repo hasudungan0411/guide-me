@@ -113,6 +113,8 @@ Route::prefix('wisatawan')->group(function () {
         // Tiket Wisatawan
         Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
+        Route::post('/pesanan/upload', [TransaksiController::class, 'uploadbukti'])->name('wisatawan.upload');
+        Route::get('/pesanan/detail', [TransaksiController::class, 'showdetailtiket'])->name('wisatawan.tiket-detail');
     });
 });
 
