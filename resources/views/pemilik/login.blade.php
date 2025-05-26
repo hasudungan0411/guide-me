@@ -50,6 +50,14 @@
                     onmouseout="this.style.opacity='1'; this.style.transform='none'; this.style.boxShadow='none'">
                     Masuk
                 </button>
+                <p>
+                    <span style="font-size:14px; center; color:#333; margin:10px 0 25px 0; cursor:pointer;">
+                        Jika belum memiliki akun, silahkan hubungi admin guide me
+                    </span>
+                    <a href="https://wa.me/+6287867529822" target="blank"
+                        style="color:#4CAF50; text-decoration:none;">Klink link whatsapp ini
+                    </a>
+                </p>
             </form>
         </div>
 

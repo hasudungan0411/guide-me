@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('galeri', function (Blueprint $table) {
-            $table->integer('id', true);
-            $table->string('gambar');
-            $table->timestamps();
+        Schema::table('destinations', function (Blueprint $table) {
+            $table->foreign(['kategori_id'])->references(['id_kategori'])->on('kategori')->onUpdate('restrict')->onDelete('cascade');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('galeri');
+        Schema::table('destinations', function (Blueprint $table) {
+            $table->dropForeign('destinations_kategori_id_foreign');
+        });
     }
 };

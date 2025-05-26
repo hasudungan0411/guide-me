@@ -39,9 +39,10 @@
                     <div id="password-error" style="color:#ff4444; font-size:12px; margin-top:4px; height:16px;"></div>
                 </div>
 
-                <div style="font-size:13px; color:#333; margin:8px 0 20px 0; cursor:pointer;"
-                    onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#333'">
-                    Lupa Kata Sandi?
+                <div style="font-size:13px; color:#333; margin:8px 0 20px 0;">
+                    <a href="{{ route('wisatawan.password.request') }}"
+                        style="color:#4CAF50; text-decoration:none;">Lupa Kata
+                        Sandi?</a>
                 </div>
 
                 <button type="submit"

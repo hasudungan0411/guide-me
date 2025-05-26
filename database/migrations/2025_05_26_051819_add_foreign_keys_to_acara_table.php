@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kategori', function (Blueprint $table) {
-            $table->unsignedBigInteger('id_kategori', true);
-            $table->string('nama_kategori');
-            $table->string('gambar')->nullable();
-            $table->timestamps();
+        Schema::table('acara', function (Blueprint $table) {
+            $table->foreign(['ID_Wisata'], 'fk_destination_id')->references(['id'])->on('destinations')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategori');
+        Schema::table('acara', function (Blueprint $table) {
+            $table->dropForeign('fk_destination_id');
+        });
     }
 };

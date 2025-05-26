@@ -12,11 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('blog', function (Blueprint $table) {
-            // ubah kolom kategori 
-            $table->unsignedBigInteger('kategori_id')->change();
-
-            // tambahkan relasinya 
-            $table->foreign('kategori')->references('id_kategori')->on('kategori')->onDelete('cascade');
+            $table->foreign(['kategori_id'], 'blog_kategori_foreign')->references(['id_kategori'])->on('kategori')->onUpdate('restrict')->onDelete('cascade');
         });
     }
 
@@ -26,9 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('blog', function (Blueprint $table) {
-            $table->dropForeign(['kategori_id']);
-            // Optional: ubah balik ke string kalau sebelumnya begitu
-            $table->string('kategori')->change();
+            $table->dropForeign('blog_kategori_foreign');
         });
     }
 };

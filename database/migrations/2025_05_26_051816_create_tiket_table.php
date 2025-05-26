@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('pemilikwisata', function (Blueprint $table) {
-            //
+        Schema::create('tiket', function (Blueprint $table) {
+            $table->integer('ID_Tiket', true);
+            $table->integer('ID_Wisata');
+            $table->integer('ID_Pemilik');
+            $table->integer('Persediaan');
+            $table->integer('Harga');
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('pemilikwisata', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('tiket');
     }
 };

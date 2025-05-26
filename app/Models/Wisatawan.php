@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 
-class Wisatawan extends Authenticatable
+class Wisatawan extends Authenticatable implements CanResetPassword
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, CanResetPasswordTrait;
 
     protected $table = 'wisatawan'; // Nama tabel di database
     protected $primaryKey = 'ID_Wisatawan'; // Primary key tabel wisatawan jika berbeda dari default 'id'
@@ -30,9 +32,13 @@ class Wisatawan extends Authenticatable
         return $this->Kata_Sandi;
     }
 
-    public function favorit()
+    public function getEmailForPasswordReset()
     {
-        return $this->belongsToMany(Destination::class,'favorit','wisatawan_id', 'destination_id');
+        return $this->Email;
     }
 
+    public function favorit()
+    {
+        return $this->belongsToMany(Destination::class, 'favorit', 'wisatawan_id', 'destination_id');
+    }
 }

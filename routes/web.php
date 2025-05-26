@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\TransaksiController;
-use App\Models\Transaksi;
-use Illuminate\Http\Request;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PemilikController;
 use App\Http\Controllers\DestinasiController;
@@ -16,6 +14,8 @@ use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\KelolaAkunPemilikController;
 use App\Http\Controllers\WisataSearchController;
 use App\Http\Controllers\TiketController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
 use App\Http\Controllers\Wisatawan\BlogController as wisatawanBlogController;
@@ -100,6 +100,15 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/Daftar-akun', [WisatawanAuthController::class, 'register'])->name('wisatawan.register');
     Route::post('/register', [WisatawanAuthController::class, 'registerPost'])->name('wisatawan.registerPost');
     Route::post('/logout', [WisatawanAuthController::class, 'logout'])->name('wisatawan.logout');
+    // Reset Password
+    Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('wisatawan.password.request');
+    // Kirim email reset password
+    Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('wisatawan.password.email');
+    // Form reset password dengan token
+    Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('wisatawan.password.reset');
+    // Submit form reset password (update password)
+    Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('wisatawan.password.update');
+
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
