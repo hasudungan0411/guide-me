@@ -33,6 +33,7 @@ class DestinasiController extends Controller
         // Ambil detail destinasi
         $destination = Destination::findOrFail($id);
 
+
         // data tiket
         $tiket = Tiket::where('ID_Wisata', $destination->id)->first();
 
