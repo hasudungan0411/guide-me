@@ -211,4 +211,25 @@ class TransaksiController extends Controller
         Alert::success('Sukses', 'Tiket berhasil dihapus.');
         return redirect()->back();
     } 
+
+    public function batalkantiket(Request $request, $id)
+    {
+        $pesanan = Transaksi::find($id);
+
+        if (!$pesanan) {
+            Alert::error('Error', 'Pesanan tidak ditemukan.');
+            return redirect()->back();
+        }
+
+        if (in_array($pesanan->Status, ['Paid', 'Sudah Digunakan'])) {
+            Alert::error('Error', 'Pesanan ini tidak dapat dibatalkan.');
+            return redirect()->back();
+        }
+
+        $pesanan->Status = 'Batal';
+        $pesanan->save();
+
+        Alert::success('Berhasil', 'Pesanan berhasil dibatalkan.');
+        return redirect()->back();
+    }
 }

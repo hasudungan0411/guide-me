@@ -115,6 +115,8 @@ Route::prefix('wisatawan')->group(function () {
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
         Route::post('/pesanan/upload/{id}', [TransaksiController::class, 'uploadbukti'])->name('upload.bukti');
         Route::get('/pesanan/detail/{id}', [TransaksiController::class, 'showdetailtiket'])->name('wisatawan.tiket-detail');
+        Route::post('/pesanan/detail/batal/{id}', [TransaksiController::class, 'batalkantiket'])->name('wisatawan.tiket-batal');
+        Route::delete('/pesanan/detail/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('wisatawan.tiket-hapus');
     });
 });
 
