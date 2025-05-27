@@ -18,7 +18,9 @@ class Pemilikwisata extends Authenticatable
         'Kata_Sandi',
         'Nomor_HP',
         'Nama_Wisata',
-        'Lokasi'
+        'Lokasi',
+        'Nomor_Rekening',
+        'Qris',
     ];
 
     protected $casts = [

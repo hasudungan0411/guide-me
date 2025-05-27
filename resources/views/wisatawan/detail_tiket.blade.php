@@ -25,10 +25,9 @@
                                             @elseif($tiket->Status === 'Batal' || $item->Status === 'Hangus') btn-danger 
                                             @endif
                                     ">
-                                        {{ $tiket->Status }}</span>
+                                        {{ $tiket->Status }}</span>                                
                         </p>
-                        <p><strong>Bukti Pembayaran:</strong> {{ $tiket->Bukti_Transaksi }}
-
+                        <p><strong>Bukti Pembayaran:</strong> {{ $tiket->Bukti_Transaksi }} <br>
                         @if ($tiket->Bukti_Transaksi)
                             <img src="{{ asset('bukti/' . $tiket->Bukti_Transaksi) }}" alt="Bukti Pembayaran" width="300">
                         @elseif ($tiket->Status !== 'Batal')
@@ -38,51 +37,45 @@
                                 <button class="btn btn-primary" type="submit">Upload</button>
                             </form>
                         @endif
-
-
-
-                        
-
                     </div>
                 </div>
                 <hr>
                 <a href="{{ route('wisatawan.pesanan') }}" class="btn btn-secondary">Kembali ke Daftar Pesanan</a>
-                @if ($tiket->Status === 'Unpaid')
+                @if ($tiket->Status === 'Unpaid' && !$tiket->Bukti_Transaksi)
                     <form action="{{ route('wisatawan.tiket-batal', $tiket->ID_Transaksi) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?');" style="display: inline;">
                         @csrf
                         <button type="submit" class="btn btn-danger">Batalkan</button>
                     </form>
                 @endif
                 @if ($tiket->Status === 'Unpaid' && !$tiket->Bukti_Transaksi)
-                    <button class="btn btn-success mt-3" data-toggle="modal" data-target="#modalPembayaran">Bayar Sekarang</button>
+                    <button class="btn btn-success" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar Sekarang</button>  
                 @endif
             </div>
 
         </div>
     </div>
 
-    <!-- Modal Pembayaran -->
-    <div class="modal fade" id="modalPembayaran" tabindex="-1" role="dialog" aria-labelledby="modalPembayaranLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="modalPembayaranLabel">Informasi Pembayaran</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-            <span aria-hidden="true">&times;</span>
-            </button>
+    <!-- Modal -->
+    <div class="modal fade" id="bayarModal" tabindex="-1"
+        aria-labelledby="bayarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bayarModalLabel">
+                        Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
+                    <p><strong>Qris : </strong></p>
+                    <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body text-center">
-            <p><strong>Transfer ke Rekening:</strong></p>
-            <p class="mb-1">BCA - 1234567890</p>
-            <p class="mb-3">a.n. PT Wisata Alam</p>
-            <hr>
-            <p><strong>Atau Scan QRIS Berikut:</strong></p>
-            <img src="{{ asset('images/qris.png') }}" alt="QRIS" class="img-fluid" style="max-height: 300px;">
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-        </div>
-        </div>
-    </div>
     </div>
 @endsection

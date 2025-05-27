@@ -223,6 +223,22 @@ class DestinasiController extends Controller
 
         $destination->save();
 
+        if ($request->jual_tiket === 'ya') {
+            $tiket = Tiket::where('ID_Wisata', $destination->id)->first();
+            
+            if (!$tiket) {
+                $tiket = new Tiket();
+                $tiket->ID_Wisata = $destination->id;
+                $tiket->ID_Pemilik = null;
+                $tiket->Persediaan = 0;
+                $tiket->Harga = 0;
+                $tiket->save();
+            }
+        } else {
+            // Jika tidak jual tiket, hapus tiket yang sudah ada
+            Tiket::where('ID_Wisata', $destination->id)->delete();
+        }
+
         alert::success('Success','Destinasi berhasil diubah');
         return redirect()->route('destinasi.index');
     }

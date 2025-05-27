@@ -159,8 +159,9 @@ class TransaksiController extends Controller
         }
 
         $destinasi = $tiket->destinasi;
+        $pemilik = $destinasi->pemilikwisata;
 
-        return view('wisatawan.detail_tiket', compact('tiket', 'destinasi'));
+        return view('wisatawan.detail_tiket', compact('tiket', 'destinasi', 'pemilik'));
     }
 
     public function uploadbukti(Request $request, $id)
