@@ -19,7 +19,7 @@ class TiketController extends Controller
 
         $tiket = $destinasi ? $destinasi->tiket()->firstOrFail() : abort(404);
 
-        return view('pemilik.tiket', compact('tiket', 'destinasi'));
+        return view('pemilik.tiket', compact('tiket', 'destinasi', 'pemilik'));
     }
 
     public function update(Request $request)

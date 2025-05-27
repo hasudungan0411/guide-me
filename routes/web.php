@@ -157,6 +157,7 @@ Route::prefix('pemilik')->group(function () {
 
         // Transaksi
         Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
+        Route::put('/transaksi/update/rekening', [TransaksiController::class, 'updateRekening'])->name('pemilik.rekening_update');
         Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('tiket.konfirmasi');
         Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('tiket.gunakan');
         Route::delete('/transaksi/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('tiket.hapus');

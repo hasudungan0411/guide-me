@@ -12,7 +12,7 @@ return [
             'driver' => 'session',
             'provider' => 'wisatawans',
         ],
-        'pemilikwisatas' => [
+        'pemilikwisata' => [
             'driver' => 'session',
             'provider' => 'pemilikwisatas',
         ],

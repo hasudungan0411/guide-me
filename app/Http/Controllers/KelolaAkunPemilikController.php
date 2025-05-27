@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pemilikwisata;
 use App\Models\Destination;
+use App\Models\Tiket;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class KelolaAkunPemilikController extends Controller
@@ -43,13 +44,23 @@ class KelolaAkunPemilikController extends Controller
             return back()->withErrors(['nama_wisata' => 'Wisata ini sudah memiliki pemilik.'])->withInput();
         }
 
-        Pemilikwisata::create([
+        $pemilik = Pemilikwisata::create([
             'Email' => $request->email,
             'Nomor_HP' => $request->nomor_hp,
             'Nama_Wisata' => $request->nama_wisata,
             'Lokasi' => $request->lokasi,
             'Kata_Sandi' => bcrypt($request->password),
         ]);
+
+        $destinasi = Destination::where('tujuan', $request->nama_wisata)->first();
+
+        if ($destinasi) {
+            $tiket = Tiket::where('ID_Wisata', $destinasi->id)->first();
+            if ($tiket) {
+                $tiket->ID_Pemilik = $pemilik->ID_Pemilik_Wisata;
+                $tiket->save();
+            }
+        }
 
         alert::success('Success','Akun Pemilik berhasil ditambahkan');
         return redirect()->route('akun_pemilik-wisata.index');

@@ -49,6 +49,13 @@
                                     <label>Destinasi</label>
                                     <input name="tujuan" type="text" class="form-control" required>
                                 </div>
+                                <div class="form-group">
+                                    <label>Jual Tiket</label>
+                                    <select name="jual_tiket" class="form-control custom-select" required>
+                                        <option value="tidak">Tidak</option>
+                                        <option value="ya">Ya</option>
+                                    </select>
+                                </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-4">
                                         <label>Latitude</label>

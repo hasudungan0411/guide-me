@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Destination;
 use App\Models\kategori;
+use App\Models\Tiket;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -56,6 +57,7 @@ class DestinasiController extends Controller
     {
         $validatedData = $request->validate([
             'tujuan' => 'required|string|max:255',
+            'jual_tiket' => 'required|in:ya,tidak',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'kategori_id' => 'required|exists:kategori,id_kategori',
@@ -89,7 +91,7 @@ class DestinasiController extends Controller
         if ($gambarMName) $request->file('gambarM')->storeAs('images/destinasi', $gambarMName, 'public');
 
         // menyimpan destinasi ke database
-        Destination::create([
+        $destinasi = Destination::create([
             'tujuan' => $validatedData['tujuan'],
             'latitude' => $validatedData['latitude'],
             'longitude' => $validatedData['longitude'],
@@ -103,6 +105,15 @@ class DestinasiController extends Controller
             'gambar5' => $gambar5Name,
             'gambarM' => $gambarMName,
         ]);
+
+        if ($request->jual_tiket === 'ya') {
+            $tiket = new Tiket();
+            $tiket->ID_Wisata = $destinasi->id;
+            $tiket->ID_Pemilik = null;
+            $tiket->Persediaan = 0;
+            $tiket->Harga = 0;
+            $tiket->save();
+        }
 
         alert::success('Success','Destinasi berhasil ditambahkan');
         return redirect()->route('destinasi.index');

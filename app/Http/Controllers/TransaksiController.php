@@ -9,6 +9,7 @@ use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
+use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -58,6 +59,43 @@ class TransaksiController extends Controller
         return view('pemilik.transaksi', compact('transaksi', 'destinasi'));
     }
 
+    public function updateRekening(Request $request)
+    {
+        $request->validate([
+            'nomor_rekening' => 'required|string|max:255',
+            'gambar_qris' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $pemilik = Auth::guard("pemilikwisata")->user();
+
+        if (!$pemilik) {
+            return redirect()->back()->withErrors('Pemilik tidak ditemukan.');
+        }
+
+        $pemilik->nomor_rekening = $request->nomor_rekening;
+
+        if ($request->hasFile('gambar_qris')) {
+
+            if ($pemilik->Qris) {
+                $filePath = public_path('gambar_qris/' . $pemilik->Qris);
+                if (File::exists($filePath)) {
+                    File::delete($filePath);
+                }
+            }
+
+            $file = $request->file('gambar_qris');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('gambar_qris'), $filename);
+            
+            $file = $filename;
+            $pemilik->Qris = $file;
+        }
+
+        $pemilik->save();
+
+        return redirect()->back()->with('success', 'Nomor rekening dan QRIS berhasil diperbarui.');
+    }
+
     public function showpesananwisatawan()
     {
         $wisatawan = Auth::guard('wisatawan')->user();
@@ -72,39 +110,39 @@ class TransaksiController extends Controller
     public function pesan(Request $request)
     {
         $request->validate([
-        'ID_Wisata' => 'required|exists:destinations,id',
-        'Jumlah_Tiket' => 'required|integer|min:1',
-        'Harga_Satuan' => 'required|numeric|min:0',
-    ]);
+            'ID_Wisata' => 'required|exists:destinations,id',
+            'Jumlah_Tiket' => 'required|integer|min:1',
+            'Harga_Satuan' => 'required|numeric|min:0',
+        ]);
 
-    $wisatawan = Auth::guard('wisatawan')->user();
+        $wisatawan = Auth::guard('wisatawan')->user();
 
-    $tiket = Tiket::where('ID_Wisata', $request->ID_Wisata)->first();
+        $tiket = Tiket::where('ID_Wisata', $request->ID_Wisata)->first();
 
-    if ($tiket->Persediaan < $request->Jumlah_Tiket) {
-        return redirect()->back()->with('error', 'Tiket tidak cukup.');
-    }
+        if ($tiket->Persediaan < $request->Jumlah_Tiket) {
+            return redirect()->back()->with('error', 'Tiket tidak cukup.');
+        }
 
-    $kodeInvoice = 'INV-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(5));
+        $kodeInvoice = 'INV-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(5));
 
-    $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
+        $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
 
-    $pesanan = new Transaksi();
-    $pesanan->ID_Tiket = $kodeInvoice;
-    $pesanan->ID_Wisata = $request->ID_Wisata;
-    $pesanan->ID_Wisatawan = $wisatawan->ID_Wisatawan;
-    $pesanan->Jumlah_Tiket = $request->Jumlah_Tiket;
-    $pesanan->total_harga = $totalHarga;
-    $pesanan->Status = 'Unpaid';
-    $pesanan->Tanggal_Transaksi = now();
-    $pesanan->Bukti_Transaksi = null;
-    $pesanan->save();
+        $pesanan = new Transaksi();
+        $pesanan->ID_Tiket = $kodeInvoice;
+        $pesanan->ID_Wisata = $request->ID_Wisata;
+        $pesanan->ID_Wisatawan = $wisatawan->ID_Wisatawan;
+        $pesanan->Jumlah_Tiket = $request->Jumlah_Tiket;
+        $pesanan->total_harga = $totalHarga;
+        $pesanan->Status = 'Unpaid';
+        $pesanan->Tanggal_Transaksi = now();
+        $pesanan->Bukti_Transaksi = null;
+        $pesanan->save();
 
 
-    $tiket->Persediaan -= $request->Jumlah_Tiket;
-    $tiket->save();
+        $tiket->Persediaan -= $request->Jumlah_Tiket;
+        $tiket->save();
 
-    return redirect()->back()->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+        return redirect()->back()->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
     }
 
     public function showdetailtiket($id)
@@ -125,28 +163,22 @@ class TransaksiController extends Controller
         return view('wisatawan.detail_tiket', compact('tiket', 'destinasi'));
     }
 
-        public function uploadbukti(Request $request, $id)
+    public function uploadbukti(Request $request, $id)
     {
-        // Validasi file
         $request->validate([
             'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Cari transaksi berdasarkan ID
         $transaksi = Transaksi::findOrFail($id);
 
-        // Ambil file yang di-upload
         $file = $request->file('bukti_transaksi');
         $filename = time() . '_' . $file->getClientOriginalName();
 
-        // Pindahkan file ke folder 'bukti' di public
         $file->move(public_path('bukti'), $filename);
 
-        // Simpan nama file ke dalam database
         $transaksi->Bukti_Transaksi = $filename;
         $transaksi->save();
 
-        // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Bukti pembayaran berhasil diunggah.');
     }
 
