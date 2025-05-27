@@ -130,9 +130,6 @@
                                     Perjalanan</button>
                             </div>
 
-<<<<<<< HEAD
-
-=======
                             <!-- pesantiket -->
                             @if($tiket)
                                 <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
@@ -151,8 +148,7 @@
                             @else
                                 <p>Tiket belum tersedia untuk destinasi ini.</p>
                             @endif
-                            
->>>>>>> 4ede242db1b3a43bc06ddaf6d2939185a8adcc96
+
                         </div>
 
                         <!--=== Disqus Comments ===-->
