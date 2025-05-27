@@ -52,6 +52,8 @@ Route::middleware(['admin'])->group(function () {
 
     Route::resource('galeri', GaleriController::class);
 
+    Route::get('/transaksi', [TransaksiController::class, 'adminIndex'])->name('admin.transaksi');
+
     // Routes untuk kolola Saran Tempat Wisata
     Route::get('/kelola-saran-wisata', [KelolaSaranController::class, 'saran'])->name('kelola_saranwisata.index');
 
@@ -124,6 +126,8 @@ Route::prefix('wisatawan')->group(function () {
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
         Route::post('/pesanan/upload/{id}', [TransaksiController::class, 'uploadbukti'])->name('upload.bukti');
         Route::get('/pesanan/detail/{id}', [TransaksiController::class, 'showdetailtiket'])->name('wisatawan.tiket-detail');
+        Route::post('/pesanan/detail/batal/{id}', [TransaksiController::class, 'batalkantiket'])->name('wisatawan.tiket-batal');
+        Route::delete('/pesanan/detail/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('wisatawan.tiket-hapus');
     });
 });
 
