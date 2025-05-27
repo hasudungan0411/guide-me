@@ -13,7 +13,7 @@
                     <div class="col-md-8">
                         <h3>{{ $destinasi->tujuan }}</h3>
 
-                        <p><strong>Deskripsi:</strong> {{ $destinasi->deskripsi }}</p>
+                        <p><strong>ID Tiket:</strong> {{ $tiket->ID_Tiket }}</p>
                         <p><strong>Jumlah Tiket:</strong> {{ $tiket->Jumlah_Tiket }}</p>
                         <p><strong>Harga Tiket:</strong> Rp {{ number_format($tiket->total_harga, 0, ',', '.') }}</p>
                         <p><strong>Tanggal Pesanan:</strong> {{ \Carbon\Carbon::parse($tiket->Tanggal_Transaksi)->format('d F Y') }}</p>

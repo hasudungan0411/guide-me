@@ -88,13 +88,11 @@
                                                 Aksi
                                             </button>
                                             <div class="dropdown-menu">
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalPembayaran{{ $tiket->ID_Transaksi }}">Konfirmasi Pembayaran</a>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalGunakan{{ $tiket->ID_Transaksi }}">Konfirmasi Penggunaan</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalHapus{{ $tiket->ID_Transaksi }}">Hapus</a>
-                                                </div>
-                                            </div>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalPembayaran{{ $tiket->ID_Transaksi }}">Konfirmasi Pembayaran</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalGunakan{{ $tiket->ID_Transaksi }}">Konfirmasi Penggunaan</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ModalHapus{{ $tiket->ID_Transaksi }}">Hapus</a>
+                                        </div>
                                         </div>
                                     </td>
                                 </tr>
