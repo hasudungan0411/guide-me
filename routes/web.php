@@ -94,6 +94,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::post('/send', [WisatawanChatbotController::class, 'sendChat']);
     Route::get('/search', [WisataSearchController::class, 'search'])->name('wisatawan.search');
 });
+
 // ======== AUTH WISATAWAN ========
 Route::prefix('wisatawan')->group(function () {
     Route::get('/Masuk', [WisatawanAuthController::class, 'login'])->name('wisatawan.login');
@@ -122,12 +123,15 @@ Route::prefix('wisatawan')->group(function () {
         Route::post('/pesan-tiket', [TransaksiController::class, 'pesan'])->name('wisatawan.pesan');
         
         // Tiket Wisatawan
-        Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
+        // Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
         Route::post('/pesanan/upload/{id}', [TransaksiController::class, 'uploadbukti'])->name('upload.bukti');
         Route::get('/pesanan/detail/{id}', [TransaksiController::class, 'showdetailtiket'])->name('wisatawan.tiket-detail');
-        Route::post('/pesanan/detail/batal/{id}', [TransaksiController::class, 'batalkantiket'])->name('wisatawan.tiket-batal');
-        Route::delete('/pesanan/detail/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('wisatawan.tiket-hapus');
+        Route::get('/pesanan/konfirmasi', [TransaksiController::class, 'showKonfirmasi'])->name('wisatawan.konfirmasi');
+        Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
+        Route::post('/pesanan/batal', [TransaksiController::class, 'batalPesanan'])->name('batal.pesanan');
+        Route::get('/pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoiceJpeg'])->name('wisatawan.invoice');
+
     });
 });
 

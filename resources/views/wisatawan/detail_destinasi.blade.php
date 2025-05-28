@@ -122,7 +122,7 @@
                                             <div class="modal-body">
                                                 <p><strong>Harga Tiket : </strong>{{ $tiket->Harga }}</p>
                                                 <p><strong>Stok Tiket : </strong>{{ $tiket->Persediaan }}</p>
-                                                <form action="{{ route('pesan.tiket') }}" method="POST" enctype="multipart/form-data">
+                                                <form action="{{ route('wisatawan.konfirmasi') }}" method="GET" enctype="multipart/form-data">
                                                     @csrf
 
                                                     <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
@@ -132,13 +132,13 @@
                                                         <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0" required>
                                                     </div>
 
-                                                    <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
+                                                    <div class="modal-footer mt-4">
+                                                        <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
+                                                    </div>
+
                                                 </form>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Tutup</button>
-                                            </div>
+                                           
                                         </div>
                                     </div>
                                 </div>

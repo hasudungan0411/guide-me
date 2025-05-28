@@ -21,61 +21,23 @@
                                         btn
                                             @if($tiket->Status === 'Paid') btn-success 
                                             @elseif($tiket->Status === 'Sudah Digunakan') btn-primary 
-                                            @elseif($tiket->Status === 'Unpaid') btn-warning 
+                                            @elseif($tiket->Status === 'Pending') btn-warning 
                                             @elseif($tiket->Status === 'Batal' || $item->Status === 'Hangus') btn-danger 
                                             @endif
                                     ">
                                         {{ $tiket->Status }}</span>                                
                         </p>
                         <p><strong>Bukti Pembayaran:</strong> {{ $tiket->Bukti_Transaksi }} <br>
-                        @if ($tiket->Bukti_Transaksi)
                             <img src="{{ asset('bukti/' . $tiket->Bukti_Transaksi) }}" alt="Bukti Pembayaran" width="300">
-                        @elseif ($tiket->Status !== 'Batal')
-                            <form action="{{ route('upload.bukti', $tiket->ID_Transaksi) }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <input type="file" name="bukti_transaksi" accept="image/*" required>
-                                <button class="btn btn-primary" type="submit">Upload</button>
-                            </form>
-                        @endif
                     </div>
                 </div>
                 <hr>
                 <a href="{{ route('wisatawan.pesanan') }}" class="btn btn-secondary">Kembali ke Daftar Pesanan</a>
-                @if ($tiket->Status === 'Unpaid' && !$tiket->Bukti_Transaksi)
-                    <form action="{{ route('wisatawan.tiket-batal', $tiket->ID_Transaksi) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?');" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">Batalkan</button>
-                    </form>
-                @endif
-                @if ($tiket->Status === 'Unpaid' && !$tiket->Bukti_Transaksi)
-                    <button class="btn btn-success" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar Sekarang</button>  
+                @if($tiket->Status === 'Paid')
+                    <a href="{{ route('wisatawan.invoice', $tiket->ID_Transaksi) }}" class="btn btn-primary">Cetak Invoice</a>
                 @endif
             </div>
 
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="bayarModal" tabindex="-1"
-        aria-labelledby="bayarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bayarModalLabel">
-                        Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
-                    <p><strong>Qris : </strong></p>
-                    <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
         </div>
     </div>
 @endsection

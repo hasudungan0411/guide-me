@@ -21,7 +21,7 @@
         <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
     </head>
     <body class="auth-page sign-in">
-        @include('sweetalert::alert')
+        @include("sweetalert::alert")
         <div class='loader'>
             <div class='spinner-grow text-primary' role='status'>
                 <span class='sr-only'>Loading...</span>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\Tiket;
 use App\Models\Transaksi;
@@ -9,13 +10,40 @@ use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
+    public function generateInvoiceJpeg($id)
+    {
+        $invoice = Transaksi::findOrFail($id);
+        $wisatawan = Wisatawan::find($invoice->ID_Wisatawan);
+        $destinasi = Destination::find($invoice->ID_Wisata);
+
+        $img = Image::canvas(800, 1000, '#ffffff');
+
+        $img->text("Invoice #$id", 100, 100, function($font) {
+            $font->file(public_path('fonts/Arial.ttf'));
+            $font->size(36);
+            $font->color('#000000');
+        });
+
+        $img->text("Nama: {$wisatawan->Nama}", 100, 200, function($font) {
+            $font->size(24);
+            $font->color('#000000');
+        });
+
+        
+        $path = storage_path("app/public/invoice-$id.jpeg");
+        $img->save($path);
+
+        return response()->download($path)->deleteFileAfterSend(true);
+    }
     public function adminIndex() 
     {
         $transaksi = Transaksi::all();
@@ -113,6 +141,7 @@ class TransaksiController extends Controller
             'ID_Wisata' => 'required|exists:destinations,id',
             'Jumlah_Tiket' => 'required|integer|min:1',
             'Harga_Satuan' => 'required|numeric|min:0',
+            'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $wisatawan = Auth::guard('wisatawan')->user();
@@ -127,22 +156,27 @@ class TransaksiController extends Controller
 
         $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
 
+        $file = $request->file('bukti_transaksi');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        $file->move(public_path('bukti'), $filename);
+
         $pesanan = new Transaksi();
         $pesanan->ID_Tiket = $kodeInvoice;
         $pesanan->ID_Wisata = $request->ID_Wisata;
         $pesanan->ID_Wisatawan = $wisatawan->ID_Wisatawan;
         $pesanan->Jumlah_Tiket = $request->Jumlah_Tiket;
         $pesanan->total_harga = $totalHarga;
-        $pesanan->Status = 'Unpaid';
+        $pesanan->Status = 'Pending';
         $pesanan->Tanggal_Transaksi = now();
-        $pesanan->Bukti_Transaksi = null;
+        $pesanan->Bukti_Transaksi = $filename;
         $pesanan->save();
 
 
         $tiket->Persediaan -= $request->Jumlah_Tiket;
         $tiket->save();
 
-        return redirect()->back()->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+        return redirect()->route('wisatawan.pesanan')->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
     }
 
     public function showdetailtiket($id)
@@ -181,6 +215,37 @@ class TransaksiController extends Controller
         $transaksi->save();
 
         return redirect()->back()->with('success', 'Bukti pembayaran berhasil diunggah.');
+    }
+
+    public function showKonfirmasi(Request $request)
+    {
+        $wisatawan = Auth::guard('wisatawan')->user();
+        if (!$wisatawan) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $data = [
+            'ID_Wisata' => $request->input('ID_Wisata'),
+            'Harga_Satuan' => $request->input('Harga_Satuan'),
+            'Jumlah_Tiket' => $request->input('Jumlah_Tiket'),
+            'Total_Harga' => $request->input('Jumlah_Tiket') * $request->input('Harga_Satuan')
+        ];
+
+        $destinasi = Destination::find($data['ID_Wisata']);
+        $pemilik = $destinasi->pemilikwisata;
+
+        if (!$destinasi) {
+            return redirect()->route('home')->with('error', 'Destinasi tidak ditemukan.');
+        }
+
+        return view('wisatawan.konfirmasi_pesanan', compact('data', 'wisatawan', 'destinasi', 'pemilik'));
+    }
+
+    public function batalPesanan()
+    {
+        Session::forget('data_pesanan'); 
+
+        return redirect()->route('wisatawan.pesanan')->with('success', 'Pesanan berhasil dibatalkan.');
     }
 
     public function konfirmasitiket($id)
@@ -266,24 +331,4 @@ class TransaksiController extends Controller
         return redirect()->back();
     } 
 
-    public function batalkantiket(Request $request, $id)
-    {
-        $pesanan = Transaksi::find($id);
-
-        if (!$pesanan) {
-            Alert::error('Error', 'Pesanan tidak ditemukan.');
-            return redirect()->back();
-        }
-
-        if (in_array($pesanan->Status, ['Paid', 'Sudah Digunakan'])) {
-            Alert::error('Error', 'Pesanan ini tidak dapat dibatalkan.');
-            return redirect()->back();
-        }
-
-        $pesanan->Status = 'Batal';
-        $pesanan->save();
-
-        Alert::success('Berhasil', 'Pesanan berhasil dibatalkan.');
-        return redirect()->back();
-    }
 }
