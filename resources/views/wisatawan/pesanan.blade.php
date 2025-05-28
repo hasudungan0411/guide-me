@@ -36,7 +36,7 @@
                                         btn
                                             @if($item->Status === 'Paid') btn-success 
                                             @elseif($item->Status === 'Sudah Digunakan') btn-primary 
-                                            @elseif($item->Status === 'Unpaid') btn-warning 
+                                            @elseif($item->Status === 'Pending') btn-warning 
                                             @elseif($item->Status === 'Batal' || $item->Status === 'Hangus') btn-danger 
                                             @endif
                                     ">

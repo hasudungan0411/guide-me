@@ -137,61 +137,99 @@
     <div class="d-flex justify-content-center align-items-center" style="width: 100%; height: 100%;">
         <div class="container">
             <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0">Tiket {{ $destinasi->tujuan }}</h3>
+                    <form action="{{ route('batal.pesanan') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <button type="submit" class="btn-close" aria-label="Tutup"></button>
+                    </form>   
+                </div>
+
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <h3>Konfirmasi Tiket {{ $destinasi->tujuan }}</h3>
+                    <div class="table-responsive">
+                        <form action="{{ route('konfirmasi.pesanan') }}" method="POST" style="display:inline;" enctype="multipart/form-data">
+                            @csrf
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Nama</strong></td>
+                                        <td>:</td>
+                                        <td>{{ $wisatawan->Nama }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email</strong></td>
+                                        <td>:</td>
+                                        <td>{{ $wisatawan->Email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Jumlah Tiket</strong></td>
+                                        <td>:</td>
+                                        <td>{{ $data['Jumlah_Tiket'] }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Harga Satuan</strong></td>
+                                        <td>:</td>
+                                        <td>Rp {{ number_format($data['Harga_Satuan'], 0, ',', '.') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Harga</strong></td>
+                                        <td>:</td>
+                                        <td>Rp {{ number_format($data['Total_Harga'], 0, ',', '.') }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Bukti Bayar</strong></td>
+                                        <td>:</td>
+                                        <td>
+                                            <input type="file" name="bukti_transaksi" accept="image/*" required>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
 
-                            <!-- Tabel untuk konfirmasi pesanan tanpa garis -->
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td><strong>Nama</strong></td>
-                                            <td>:</td>
-                                            <td>{{ $wisatawan->Nama }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Email</strong></td>
-                                            <td>:</td>
-                                            <td>{{ $wisatawan->Email }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Jumlah Tiket</strong></td>
-                                            <td>:</td>
-                                            <td>{{ $data['Jumlah_Tiket'] }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Harga Satuan</strong></td>
-                                            <td>:</td>
-                                            <td>Rp {{ number_format($data['Harga_Satuan'], 0, ',', '.') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>Total Harga</strong></td>
-                                            <td>:</td>
-                                            <td>Rp {{ number_format($data['Total_Harga'], 0, ',', '.') }}</td>
-                                        </tr>
-                                        
-                                    </tbody>
-                                </table>
+                            <input type="hidden" name="ID_Wisata" value="{{ $destinasi->id }}">
+                            <input type="hidden" name="Harga_Satuan" value="{{ $data['Harga_Satuan'] }}">
+                            <input type="hidden" name="Jumlah_Tiket" class="form-control" id="Tiket" value="{{ $data['Jumlah_Tiket'] }}" required>
+
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengkonfirmasi pesanan ini?')">Konfirmasi Pesanan</button>
+                        </form>
+
+                        <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button>
+
+                        <!-- ModalBayar -->
+                        <div class="modal fade" id="bayarModal" tabindex="-1"
+                            aria-labelledby="bayarModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="bayarModalLabel">
+                                            Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Tutup"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
+                                        <p><strong>Qris : </strong></p>
+                                        <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
                             </div>
-
-                            <!-- Tombol untuk Konfirmasi dan Pembatalan -->
-                            <form action="{{ route('konfirmasi.pesanan', $data['ID_Wisata']) }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="btn btn-success">Konfirmasi Pesanan</button>
-                            </form>
-
-                            <form action="{{ route('batal.pesanan') }}" method="POST" style="display:inline;">
-                                @csrf
-                                <button type="submit" class="btn btn-danger">Batalkan Pesanan</button>
-                            </form>
                         </div>
+                        
                     </div>
+
+
+
+                                        
                 </div>
             </div>
         </div>
     </div>
+
+    
 
     {{-- Scripts --}}
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>
