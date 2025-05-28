@@ -195,29 +195,7 @@
 
                         <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button>
 
-                        <!-- ModalBayar -->
-                        <div class="modal fade" id="bayarModal" tabindex="-1"
-                            aria-labelledby="bayarModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="bayarModalLabel">
-                                            Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Tutup"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
-                                        <p><strong>Qris : </strong></p>
-                                        <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Tutup</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                         
                     </div>
 
@@ -229,6 +207,29 @@
         </div>
     </div>
 
+    <!-- ModalBayar -->
+    <div class="modal fade" id="bayarModal" tabindex="-1"
+        aria-labelledby="bayarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bayarModalLabel">
+                        Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Tutup"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
+                    <p><strong>Qris : </strong></p>
+                    <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
     
 
     {{-- Scripts --}}
