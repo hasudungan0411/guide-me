@@ -142,12 +142,8 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                
-
-                                
                             @else
-                                <p>Tiket belum tersedia untuk destinasi ini.</p>                              
+                                <p>Tiket belum tersedia untuk destinasi ini.</p>
                             @endif
 
                             <h4 class="mt-4">Navigasi</h4>
@@ -180,7 +176,7 @@
                                     Perjalanan</button>
                             </div>
 
-                            
+
 
                         </div>
 
