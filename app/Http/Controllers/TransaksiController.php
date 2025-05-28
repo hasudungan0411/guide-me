@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Destination;
 use Illuminate\Http\Request;
 use App\Models\Tiket;
 use App\Models\Transaksi;
@@ -9,6 +10,7 @@ use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
 use PhpParser\Builder\Function_;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
@@ -181,6 +183,38 @@ class TransaksiController extends Controller
         $transaksi->save();
 
         return redirect()->back()->with('success', 'Bukti pembayaran berhasil diunggah.');
+    }
+
+    public function showKonfirmasi(Request $request)
+    {
+        $wisatawan = Auth::guard('wisatawan')->user();
+        if (!$wisatawan) {
+            return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        }
+
+        $data = [
+            'ID_Wisata' => $request->input('ID_Wisata'),
+            'Harga_Satuan' => $request->input('Harga_Satuan'),
+            'Jumlah_Tiket' => $request->input('Jumlah_Tiket'),
+            'Total_Harga' => $request->input('Jumlah_Tiket') * $request->input('Harga_Satuan')
+        ];
+
+        $destinasi = Destination::find($data['ID_Wisata']);
+
+        if (!$destinasi) {
+            return redirect()->route('home')->with('error', 'Destinasi tidak ditemukan.');
+        }
+
+        return view('wisatawan.konfirmasi_pesanan', compact('data', 'wisatawan', 'destinasi'));
+    }
+
+        public function batalPesanan(Request $request)
+    {
+        // Hapus data pesanan dari sesi
+        Session::forget('data_pesanan'); // Misalkan data pesanan disimpan di sesi dengan key 'data_pesanan'
+
+        // Atau bisa redirect kembali ke halaman sebelumnya
+        return redirect()->route('wisatawan.pesanan')->with('success', 'Pesanan berhasil dibatalkan.');
     }
 
     public function konfirmasitiket($id)
