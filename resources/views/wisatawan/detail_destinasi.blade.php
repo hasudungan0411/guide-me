@@ -8,6 +8,7 @@
         rel="stylesheet" />
 @endpush
 
+
 @section('content')
     <section class="place-details-section">
         <!-- Map Slider -->
@@ -102,15 +103,15 @@
 
                             <h4 class="mt-4">Beli Tiket</h4>
                             <!-- pesantiket -->
-                            @if($tiket)
+                            @if ($tiket)
                                 <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
                                     data-bs-target="#tiketModal">
                                     Pesan Tiket
                                 </button>
 
                                 <!-- Modal -->
-                                <div class="modal fade" id="tiketModal" tabindex="-1"
-                                    aria-labelledby="tiketModalLabel" aria-hidden="true">
+                                <div class="modal fade" id="tiketModal" tabindex="-1" aria-labelledby="tiketModalLabel"
+                                    aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <div class="modal-content">
                                             <div class="modal-header">
@@ -122,23 +123,26 @@
                                             <div class="modal-body">
                                                 <p><strong>Harga Tiket : </strong>{{ $tiket->Harga }}</p>
                                                 <p><strong>Stok Tiket : </strong>{{ $tiket->Persediaan }}</p>
-                                                <form action="{{ route('wisatawan.konfirmasi') }}" method="GET" enctype="multipart/form-data">
+                                                <form action="{{ route('wisatawan.konfirmasi') }}" method="GET"
+                                                    enctype="multipart/form-data">
                                                     @csrf
 
                                                     <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
                                                     <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
 
                                                     <div class="form-group col-md-4">
-                                                        <input name="Jumlah_Tiket" type="number" class="form-control" id="Tiket" min="0" required>
+                                                        <input name="Jumlah_Tiket" type="number" class="form-control"
+                                                            id="Tiket" min="0" required>
                                                     </div>
 
                                                     <div class="modal-footer mt-4">
-                                                        <button id="submitBtn" type="submit" class="btn btn-primary mt-3">Pesan Tiket</button>
+                                                        <button id="submitBtn" type="submit"
+                                                            class="btn btn-primary mt-3">Pesan Tiket</button>
                                                     </div>
 
                                                 </form>
                                             </div>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -175,25 +179,133 @@
                                 <button id="start-navigation-btn" class="btn btn-success" style="display:none;">Mulai
                                     Perjalanan</button>
                             </div>
-
-
-
                         </div>
 
-                        <!--=== Disqus Comments ===-->
-                        <div id="disqus_thread"></div>
-                        <script>
-                            (function() {
-                                var d = document,
-                                    s = d.createElement('script');
-                                s.src = 'https://meguide-org.disqus.com/embed.js';
-                                s.setAttribute('data-timestamp', +new Date());
-                                (d.head || d.body).appendChild(s);
-                            })();
-                        </script>
-                        <noscript>Please enable JavaScript to view the
-                            <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
-                        </noscript>
+                        <!--=== Ulasan Section ===-->
+                        <h4 class="mt-4">Ulasan Pengunjung</h4>
+                        {{-- <h5>Rating Rata-rata:
+                            @if ($destination->ulasan->count() > 0)
+                                {{ number_format($destination->ulasan->avg('rating'), 1) }} / 5
+                            @else
+                                Belum ada ulasan
+                            @endif
+                        </h5> --}}
+
+                        <form action="{{ route('wisatawan.ulasan.store', $destination->id) }}" method="POST"
+                            id="form-ulasan">
+                            @csrf
+                            <div class="form-row" style="display: flex; align-items: center;">
+                                <div class="col-md-10" style="flex: 1;">
+                                    <div class="form-group mt-3">
+                                        <textarea name="ulasan" required class="form-control" rows="4"></textarea>
+                                    </div>
+                                    <!-- Tombol Kirim -->
+                                    <button type="button" id="showRatingModal" class="btn btn-primary mt-2">Kirim
+                                        Ulasan</button>
+
+                                </div>
+                            </div>
+                            <!-- Pembatas (Divider) setelah tombol kirim ulasan -->
+                            <hr style="border: 1px solid #b2aeae; margin: 20px 0;">
+
+                            <!-- Menampilkan jumlah ulasan -->
+                            <div style="text-align: left; margin-bottom: 20px;">
+                                <h4><strong>Ulasan </strong>({{ $destination->ulasan->count() }})</h4>
+                            </div>
+                        </form>
+                        <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog"
+                            aria-labelledby="ratingModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document"
+                                style="display: flex; justify-content: center; align-items: center; height: 100%; max-width: 500px;">
+                                <div class="modal-content"
+                                    style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); background-color: #fff;">
+                                    <div class="modal-header"
+                                        style="display: flex; justify-content: center; width: 100%;">
+                                        <h5 class="modal-title" style="text-align: center; width: 100%;"
+                                            id="ratingModalLabel">Pilih Rating Anda</h5>
+                                    </div>
+                                    <div class="modal-body" style="text-align: center;">
+                                        <!-- Rating Bintang -->
+                                        <div class="rating-container"
+                                            style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                <div style="display: flex; flex-direction: column; align-items: center;">
+                                                    <input type="radio" name="rating_popup"
+                                                        value="{{ $i }}" id="star{{ $i }}_popup"
+                                                        required style="display: none;">
+                                                    <label for="star{{ $i }}_popup" class="fa fa-star"
+                                                        style="font-size: 2rem; color: #ddd; cursor: pointer; transition: color 0.2s ease;">
+                                                    </label>
+                                                    <span class="rating-label" style="font-size: 0.9rem; color: #555;">
+                                                        @if ($i == 1)
+                                                            Tidak Suka
+                                                        @elseif ($i == 2)
+                                                            Kurang Suka
+                                                        @elseif ($i == 3)
+                                                            Netral
+                                                        @elseif ($i == 4)
+                                                            Suka
+                                                        @else
+                                                            Sangat Suka
+                                                        @endif
+                                                    </span>
+                                                </div>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        {{-- Menampilkan ulasan yang sudah ada --}}
+                        @forelse ($destination->ulasan->take(3) as $ulasan)
+                            <div class="ulasan-item" id="ulasan-{{ $ulasan->id }}" style="margin-bottom: 1.5rem;">
+                                <h6 style="font-size: 1.25rem; font-weight: bold;">{{ $ulasan->wisatawan->Nama }}</h6>
+                                <p style="font-size: 1rem; margin: 0;">
+                                    {{-- <small><strong>Ditulis pada:</strong> --}}
+                                    {{ $ulasan->created_at->format('d M Y') }}</small>
+                                </p>
+                                <div class="rating-container" style="display: inline-block; font-size: 1rem;"
+                                    data-rating="{{ $ulasan->rating }}">
+                                    <p>
+                                        <strong>Rating:</strong>
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            <span class="fa fa-star"></span>
+                                        @endfor
+                                    </p>
+                                </div>
+                                <p style="font-size: 1rem; margin: 0;">{{ $ulasan->ulasan }}</p>
+                                <hr style="border: 1px solid #ddd;">
+                            </div>
+                        @empty
+                            <p>Belum ada ulasan untuk destinasi ini.</p>
+                        @endforelse
+                        <style>
+                            /* css utk rating */
+                            .fa-star {
+                                color: #ddd;
+                                /* Default warna bintang: abu-abu */
+                                transition: color 0.2s ease;
+                                /* Efek transisi untuk perubahan warna */
+                            }
+
+                            .fa-star.checked {
+                                color: #f39c12;
+                                /* Warna emas untuk bintang yang terpilih */
+                            }
+                        </style>
+
+                        <!-- Tombol untuk memuat lebih banyak ulasan -->
+                        <div class="post-title-date" style="margin-top: 1.5rem;">
+                            @if ($destination->ulasan->count() > 3)
+                                <button id="load-more" data-destination-id="{{ $destination->id }}"
+                                    class="btn btn-success"
+                                    style="padding: 10px 20px; background-color: #28a745; border-color: #28a745; color: white; font-size: 1rem;">
+                                    Tampilkan Lebih Banyak Ulasan
+                                </button>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="col-xl-4">
@@ -258,6 +370,184 @@
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
     <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
 
+    <script>
+        $(document).ready(function() {
+            var currentPage = 1; // Mulai dari halaman pertama
+
+            // Fungsi untuk inisialisasi rating stars (warna bintang)
+            function initRatingStars() {
+                // Loop untuk menangani rating di semua ulasan yang sudah ada atau dimuat
+                $('.rating-container').each(function() {
+                    const ratingContainer = $(this); // Simpan referensi container
+                    const ratingValue = ratingContainer.data(
+                        'rating'); // Ambil nilai rating dari data-attribute
+
+                    // Reset warna bintang dengan class
+                    ratingContainer.find('.fa-star').each(function(index) {
+                        if (index < ratingValue) {
+                            $(this).addClass('checked'); // Beri class untuk warna emas
+                        } else {
+                            $(this).removeClass('checked'); // Hapus class untuk warna abu-abu
+                        }
+                    });
+                });
+            }
+
+            // Menambahkan event listener untuk input rating (untuk perubahan bintang saat klik)
+            $('.rating-container input').on('change', function() {
+                const ratingValue = $(this).val();
+                const ratingLabels = $(this).closest('.rating-container').find('label');
+
+                // Update warna bintang berdasarkan rating yang dipilih
+                ratingLabels.each(function(index) {
+                    if (index < ratingValue) {
+                        $(this).css('color', '#f39c12'); // Warna emas
+                    } else {
+                        $(this).css('color', '#ddd'); // Warna abu-abu
+                    }
+                });
+            });
+
+            // Menambahkan efek hover untuk bintang
+            $('.rating-container label').on('mouseenter', function() {
+                const index = $(this).index(); // Ambil indeks dari label yang sedang dihover
+                const ratingLabels = $(this).closest('.rating-container').find(
+                    'label'); // Semua label dalam container
+
+                // Update warna semua bintang berdasarkan posisi indeks yang sedang dihover
+                ratingLabels.each(function(i) {
+                    if (i <= index) {
+                        $(this).css('color', '#f39c12'); // Warna emas saat hover
+                    } else {
+                        $(this).css('color', '#ddd'); // Warna abu-abu untuk yang lain
+                    }
+                });
+            });
+
+            $('.rating-container label').on('mouseleave', function() {
+                const ratingLabels = $(this).closest('.rating-container').find(
+                    'label'); // Semua label dalam container
+
+                // Update warna bintang berdasarkan rating yang sudah dipilih
+                const selectedRating = $(this).closest('.rating-container').find(
+                    'input[type="radio"]:checked').val();
+                ratingLabels.each(function(index) {
+                    if (selectedRating && index < selectedRating) {
+                        $(this).css('color', '#f39c12'); // Warna emas jika rating sudah dipilih
+                    } else {
+                        $(this).css('color', '#ddd'); // Warna abu-abu jika belum dipilih
+                    }
+                });
+            });
+
+            // Panggil fungsi pertama kali saat halaman dimuat
+            initRatingStars();
+
+            // Handling load more ulasan via AJAX
+            $('#load-more').click(function() {
+                var destinationId = $(this).data('destination-id'); // Ambil ID destinasi
+                var button = $(this); // Simpan tombol untuk dihapus nanti
+
+                currentPage++; // Naikkan halaman untuk request berikutnya
+
+                $.ajax({
+                    url: '/wisatawan/destinasi/' + destinationId + '/load-more-ulasan?page=' +
+                        currentPage, // Kirimkan parameter page
+                    method: 'GET',
+                    success: function(response) {
+                        // Tambahkan ulasan baru ke halaman
+                        $('#load-more').before(response.html);
+
+                        // Jika sudah tidak ada ulasan lebih lanjut
+                        if (response.finished) {
+                            button.remove(); // Hapus tombol jika tidak ada ulasan lagi
+                        }
+
+                        // Panggil kembali fungsi untuk inisialisasi ulang rating stars pada ulasan yang baru dimuat
+                        initRatingStars();
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan saat memuat ulasan. Coba lagi nanti.');
+                    }
+                });
+            });
+
+            // Menampilkan modal saat tombol Kirim ditekan
+            $('#showRatingModal').click(function() {
+                $('#ratingModal').modal('show');
+            });
+
+            // Menambahkan event listener untuk input rating di dalam modal
+            $('#ratingModal input').on('change', function() {
+                const ratingValue = $(this).val(); // Ambil nilai rating yang dipilih
+                const ulasanText = $('textarea[name="ulasan"]').val(); // Ambil teks ulasan
+
+                // Cek apakah pengguna sudah login
+                @if (Auth::check()) // Laravel Blade directive untuk mengecek status login
+                    // Kirim ulasan dan rating ke server
+                    $.ajax({
+                        url: '{{ route('wisatawan.ulasan.store', $destination->id) }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            ulasan: ulasanText,
+                            rating: ratingValue
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Tampilkan pesan sukses menggunakan SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Ulasan berhasil dikirim!',
+                                    text: 'Terima kasih atas ulasan Anda!',
+                                    confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Tutup modal
+                                        $('#ratingModal').modal('hide');
+                                        // Reset form ulasan
+                                        $('textarea[name="ulasan"]').val('');
+                                        // Refresh halaman setelah ulasan dikirim
+                                        location
+                                            .reload(); // Refresh halaman untuk melihat ulasan baru
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi kesalahan!',
+                                    text: 'Coba lagi nanti.'
+                                });
+                            }
+                        },
+                        error: function() {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Terjadi kesalahan!',
+                                text: 'Coba lagi nanti.'
+                            });
+                        }
+                    });
+                @else
+                    // Jika belum login, tampilkan notifikasi dan arahkan ke halaman login
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Anda perlu login!',
+                        text: 'Silakan login terlebih dahulu untuk memberikan rating.',
+                        confirmButtonText: 'Login',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Arahkan pengguna ke halaman login
+                            window.location.href =
+                                '{{ route('wisatawan.login') }}'; // Ganti dengan URL halaman login Anda
+                        }
+                    });
+                @endif
+            });
+        });
+    </script>
+
+    {{-- logika map  --}}
     <script>
         mapboxgl.accessToken = 'pk.eyJ1Ijoibml6YW4iLCJhIjoiY2xtcmp2ZnR4MDdwaDJqbnQ0aHFzNDhvcyJ9.DljKUfMz4UuQs217X2Dwvg';
 

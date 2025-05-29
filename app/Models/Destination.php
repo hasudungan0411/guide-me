@@ -29,6 +29,7 @@ class Destination extends Model
         'click_count',
     ];
 
+
     public function kategori()
     {
         return $this->belongsTo(kategori::class, 'kategori_id', 'id_kategori');
@@ -46,10 +47,16 @@ class Destination extends Model
 
     public function favoritwisatawan()
     {
-        return $this->belongsTo(Wisatawan::class,'favorit','destination_id','wisatawan_id');
+        return $this->belongsTo(Wisatawan::class, 'favorit', 'destination_id', 'wisatawan_id');
     }
     public function tiket()
-{
-    return $this->hasMany(Tiket::class, 'ID_Wisata', 'id');
-}
+    {
+        return $this->hasMany(Tiket::class, 'ID_Wisata', 'id');
+    }
+
+    public function ulasan()
+    {
+        return $this->hasMany(Ulasan::class, 'destinations_id');
+    }
+
 }

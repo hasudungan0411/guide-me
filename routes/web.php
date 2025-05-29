@@ -16,6 +16,7 @@ use App\Http\Controllers\WisataSearchController;
 use App\Http\Controllers\TiketController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Wisatawan\UlasanController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
 use App\Http\Controllers\Wisatawan\BlogController as wisatawanBlogController;
@@ -113,15 +114,18 @@ Route::prefix('wisatawan')->group(function () {
     // Submit form reset password (update password)
     Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('wisatawan.password.update');
 
+    // rute tampilan ulasan
+    Route::get('/destinasi/{destinationId}/load-more-ulasan', [UlasanController::class, 'loadMoreUlasan'])->name('wisatawan.loadMoreUlasan');
 
     // fitur wajib login
     Route::middleware(['auth:wisatawan'])->group(function () {
 
-        // Route::post('/ulasan', [WisatawanReviewController::class, 'store'])->name('wisatawan.ulasan');
+        Route::post('/ulasan/{id_destinasi}', [UlasanController::class, 'store'])->name('wisatawan.ulasan.store');
+
         Route::get('/favorit', [WisatawanFavoritController::class, 'index'])->name('wisatawan.favorit');
         Route::post('/favorit/toggle/{id}', [WisatawanFavoritController::class, 'toggleFavorit']);
         Route::post('/pesan-tiket', [TransaksiController::class, 'pesan'])->name('wisatawan.pesan');
-        
+
         // Tiket Wisatawan
         // Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');

@@ -9,7 +9,6 @@ use App\Models\Transaksi;
 use App\Models\Wisatawan;
 use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Builder\Function_;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
@@ -38,13 +37,13 @@ class TransaksiController extends Controller
             $font->color('#000000');
         });
 
-        
+
         $path = storage_path("app/public/invoice-$id.jpeg");
         $img->save($path);
 
         return response()->download($path)->deleteFileAfterSend(true);
     }
-    public function adminIndex() 
+    public function adminIndex()
     {
         $transaksi = Transaksi::all();
         $totalTransaksi = Transaksi::count();
@@ -114,7 +113,7 @@ class TransaksiController extends Controller
             $file = $request->file('gambar_qris');
             $filename = time() . '_' . $file->getClientOriginalName();
             $file->move(public_path('gambar_qris'), $filename);
-            
+
             $file = $filename;
             $pemilik->Qris = $file;
         }
@@ -243,7 +242,7 @@ class TransaksiController extends Controller
 
     public function batalPesanan()
     {
-        Session::forget('data_pesanan'); 
+        Session::forget('data_pesanan');
 
         return redirect()->route('wisatawan.pesanan')->with('success', 'Pesanan berhasil dibatalkan.');
     }
@@ -303,7 +302,7 @@ class TransaksiController extends Controller
 
         Alert::success('Sukses', 'Tiket berhasil digunakan.');
         return redirect()->back();
-    } 
+    }
 
     public function hapustiket($id)
     {
@@ -324,11 +323,11 @@ class TransaksiController extends Controller
                 Alert::error('Error', 'Pesanan ini belum dapat dihapus.');
                 return redirect()->back();
             }
-        }   
+        }
 
         $pesanan->delete();
         Alert::success('Sukses', 'Tiket berhasil dihapus.');
         return redirect()->back();
-    } 
+    }
 
 }

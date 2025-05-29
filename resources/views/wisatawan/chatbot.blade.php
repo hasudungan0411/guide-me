@@ -1,121 +1,144 @@
-@extends('layouts.wisatawan')
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teman Wisata - Chatbot</title>
 
-@section('title', 'Halaman Teman Wisata')
+    {{-- Favicon dan Fonts --}}
+    <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-@section('content')
+    {{-- Icon dan CSS --}}
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/fonts/flaticon/flaticon_gowilds.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/fonts/fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/wisatawan/css/custom.css') }}">
+
     <style>
-        .modal-header {
-            background-color: #4caf50;
-            color: white;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
+        body {
+            background-color: #05113b;
+            font-family: 'Prompt', sans-serif;
         }
 
-        .modal-content {
-            border: none;
+        .chat-header {
+            background-color: transparent;
+            padding: 1rem;
+        }
+
+        .chat-header img {
+            width: 50px;
+            height: 50px;
+        }
+
+        .chat-title {
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        #content-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: calc(100vh - 162px);
+            padding: 1rem;
+        }
+
+        .chat-bubble {
+            font-size: 85%;
+            max-width: 270px;
+            padding: 0.5rem 0.75rem;
             border-radius: 10px;
+            line-height: 1.4;
         }
 
-        .modal-body {
-            padding: 2rem;
-            font-family: 'Segoe UI', sans-serif;
-        }
-
-        .btn-primary {
-            background-color: #4caf50;
-            border-color: #4caf50;
-        }
-
-        .btn-outline-primary {
-            border-color: #4caf50;
-            color: #4caf50;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #4caf50;
+        .chatbot-msg {
+            background-color: #13254b;
             color: white;
         }
 
-        #input::placeholder {
+        .user-msg {
+            background-color: #4acfee;
+            color: white;
+        }
+
+        .chat-input {
+            background: #131f45;
+            height: 62px;
+        }
+
+        .chat-input input {
+            background: #ffffff1c;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 5px;
+        }
+
+        .chat-input input::placeholder {
             color: white;
             opacity: 1;
-            /* supaya tidak transparan */
+        }
+
+        .send-btn {
+            background-color: #027e40;
+            color: white;
+            width: 50px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
         }
     </style>
+</head>
+<body>
+    <div class="d-flex flex-column min-vh-100">
+        {{-- Header --}}
+        <div class="container-fluid d-flex align-items-center chat-header">
+            <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="Bot Avatar">
+            <div class="chat-title">Teman Wisata</div>
+        </div>
+        <div style="background: #061128; height: 2px;"></div>
 
-    <div class="w-100 min-vh-100 d-flex flex-column mt-4" style="background-color: #05113b;">
-        {{-- Headernya  --}}
-        <div class="container-fluid d-flex align-items-center p-2 mt-3">
-            <div style="width: 40px; height: 50px;"></div>
-            <div style="width: 50px;height: 50px;">
-                <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="">
+        {{-- Chat Content --}}
+        <div id="content-box" class="container-fluid overflow-auto">
+            <div class="d-flex mb-3 align-items-start">
+                <img class="avatar me-2" src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="Bot Avatar">
+                <div class="chat-bubble chatbot-msg">Hai, saya Teman Wisata sebagai asisten virtual kamu.</div>
             </div>
-            <div class="text-white fw-semibold ms-2 fs-5">
-                Teman Wisata
+            <div class="d-flex mb-3 align-items-start">
+                <img class="avatar me-2" src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="Bot Avatar">
+                <div class="chat-bubble chatbot-msg">Ada yang bisa saya bantu?</div>
             </div>
         </div>
 
-        <div style="background: #061128;height: 2px;"></div>
-
-        {{-- chat content  --}}
-        <div id="content-box" class="container-fluid px-3 py-2 mt-3 overflow-auto"
-            style="flex-grow: 1; min-height: 100px; max-height: calc(100vh - 162px);">
-
-
-
-            {{-- wisatawan --}}
-
-            {{-- chatbot  --}}
-            <div class="d-flex mb-3 align-items-start">
-                <div class="me-2" style="width: 45px; height: 45px;">
-                    <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="">
-                </div>
-                <div class="text-white px-3 py-2"
-                    style="background: #13254b; border-radius: 10px; font-size: 85%; max-width: 270px; line-height: 20px;">
-                    Hai , saya Teman Wisata sebagai asisten virtual kamu
-                </div>
-            </div>
-            <div class="d-flex mb-3 align-items-start">
-                <div class="me-2" style="width: 45px; height: 45px;">
-                    <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="">
-                </div>
-                <div class="text-white px-3 py-2"
-                    style="background: #13254b; border-radius: 10px; font-size: 85%; max-width: 270px;">
-                    Ada yang bisa saya bantu?
-                </div>
-            </div>
-        </div>
         {{-- Input Area --}}
-        <div class="container-fluid w-100 px-3 py-2 d-flex" style="background: #131f45; height: 62px;">
-            <div class="me-2 pl-2" style="background: #ffffff1c; width: calc(100% - 45px); border-radius: 5px;">
-                <input type="text" id="input" name="input" class="text-white" placeholder=" Tanyakan apa saja..."
-                    style="background: none; width: 100%; height: 100%; border: 0; outline: none;">
-            </div>
-            <div id="button-submit" class="text-center"
-                style="background: #027e40; height: 100%; width: 50px; border-radius: 5px;">
-                <i class="fa fa-paper-plane text-white" aria-hidden="true" style="line-height: 45px;"></i>
+        <div class="container-fluid chat-input d-flex px-3">
+            <input type="text" id="input" placeholder="Tanyakan apa saja...">
+            <div id="button-submit" class="send-btn ms-2">
+                <i class="fa fa-paper-plane"></i>
             </div>
         </div>
     </div>
 
+    {{-- Guest Modal --}}
     @guest('wisatawan')
-        {{-- Modal --}}
-        <div class="modal fade show" id="chatModal" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);"
-            aria-modal="true" role="dialog">
+        <div class="modal fade show" id="chatModal" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);" aria-modal="true" role="dialog">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content shadow">
                     <div class="modal-body text-center">
-                        <p class="fs-5 text-success fw-semibold mb-4">
-                            👋 Halo, Selamat Datang di <strong>Teman Wisata</strong>!
-                        </p>
-                        <p class="text-secondary fw-semibold mb-3">
-                            Saya adalah asisten virtual kamu, siap membantu menemukan destinasi terbaik, tips perjalanan, dan
-                            info wisata menarik lainnya yang ada diBatam.
-                        </p>
-                        <p class="text-dark fw-bold mt-3">
-                            Pilih salah satu untuk mulai berbagi cerita:)
-                        </p>
-
+                        <p class="fs-5 text-success fw-semibold mb-4">👋 Halo, Selamat Datang di <strong>Teman Wisata</strong>!</p>
+                        <p class="text-secondary fw-semibold mb-3">Saya adalah asisten virtual kamu, siap membantu menemukan destinasi terbaik di Batam.</p>
+                        <p class="text-dark fw-bold mt-3">Pilih salah satu untuk mulai berbagi cerita :)</p>
                         <div class="d-grid gap-2 mt-4">
                             <a href="{{ route('wisatawan.login') }}" class="btn btn-primary">Masuk</a>
                             <a href="{{ route('wisatawan.register') }}" class="btn btn-outline-primary">Daftar</a>
@@ -125,7 +148,6 @@
                 </div>
             </div>
         </div>
-        {{-- Script Modal --}}
         <script>
             function closeModal() {
                 const modal = document.getElementById('chatModal');
@@ -133,99 +155,78 @@
                 modal.classList.remove('show');
                 document.body.classList.remove('modal-open');
             }
-
-            // Lock scroll while modal is open
             document.body.classList.add('modal-open');
         </script>
     @endguest
 
-    {{-- script cdn  --}}
-    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-        crossorigin="anonymous"></script>
+    {{-- Script --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     @php
         $user = auth('wisatawan')->user();
-
-        // Default foto profil
-        $profileImage = asset('assets/images/avatars/profile-image-1.png');
-
-        // Kalau user login dan punya foto di database
-        if ($user && $user->Foto_Profil) {
-            $profileImage = $user->Foto_Profil;
-        }
+        $profileImage = $user && $user->Foto_Profil ? $user->Foto_Profil : asset('assets/images/avatars/profile-image-1.png');
     @endphp
+
     <script>
         const profileImage = "{{ $profileImage }}";
 
         function scrollToBottom() {
-            const contentBox = $('#content-box')[0];
-            contentBox.scrollTop = contentBox.scrollHeight;
+            const box = document.getElementById('content-box');
+            box.scrollTop = box.scrollHeight;
         }
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        function appendMessage(message, sender = 'bot') {
+            const container = document.createElement('div');
+            container.classList.add('d-flex', 'mb-3', 'align-items-start');
+            if (sender === 'user') {
+                container.classList.add('justify-content-end');
+                container.innerHTML = `
+                    <div class="chat-bubble user-msg">${message}</div>
+                    <img class="avatar ms-2" src="${profileImage}" alt="User Avatar">
+                `;
+            } else {
+                container.innerHTML = `
+                    <img class="avatar me-2" src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="Bot Avatar">
+                    <div class="chat-bubble chatbot-msg">${message}</div>
+                `;
             }
-        });
-
-        // Mengirim pesan menggunakan tombol submit
-        $('#button-submit').on('click', function() {
-            let value = $('#input').val();
-            if (value.trim() === '') return;
-
-            // Menambah chat ke tampilan
-            $('#content-box').append(`
-            <div class="d-flex justify-content-end align-items-center">
-                <div class="px-3 py-2 text-white" style="background:#4acfee; border-radius: 10px; font-size: 85%; max-width: 270px; line-height: 20px;">
-                    ${value}
-                </div>
-                <div class="ms-2" style="width: 45px; height: 45px;">
-                    <img src="${profileImage}" alt="" class="img-fluid rounded-circle">
-                </div>
-            </div>
-        `);
-
-            $('#input').val('');
+            document.getElementById('content-box').appendChild(container);
             scrollToBottom();
+        }
 
-            // Kirim pesan menggunakan AJAX
+        $('#button-submit').on('click', function () {
+            const value = $('#input').val().trim();
+            if (!value) return;
+
+            appendMessage(value, 'user');
+            $('#input').val('');
+
             $.ajax({
-                type: 'POST',
-                url: '{{ url('send') }}',
+                method: 'POST',
+                url: '{{ url("send") }}',
                 data: {
-                    'input': value,
-                    '_token': $('meta[name="csrf-token"]').attr('content')
+                    input: value,
+                    _token: $('meta[name="csrf-token"]').attr('content')
                 },
-
-                success: function(data) {
-                    // Menambahkan balasan dari chatbot ke chat
-                    $('#content-box').append(`
-                    <div class="d-flex mb-3 align-items-start">
-                        <div class="me-2" style="width: 45px; height: 45px;">
-                            <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="">
-                        </div>
-                        <div class="text-white px-3 py-2"
-                            style="background: #13254b; border-radius: 10px; font-size: 85%; max-width: 270px;">
-                            ${data}
-                        </div>
-                    </div>
-                `);
-                    scrollToBottom();
+                success: function (response) {
+                    appendMessage(response, 'bot');
+                },
+                error: function () {
+                    appendMessage('Maaf, terjadi kesalahan.', 'bot');
                 }
             });
         });
 
-        // Mengirim pesan menggunakan Enter key
-        $('#input').on('keydown', function(e) {
+        $('#input').on('keydown', function (e) {
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Mencegah newline
-                $('#button-submit').click(); // Mengklik tombol submit secara otomatis
+                e.preventDefault();
+                $('#button-submit').click();
             }
         });
 
-        // Scroll ke bawah ketika halaman pertama kali dimuat
-        $(document).ready(function() {
+        $(document).ready(function () {
             scrollToBottom();
         });
     </script>
-@endsection
+</body>
+</html>

@@ -41,4 +41,9 @@ class Wisatawan extends Authenticatable implements CanResetPassword
     {
         return $this->belongsToMany(Destination::class, 'favorit', 'wisatawan_id', 'destination_id');
     }
+
+    public function ulasan()
+    {
+        return $this->hasMany(Ulasan::class, 'wisatawan_id');
+    }
 }
