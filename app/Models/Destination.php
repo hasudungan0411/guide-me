@@ -50,6 +50,6 @@ class Destination extends Model
     }
     public function tiket()
 {
-    return $this->hasMany(Tiket::class, 'ID_Wisata', 'id');
+    return $this->hasOne(Tiket::class, 'ID_Wisata', 'id');
 }
 }

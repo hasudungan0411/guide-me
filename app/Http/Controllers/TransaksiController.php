@@ -26,6 +26,8 @@ class TransaksiController extends Controller
         $pdf = Pdf::loadView('wisatawan.invoice', compact('pesanan'));
 
         return $pdf->download('Invoice_'.$pesanan->ID_Tiket.'_Guide-Me.pdf');
+
+        // return view('wisatawan.invoice', compact('pesanan'));
     }
 
     public function adminIndex() 
