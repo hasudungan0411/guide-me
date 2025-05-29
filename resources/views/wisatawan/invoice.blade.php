@@ -107,7 +107,7 @@
     <div class="invoice-card">
         <!-- Foto destinasi -->
         <div class="invoice-image">
-            <img src="{{ $pesanan->destinasi->gambar }}" alt="Destinasi">
+            <img src="{{ asset('storage/images/destinasi/' . $pesanan->destinasi->gambar) }}" alt="Destinasi">
         </div>
 
         <div class="invoice-content">
