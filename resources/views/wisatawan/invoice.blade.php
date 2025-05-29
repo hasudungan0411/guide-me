@@ -112,9 +112,8 @@
 </head>
 <body>
     <div class="invoice-card">
-        <!-- Foto destinasi -->
         <div class="invoice-image">
-            <img src="{{ public_path('storage/images/destinasi/' . $pesanan->destinasi->gambar) }}" alt="Destinasi">
+            <img src="{{ asset('storage/images/destinasi/' . $pesanan->destinasi->gambar) }}" alt="Destinasi">
         </div>
 
         <div class="invoice-content">
@@ -167,7 +166,6 @@
         </div>
     </div>
 
-    <!-- Tombol download -->
     <button class="download-btn" onclick="window.print()">Download Tiket</button>
 </body>
 </html>
