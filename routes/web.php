@@ -134,7 +134,7 @@ Route::prefix('wisatawan')->group(function () {
         Route::get('/pesanan/konfirmasi', [TransaksiController::class, 'showKonfirmasi'])->name('wisatawan.konfirmasi');
         Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
         Route::post('/pesanan/batal', [TransaksiController::class, 'batalPesanan'])->name('batal.pesanan');
-        Route::get('/pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoiceJpeg'])->name('wisatawan.invoice');
+        Route::get('pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoicePDF'])->name('wisatawan.invoice');
 
     });
 });

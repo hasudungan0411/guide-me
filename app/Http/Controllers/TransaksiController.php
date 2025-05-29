@@ -11,26 +11,19 @@ use App\Models\Pemilikwisata;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Facades\Image;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class TransaksiController extends Controller
 {
-    public function generateInvoiceJpeg($id)
+    public function generateInvoicePDF($id)
     {
-        $invoice = Transaksi::findOrFail($id);
-        $wisatawan = Wisatawan::find($invoice->ID_Wisatawan);
-        $destinasi = Destination::find($invoice->ID_Wisata);
+        $pesanan = Transaksi::with('wisatawan')->findOrFail($id);
 
-        $img = Image::canvas(800, 1000, '#ffffff');
+        $pdf = Pdf::loadView('wisatawan.invoice', compact('pesanan'));
 
-        $img->text("Invoice #$id", 100, 100, function($font) {
-            $font->file(public_path('fonts/Arial.ttf'));
-            $font->size(36);
-            $font->color('#000000');
-        });
+        return $pdf->download('Invoice_'.$pesanan->ID_Tiket.'_Guide-Me.pdf');
 
         $img->text("Nama: {$wisatawan->Nama}", 100, 200, function($font) {
             $font->size(24);
