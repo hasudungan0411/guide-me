@@ -18,7 +18,7 @@
 
     <style>
         body {
-            background-color: #05113b;
+            background-color: #d5d4de;
             font-family: 'Prompt', sans-serif;
         }
 
@@ -33,7 +33,7 @@
         }
 
         .chat-title {
-            color: white;
+            color: rgb(40, 27, 109);
             font-weight: 600;
             font-size: 1.2rem;
             margin-left: 10px;
@@ -55,12 +55,12 @@
         }
 
         .chatbot-msg {
-            background-color: #13254b;
+            background-color: #486ddb;
             color: white;
         }
 
         .user-msg {
-            background-color: #4acfee;
+            background-color: #0065F8;
             color: white;
         }
 
@@ -103,11 +103,11 @@
 <body>
     <div class="d-flex flex-column min-vh-100">
         {{-- Header --}}
-        <div class="container-fluid d-flex align-items-center chat-header">
+        <div class="container-fluid d-flex align-items-center chat-header" style="background: #353eec">
             <img src="{{ asset('assets/images/avatars/profile-image.png') }}" alt="Bot Avatar">
-            <div class="chat-title">Teman Wisata</div>
+            <div class="chat-title" style="color: #e9edee">Teman Wisata</div>
         </div>
-        <div style="background: #061128; height: 2px;"></div>
+        <div style="background: #25b025; height: 2px;"></div>
 
         {{-- Chat Content --}}
         <div id="content-box" class="container-fluid overflow-auto">

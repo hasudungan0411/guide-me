@@ -18,27 +18,42 @@
         <div class="kiri"
             style="flex:1; background:#e8ebf9; padding:40px 30px; display:flex; flex-direction:column; justify-content:center;">
             <h2 style="font-size:22px; text-align: center; margin-bottom:25px;">Atur ulang kata sandi</h2>
-                @if ($errors->any())
-                    <div style="color:red;">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <form method="POST" action="{{ route('wisatawan.password.update') }}">
-                    @csrf
-                    <input type="hidden" name="token" value="{{ $token }}">
-                    <input type="hidden" name="email" value="{{ $email }}">
-                    <label>Password Baru:</label>
-                    <input type="password" name="password" required>
-                    <label>Konfirmasi Password:</label>
-                    <input type="password" name="password_confirmation" required>
-                    <button type="submit">Reset Password</button>
-                </form>
+            <form method="POST" action="{{ route('wisatawan.password.update') }}">
+                @csrf
+                <input type="hidden" name="token" value="{{ $token }}">
+                <input type="hidden" name="email" value="{{ $email }}">
+                <div style="margin-bottom:15px;">
+                    <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi
+                        Baru:</label>
+                    <input id="password" name="password" type="password" placeholder="********"
+                        style="width:90%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s;"
+                        onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
+                        onblur="this.style.boxShadow='none'" />
+                    <div id="password-error" style="color:#ff4444; font-size:12px; margin-top:4px; height:16px;"></div>
+                </div>
+                <div style="margin-bottom:15px;">
+                    <label for="password-confirmation"
+                        style="font-size:14px; display:block; margin-bottom:5px;">Konfirmasi Kata
+                        Sandi Baru:</label>
+                    <input id="password-confirmation" name="password_confirmation" type="password"
+                        placeholder="********"
+                        style="width:90%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s;"
+                        onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
+                        onblur="this.style.boxShadow='none'" />
+                </div>
+                <button type="submit"
+                    style="width:100%; box-sizing:border-box; padding:12px; border-radius:20px; border:none; background:linear-gradient(to right, #4CAF50, #8BC34A); color:white; font-weight:bold; font-size:14px; cursor:pointer; transition:all 0.3s ease;"
+                    onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(76,175,80,0.3)'"
+                    onmouseout="this.style.opacity='1'; this.style.transform='none'; this.style.boxShadow='none'">
+                    Atur ulang kata sandi
+                </button>
+            </form>
+            <div style="text-align:center; font-size:14px; margin-top:15px;">
+                Sudah ingat kata sandi?
+                <a href="{{ route('wisatawan.login') }}"
+                    style="color:#9575cd; text-decoration:none; font-weight:500;">Masuk</a>
+            </div>
         </div>
-
         <!-- Kanan (logo) -->
         <div class="kanan"
             style="flex:1; min-height:300px; background:linear-gradient(to bottom right, #0917d5, #86e77a); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px; text-align:center;">
@@ -69,7 +84,22 @@
         window.addEventListener('resize', handleResponsiveLayout);
     </script>
 
-    @include('sweetalert::alert')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}'
+            });
+        @elseif ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ $errors->first() }}'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

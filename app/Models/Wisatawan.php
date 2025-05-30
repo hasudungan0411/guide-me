@@ -46,4 +46,9 @@ class Wisatawan extends Authenticatable implements CanResetPassword
     {
         return $this->hasMany(Ulasan::class, 'wisatawan_id');
     }
+
+    public function routeNotificationForMail()
+    {
+        return $this->Email;
+    }
 }

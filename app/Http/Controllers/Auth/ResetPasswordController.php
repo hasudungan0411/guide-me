@@ -32,16 +32,18 @@ class ResetPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password),
-                    'remember_token' => Str::random(60),
+                    'Kata_Sandi' => Hash::make($password),
+                    // 'remember_token' => Str::random(60),
                 ])->save();
 
                 event(new PasswordReset($user));
             }
         );
 
-        return $status == Password::PASSWORD_RESET
-            ? redirect()->route('wisatawan.login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
-    }
+        if ($status == Password::PASSWORD_RESET) {
+            return redirect()->route('wisatawan.login')->with('success', 'Kata Sandi Anda telah berhasil diperbaharui.');
+        } else {
+            return back()->withErrors(['Error', 'Gagal memperbaharui kata sandi. Silakan coba lagi.']);
+        }
+   }
 }

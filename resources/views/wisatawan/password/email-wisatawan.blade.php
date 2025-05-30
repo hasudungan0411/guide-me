@@ -18,24 +18,27 @@
         <div class="kiri"
             style="flex:1; background:#e8ebf9; padding:40px 30px; display:flex; flex-direction:column; justify-content:center;">
             <h2 style="font-size:22px; text-align: center; margin-bottom:25px;">Reset kata sandi</h2>
-            @if (session('status'))
-                <div style="color:green;">{{ session('status') }}</div>
-            @endif
-            @if ($errors->any())
-                <div style="color:red;">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
             <form method="POST" action="{{ route('wisatawan.password.email') }}">
                 @csrf
-                <label>Email:</label>
-                <input type="email" name="email" required>
-                <button type="submit">Kirim Link Reset</button>
+                <div style="margin-bottom:15px;">
+                    <label for="email" style="font-size:14px; display:block; margin-bottom:5px;">Email:</label>
+                    <input id="email" name="email" type="email" placeholder="email@example.com"
+                        style="width:90%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s;"
+                        onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
+                        onblur="this.style.boxShadow='none'" />
+                </div>
+                <button type="submit"
+                    style="width:100%; box-sizing:border-box; padding:12px; border-radius:20px; border:none; background:linear-gradient(to right, #4CAF50, #8BC34A); color:white; font-weight:bold; font-size:14px; cursor:pointer; transition:all 0.3s ease;"
+                    onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(76,175,80,0.3)'"
+                    onmouseout="this.style.opacity='1'; this.style.transform='none'; this.style.boxShadow='none'">
+                    Kirim Link Atur Ulang Kata Sandi
+                </button>
             </form>
+            <div style="text-align:center; font-size:14px; margin-top:15px;">
+                Sudah ingat kata sandi?
+                <a href="{{ route('wisatawan.login') }}"
+                    style="color:#9575cd; text-decoration:none; font-weight:500;">Masuk</a>
+            </div>
         </div>
 
         <!-- Kanan (logo) -->
@@ -68,7 +71,22 @@
         window.addEventListener('resize', handleResponsiveLayout);
     </script>
 
-    @include('sweetalert::alert')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: '{{ session('success') }}'
+            });
+        @elseif ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: '{{ $errors->first() }}'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

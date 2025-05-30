@@ -67,30 +67,29 @@ class UlasanController extends Controller
         }
 
         // Generate HTML untuk ulasan baru
-        $response = '';
-        foreach ($ulasan as $ulasanItem) {
-            $response .= '<div class="ulasan-item" id="ulasan-' . $ulasanItem->id . '">
-                   <h6>' . $ulasanItem->wisatawan->Nama . '</h6>
-                   <small>' . $ulasanItem->created_at->format('d M Y') . '</small>
-                   <p><strong>Rating: </strong>';
+        // $response = '';
+        // foreach ($ulasan as $ulasanItem) {
+        //     $response .= '<div class="ulasan-item" id="ulasan-' . $ulasanItem->id . '">
+        //            <h6>' . $ulasanItem->wisatawan->Nama . '</h6>
+        //            <small style="font-size: 15px;">' . $ulasanItem->created_at->format('d M Y') . '</small> ';
 
-            // Loop untuk bintang yang terisi
-            for ($i = 1; $i <= $ulasanItem->rating; $i++) {
-                $response .= '<span class="fa fa-star checked" style="margin-right: 3px;"></span>';  // Bintang terisi
-            }
+        //     // Loop untuk bintang yang terisi
+        //     for ($i = 1; $i <= $ulasanItem->rating; $i++) {
+        //         $response .= '<span class="fa fa-star checked" style="margin-right: 3px;"></span>';  // Bintang terisi
+        //     }
 
-            // Loop untuk bintang yang kosong
-            for ($i = $ulasanItem->rating + 1; $i <= 5; $i++) {
-                $response .= '<span class="fa fa-star" style="margin-right: 3px;"></span>';  // Bintang kosong
-            }
+        //     // Loop untuk bintang yang kosong
+        //     for ($i = $ulasanItem->rating + 1; $i <= 5; $i++) {
+        //         $response .= '<span class="fa fa-star" style="margin-right: 3px;"></span>';  // Bintang kosong
+        //     }
 
-            $response .= '</p><p>' . $ulasanItem->ulasan . '</p><hr></div>';
-        }
+        //     $response .= '</p><p>' . $ulasanItem->ulasan . '</p><hr></div>';
+        // }
 
-        // Return json response dengan HTML dan status finished
-        return response()->json([
-            'html' => $response,
-            'finished' => !$ulasan->hasMorePages(),
-        ]);
+        // // Return json response dengan HTML dan status finished
+        // return response()->json([
+        //     'html' => $response,
+        //     'finished' => !$ulasan->hasMorePages(),
+        // ]);
     }
 }

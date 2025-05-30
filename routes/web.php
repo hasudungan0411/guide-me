@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PemilikController;
@@ -74,7 +76,6 @@ Route::middleware(['admin'])->group(function () {
     Route::delete('/kelola-akun-wisatawan/{ID_Wisatawan}', [KelolaAkunController::class, 'destroyWisatawan'])->name('akun_wisatawan.destroy');
 
 });
-
 
 // Halaman umum wisatawan tanpa login
 Route::get('/', [WisatawanHomeController::class, 'index'])->name('wisatawan.home');
