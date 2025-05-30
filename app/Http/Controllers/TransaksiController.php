@@ -23,11 +23,11 @@ class TransaksiController extends Controller
     {
         $pesanan = Transaksi::with('wisatawan')->findOrFail($id);
 
-        $pdf = Pdf::loadView('wisatawan.invoice', compact('pesanan'));
+        // $pdf = Pdf::loadView('wisatawan.invoice', compact('pesanan'));
 
-        return $pdf->download('Invoice_'.$pesanan->ID_Tiket.'_Guide-Me.pdf');
+        // return $pdf->download('Invoice_'.$pesanan->ID_Tiket.'_Guide-Me.pdf');
 
-        // return view('wisatawan.invoice', compact('pesanan'));
+        return view('wisatawan.invoice', compact('pesanan'));
     }
     public function adminIndex()
     {
