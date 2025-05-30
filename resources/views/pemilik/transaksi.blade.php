@@ -50,7 +50,8 @@
                                     <th>Status</th>
                                     <th>Total Harga</th>
                                     <th>Jumlah Tiket</th>
-                                    <th>Tanggal Pesanan</th>
+                                    <th>Tanggal Transaksi</th>
+                                    <th>Tanggal Tiket</th>
                                     <th>Bukti Transaksi</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -65,7 +66,7 @@
                                     <td class="
                                             @if($tiket->Status === 'Paid') text-success 
                                             @elseif($tiket->Status === 'Sudah Digunakan') text-primary 
-                                            @elseif($tiket->Status === 'Unpaid') text-warning 
+                                            @elseif($tiket->Status === 'Pending') text-warning 
                                             @elseif($tiket->Status === 'Batal' || $tiket->Status === 'Hangus') text-danger 
                                             @endif
                                     ">
@@ -75,6 +76,7 @@
                                     <td>{{ number_format($tiket->total_harga, 0, ',', '.') }}</td>
                                     <td>{{ $tiket->Jumlah_Tiket }}</td>
                                     <td>{{ $tiket->Tanggal_Transaksi }}</td>
+                                    <td>{{ $tiket->Tanggal_Tiket }}</td>
                                     <td>
                                         @if ($tiket->Bukti_Transaksi)
                                             <a class="btn btn-success" href="#" data-toggle="modal" data-target="#ModalBukti{{ $tiket->ID_Transaksi }}">Lihat</a>

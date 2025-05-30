@@ -16,7 +16,8 @@
                         <p><strong>ID Tiket:</strong> {{ $tiket->ID_Tiket }}</p>
                         <p><strong>Jumlah Tiket:</strong> {{ $tiket->Jumlah_Tiket }}</p>
                         <p><strong>Harga Tiket:</strong> Rp {{ number_format($tiket->total_harga, 0, ',', '.') }}</p>
-                        <p><strong>Tanggal Pesanan:</strong> {{ \Carbon\Carbon::parse($tiket->Tanggal_Transaksi)->format('d F Y') }}</p>
+                        <p><strong>Tanggal Transaksi:</strong> {{ \Carbon\Carbon::parse($tiket->Tanggal_Transaksi)->format('d F Y') }}</p>
+                        <p><strong>Tanggal Tiket:</strong> {{ \Carbon\Carbon::parse($tiket->Tanggal_Tiket)->format('d F Y') }}</p>
                         <p><strong>Status Tiket:</strong> <span class="
                                         btn
                                             @if($tiket->Status === 'Paid') btn-success 

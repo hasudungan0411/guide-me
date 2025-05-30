@@ -134,8 +134,12 @@
                     <td class="value">{{ $pesanan->wisatawan->Email }}</td>
                 </tr>
                 <tr>
-                    <td class="label">TANGGAL</td>
+                    <td class="label">TANGGAL TRANSAKSI</td>
                     <td class="value">{{ \Carbon\Carbon::parse($pesanan->Tanggal_Transaksi)->format('d M Y') }}</td>
+                </tr>
+                <tr>
+                    <td class="label">TANGGAL TIKET</td>
+                    <td class="value">{{ \Carbon\Carbon::parse($pesanan->Tanggal_Tiket)->format('d M Y') }}</td>
                 </tr>
                 <tr>
                     <td class="label">HARGA TIKET</td>
