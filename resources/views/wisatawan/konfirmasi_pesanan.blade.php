@@ -177,6 +177,11 @@
                                         <td>Rp {{ number_format($data['Total_Harga'], 0, ',', '.') }}</td>
                                     </tr>
                                     <tr>
+                                        <td><strong>Tanggal Pengunaan</strong></td>
+                                        <td>:</td>
+                                        <td><input type="date" name="Tanggal_Tiket"></td>
+                                    </tr>
+                                    <tr>
                                         <td><strong>Bukti Bayar</strong></td>
                                         <td>:</td>
                                         <td>

@@ -39,7 +39,7 @@ class TransaksiController extends Controller
         foreach ($transaksi as $item) {
             if (
                 in_array($item->Status, ['Unpaid', 'Paid']) &&
-                Carbon::parse($item->Tanggal_Transaksi)->addDays(2)->isPast()
+                Carbon::parse($item->Tanggal_Tiket)->addDays(1)->isPast()
             ) {
                 $item->Status = 'Hangus';
                 $item->save();
@@ -62,7 +62,7 @@ class TransaksiController extends Controller
         foreach ($transaksi as $item) {
         if (
             in_array($item->Status, ['Unpaid', 'Paid']) &&
-            Carbon::parse($item->Tanggal_Transaksi)->addDays(2)->isPast()
+            Carbon::parse($item->Tanggal_Tiket)->addDays(1)->isPast()
         ) {
             $item->Status = 'Hangus';
             $item->save();
@@ -126,6 +126,7 @@ class TransaksiController extends Controller
             'ID_Wisata' => 'required|exists:destinations,id',
             'Jumlah_Tiket' => 'required|integer|min:1',
             'Harga_Satuan' => 'required|numeric|min:0',
+            'Tanggal_Tiket' => 'required|date',
             'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -154,6 +155,7 @@ class TransaksiController extends Controller
         $pesanan->total_harga = $totalHarga;
         $pesanan->Status = 'Pending';
         $pesanan->Tanggal_Transaksi = now();
+        $pesanan->Tanggal_Tiket = $request->Tanggal_Tiket;
         $pesanan->Bukti_Transaksi = $filename;
         $pesanan->save();
 
@@ -305,7 +307,7 @@ class TransaksiController extends Controller
         }
 
         if ($pesanan->Status === 'Hangus') {
-            if (!Carbon::parse($pesanan->Tanggal_Transaksi)->addDays(3)->isPast()) {
+            if (!Carbon::parse($pesanan->Tanggal_Tiket)->addDays(1)->isPast()) {
                 Alert::error('Error', 'Pesanan ini belum dapat dihapus.');
                 return redirect()->back();
             }
