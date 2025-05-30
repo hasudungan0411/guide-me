@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Destination;
+use Barryvdh\DomPDF\Facade as Pdf;
 use Illuminate\Http\Request;
 use App\Models\Tiket;
 use App\Models\Transaksi;
@@ -15,6 +16,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
+
 class TransaksiController extends Controller
 {
     public function generateInvoicePDF($id)
@@ -25,16 +27,7 @@ class TransaksiController extends Controller
 
         return $pdf->download('Invoice_'.$pesanan->ID_Tiket.'_Guide-Me.pdf');
 
-        $img->text("Nama: {$wisatawan->Nama}", 100, 200, function($font) {
-            $font->size(24);
-            $font->color('#000000');
-        });
-
-
-        $path = storage_path("app/public/invoice-$id.jpeg");
-        $img->save($path);
-
-        return response()->download($path)->deleteFileAfterSend(true);
+        // return view('wisatawan.invoice', compact('pesanan'));
     }
     public function adminIndex()
     {

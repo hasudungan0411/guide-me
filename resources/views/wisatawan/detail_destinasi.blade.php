@@ -216,18 +216,18 @@
                         <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog"
                             aria-labelledby="ratingModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document"
-                                style="display: flex; justify-content: center; align-items: center; height: 100%; max-width: 500px;">
+                                style="display: flex; justify-content: center; align-items: center; height: 100%; width: 100%; max-width: 400px; margin: 0 auto;">
                                 <div class="modal-content"
                                     style="padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); background-color: #fff;">
                                     <div class="modal-header"
-                                        style="display: flex; justify-content: center; width: 100%;">
-                                        <h5 class="modal-title" style="text-align: center; width: 100%;"
-                                            id="ratingModalLabel">Pilih Rating Anda</h5>
+                                        style="display: flex; justify-content: center; width: 100%; text-align: center;">
+                                        <h5 class="modal-title" id="ratingModalLabel" style="width: 100%;">Pilih Rating
+                                            Anda</h5>
                                     </div>
                                     <div class="modal-body" style="text-align: center;">
                                         <!-- Rating Bintang -->
                                         <div class="rating-container"
-                                            style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                                            style="display: flex; justify-content: center; gap: 65px; margin-bottom: 20px; flex-wrap: wrap;">
                                             @for ($i = 1; $i <= 5; $i++)
                                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                                     <input type="radio" name="rating_popup"
@@ -256,7 +256,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                         {{-- Menampilkan ulasan yang sudah ada --}}
                         @forelse ($destination->ulasan->take(3) as $ulasan)
@@ -393,6 +392,42 @@
                 });
             }
 
+            // Menambahkan efek hover untuk bintang
+            $('.rating-container label').on('mouseenter', function() {
+                const ratingValue = $(this).attr('for').replace('star', '') -
+                    1; // Ambil nilai rating dari atribut 'for'
+
+                const ratingLabels = $(this).closest('.rating-container').find(
+                    'label'); // Semua label dalam container
+
+                // Update warna semua bintang berdasarkan posisi indeks yang sedang dihover
+                ratingLabels.each(function(index) {
+                    if (index <= ratingValue) {
+                        $(this).css('color', '#f39c12'); // Warna emas saat hover
+                    } else {
+                        $(this).css('color', '#ddd'); // Warna abu-abu untuk yang lain
+                    }
+                });
+            });
+
+            // Mengembalikan warna bintang setelah hover
+            $('.rating-container label').on('mouseleave', function() {
+                const selectedRating = $(this).closest('.rating-container').find(
+                    'input[type="radio"]:checked').val(); // Ambil rating yang dipilih
+
+                const ratingLabels = $(this).closest('.rating-container').find(
+                    'label'); // Semua label dalam container
+
+                // Update warna berdasarkan rating yang dipilih atau default
+                ratingLabels.each(function(index) {
+                    if (selectedRating && index < selectedRating) {
+                        $(this).css('color', '#f39c12'); // Warna emas jika sudah dipilih
+                    } else {
+                        $(this).css('color', '#ddd'); // Warna abu-abu jika belum dipilih
+                    }
+                });
+            });
+
             // Menambahkan event listener untuk input rating (untuk perubahan bintang saat klik)
             $('.rating-container input').on('change', function() {
                 const ratingValue = $(this).val();
@@ -404,38 +439,6 @@
                         $(this).css('color', '#f39c12'); // Warna emas
                     } else {
                         $(this).css('color', '#ddd'); // Warna abu-abu
-                    }
-                });
-            });
-
-            // Menambahkan efek hover untuk bintang
-            $('.rating-container label').on('mouseenter', function() {
-                const index = $(this).index(); // Ambil indeks dari label yang sedang dihover
-                const ratingLabels = $(this).closest('.rating-container').find(
-                    'label'); // Semua label dalam container
-
-                // Update warna semua bintang berdasarkan posisi indeks yang sedang dihover
-                ratingLabels.each(function(i) {
-                    if (i <= index) {
-                        $(this).css('color', '#f39c12'); // Warna emas saat hover
-                    } else {
-                        $(this).css('color', '#ddd'); // Warna abu-abu untuk yang lain
-                    }
-                });
-            });
-
-            $('.rating-container label').on('mouseleave', function() {
-                const ratingLabels = $(this).closest('.rating-container').find(
-                    'label'); // Semua label dalam container
-
-                // Update warna bintang berdasarkan rating yang sudah dipilih
-                const selectedRating = $(this).closest('.rating-container').find(
-                    'input[type="radio"]:checked').val();
-                ratingLabels.each(function(index) {
-                    if (selectedRating && index < selectedRating) {
-                        $(this).css('color', '#f39c12'); // Warna emas jika rating sudah dipilih
-                    } else {
-                        $(this).css('color', '#ddd'); // Warna abu-abu jika belum dipilih
                     }
                 });
             });
@@ -516,7 +519,7 @@
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Terjadi kesalahan!',
-                                    text: 'Coba lagi nanti.'
+                                    text: 'Isi ulasan anda tidak boleh kosong.'
                                 });
                             }
                         },
@@ -524,7 +527,7 @@
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Terjadi kesalahan!',
-                                text: 'Coba lagi nanti.'
+                                text: 'Isi ulasan anda tidak boleh kosong.'
                             });
                         }
                     });

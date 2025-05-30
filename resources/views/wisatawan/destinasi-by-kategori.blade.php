@@ -9,7 +9,7 @@
             <div class="row justify-content-center">
                 <div class="col-lg-10">
                     <div class="page-banner-content text-center text-white">
-                        <h1 class="page-title">Kategori->{{ $category->nama_kategori }}</h1>
+                        <h1 class="page-title">{{ $category->nama_kategori }}</h1>
                         <ul class="breadcrumb-link text-white">
                             <li><a href="{{ route('wisatawan.kategori-destinasi') }}">Kategori</a></li>
                             <li class="active">{{ $category->nama_kategori }}</li>
