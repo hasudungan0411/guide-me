@@ -78,12 +78,14 @@ class TransaksiController extends Controller
             abort(404, 'Destinasi tidak ditemukan');
         }
 
-        // ambil semua transaksi untuk destinasi ini
         $transaksi = Transaksi::where('ID_Wisata', $destinasi->id)->get();
 
-        // Inisialisasi variabel untuk total tiket dan total pendapatan
-        $totalTiketTerjual = $transaksi->sum('Jumlah_Tiket');
-        $totalPendapatan = $transaksi->sum('total_harga');
+        $transaksiValid = $transaksi->filter(function ($item) {
+            return $item->Status !== 'Hangus';
+        });
+
+        $totalTiketTerjual = $transaksiValid->sum('Jumlah_Tiket');
+        $totalPendapatan = $transaksiValid->sum('total_harga');
 
         foreach ($transaksi as $item) {
             if (
@@ -93,12 +95,6 @@ class TransaksiController extends Controller
                 $item->Status = 'Hangus';
                 $item->save();
             }
-
-            // Tambahkan tiket yang terjual ke total tiket terjual
-            $totalTiketTerjual += $item->jumlah_tiket;
-
-            // Hitung pendapatan dari transaksi ini dan tambahkan ke total pendapatan
-            $totalPendapatan += $item->jumlah_tiket * $item->harga_tiket;
         }
 
         return view('pemilik.transaksi', compact('transaksi', 'destinasi', 'totalPendapatan', 'totalTiketTerjual'));
