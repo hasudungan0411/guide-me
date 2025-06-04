@@ -69,6 +69,7 @@ class KelolaAkunPemilikController extends Controller
     public function destroy($ID_Pemilik_Wisata)
     {
         Pemilikwisata::destroy($ID_Pemilik_Wisata);
+
         alert::success('Success','Akun pemilik berhasil dihapus');
         return redirect()->route('akun_pemilik-wisata.index');
     }

@@ -57,9 +57,6 @@ Route::middleware(['admin'])->group(function () {
 
     Route::get('/transaksi', [TransaksiController::class, 'adminIndex'])->name('admin.transaksi');
 
-    // Routes untuk kolola Saran Tempat Wisata
-    Route::get('/kelola-saran-wisata', [KelolaSaranController::class, 'saran'])->name('kelola_saranwisata.index');
-
     // Rute Kelola Akun Pemilik
     Route::get('/kelola-akun-pemilik-wisata', [KelolaAkunPemilikController::class, 'pemilik_wisata'])->name('akun_pemilik-wisata.index');
     Route::get('/kelola-akun-pemilik-wisata/create', [KelolaAkunPemilikController::class, 'create'])->name('akun_pemilik-wisata.create');

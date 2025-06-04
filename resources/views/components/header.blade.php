@@ -41,12 +41,13 @@
                                 <a href="{{ url('/wisatawan/acara') }}"
                                     class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/acara*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Acara</a>
                             </li>
-                            <li
-                                class="menu-item has-children {{ Request::is('wisatawan/chatbot') ? 'active' : '' }} d-block d-xl-none">
-                                <a href="{{ route('wisatawan.chatbot') }}"
-                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0">Teman
-                                    Wisata</a>
+                            <li class="me-0 menu-item has-children d-block d-xl-none">
+                                <a href="#" id="chatbotTriggerMobile"
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0">
+                                    Teman Wisata
+                                </a>
                             </li>
+
                             <li class="me-0 menu-item">
                                 <a href="{{ route('wisatawan.kategori-destinasi') }}"
                                     class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0
@@ -140,7 +141,7 @@
 
                     {{-- Tombol Teman Wisata desktopp --}}
                     <div class="menu-button d-none d-xl-block">
-                         <a href="#" id="chatbotTrigger" class="main-btn primary-btn px-3 py-2 text-right">
+                        <a href="#" id="chatbotTriggerDesktop" class="main-btn primary-btn px-3 py-2 text-right">
                             Teman Wisata <i class="fas fa-comments ms-1"></i>
                         </a>
                     </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Wisatawan;
+use RealRashid\SweetAlert\Facades\Alert;
 class KelolaAkunController extends Controller
 {
     public function wisatawan()
@@ -34,13 +35,16 @@ class KelolaAkunController extends Controller
             'Foto_Profil' => null,
         ]);
 
-        return redirect()->route('akun_wisatawan.index')->with('success', 'Wisatawan berhasil ditambahkan');
+        Alert::success('Berhasil', 'Wisatawan berhasil ditambahkan!');
+        return redirect()->route('akun_wisatawan.index');
     }
 
     public function destroyWisatawan($ID_Wisatawan)
     {
         Wisatawan::destroy($ID_Wisatawan);
-        return redirect()->route('akun_wisatawan.index')->with('success', 'Wisatawan berhasil dihapus');
+
+        Alert::success('Berhasil', 'Wisatawan berhasil dihapus');
+        return redirect()->route('akun_wisatawan.index');
     }
 
 }

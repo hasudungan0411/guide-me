@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\kategori;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BlogController extends Controller
 {
@@ -57,7 +58,8 @@ class BlogController extends Controller
             'slug' => Str::slug($validatedData['judul'])
         ]);
 
-        return redirect()->route('blog.index')->with('success', 'Berhasil Menambahkan Blog');
+        alert::success('Berhasil', 'Berhasil Menambahkan Blog');
+        return redirect()->route('blog.index');
     }
 
     /**
@@ -94,7 +96,7 @@ class BlogController extends Controller
             // 'slug' => 'required|string|max:255'
         ]);
 
-        // mencari blog berdasarkan id 
+        // mencari blog berdasarkan id
         $blog = Blog::findOrFail($id);
 
         $blog->judul = $validatedData['judul'];
@@ -104,7 +106,7 @@ class BlogController extends Controller
         $blog->tanggal = $validatedData['tanggal'];
         $blog->slug = Str::slug($validatedData['judul']);
 
-        // mengambil gambarnya 
+        // mengambil gambarnya
         if ($request->hasfile('gambar')) {
             $gambar = $request->file('gambar')->hashName();
             $request->file('gambar')->storeAs('images/blog', $gambar, 'public');
@@ -113,7 +115,8 @@ class BlogController extends Controller
 
         $blog->save();
 
-        return redirect()->route('blog.index')->with('success', 'Berhasil Update Blog');
+        alert::success('Berhasil', 'Berhasil Mengubah Blog');
+        return redirect()->route('blog.index');
 
     }
 
@@ -122,10 +125,10 @@ class BlogController extends Controller
      */
     public function destroy(string $id)
     {
-        // ambil ID nya 
+        // ambil ID nya
         $blog = Blog::findOrFail($id);
 
-        // hapus gambar dari storage 
+        // hapus gambar dari storage
         $gambarfields = ['gambar'];
         foreach ($gambarfields as $gambar) {
             if ($blog->$gambar) {
@@ -134,6 +137,8 @@ class BlogController extends Controller
         }
 
         $blog->delete();
-        return redirect()->route('blog.index')->with('success', 'Berhasil Menghapus Blog');
+
+        alert::success('Berhasil', 'Berhasil Menghapus Blog');
+        return redirect()->route('blog.index');
     }
 }

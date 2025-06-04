@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Halaman Admin')</title>
     @stack('styles')
     <!-- Styles -->
@@ -35,65 +35,71 @@
     <div class="connect-container align-content-stretch d-flex flex-wrap">
         <!-- Sidebar -->
         <div class="page-sidebar">
-            <div class="logo-box">
-                <a href="#" class="logo-text">MeGuide</a>
-            </div>
-            <div class="page-sidebar-inner slimscroll">
-                <ul class="accordion-menu">
-                    <li class="sidebar-title">Apps</li>
+            <div class="page-sidebar">
+                <div class="logo-box"><a href="#" class="logo-text">MeGuide</a><a href="#"
+                        id="sidebar-close"><i class="material-icons">close</i></a> <a href="#"
+                        id="sidebar-state"><i class="material-icons">adjust</i><i
+                            class="material-icons compact-sidebar-icon">panorama_fish_eye</i></a></div>
+                <div class="page-sidebar-inner slimscroll">
+                    <ul class="accordion-menu">
+                        <li class="sidebar-title">Apps</li>
 
-                    <li class="{{ Request::routeIs('destinasi.*') ? 'active-page' : '' }}">
-                        <a href="{{ route('destinasi.index') }}"
-                            class="{{ Request::routeIs('destinasi.*') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">dashboard</i>Dashboard
-                        </a>
-                    </li>
+                        <li class="{{ Request::routeIs('destinasi.*') ? 'active-page' : '' }}">
+                            <a href="{{ route('destinasi.index') }}"
+                                class="{{ Request::routeIs('destinasi.*') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">dashboard</i>Dashboard
+                            </a>
+                        </li>
 
-                    <li class="{{ Request::routeIs('blog.*') ? 'active-page' : '' }}">
-                        <a href="{{ url('/blog') }}" class="{{ Request::routeIs('blog.*') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">rss_feed</i>Blog
-                        </a>
-                    </li>
+                        <li class="{{ Request::routeIs('blog.*') ? 'active-page' : '' }}">
+                            <a href="{{ url('/blog') }}" class="{{ Request::routeIs('blog.*') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">rss_feed</i>Blog
+                            </a>
+                        </li>
 
-                    <li class="sidebar-title">Akun Pengguna</li>
-                    <li
-                        class="{{ Request::routeIs('akun_wisatawan.*') || Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
-                        <a href="#"><i class="material-icons">people</i>Kelola Akun<i
-                                class="material-icons has-sub-menu">add</i></a>
-                        <ul class="sub-menu">
-                            <li class="{{ Request::routeIs('akun_wisatawan.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/kelola-akun-wisatawan') }}"
-                                    class="{{ Request::routeIs('akun_wisatawan.*') ? 'active' : '' }}">Wisatawan</a>
-                            </li>
-                            <li class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/kelola-akun-pemilik-wisata') }}"
-                                    class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active' : '' }}">Pemilik Wisata</a>
-                            </li>
-                        </ul>
-                    </li>
+                        <li class="sidebar-title">Akun Pengguna</li>
+                        <li
+                            class="{{ Request::routeIs('akun_wisatawan.*') || Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
+                            <a href="#"><i class="material-icons">people</i>Kelola Akun<i
+                                    class="material-icons has-sub-menu">add</i></a>
+                            <ul class="sub-menu">
+                                <li class="{{ Request::routeIs('akun_wisatawan.*') ? 'active-page' : '' }}">
+                                    <a href="{{ url('/kelola-akun-wisatawan') }}"
+                                        class="{{ Request::routeIs('akun_wisatawan.*') ? 'active' : '' }}">Wisatawan</a>
+                                </li>
+                                <li class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active-page' : '' }}">
+                                    <a href="{{ url('/kelola-akun-pemilik-wisata') }}"
+                                        class="{{ Request::routeIs('akun_pemilik-wisata.*') ? 'active' : '' }}">Pemilik
+                                        Wisata</a>
+                                </li>
+                            </ul>
+                        </li>
 
 
-                    <li class="sidebar-title">Management</li>
-                    <li
-                        class="{{ Request::routeIs('kategori.*') || Request::routeIs('galeri.*') ? 'active-page' : '' }}">
-                        <a href="#"><i class="material-icons">apps</i>Data<i
-                                class="material-icons has-sub-menu">add</i></a>
-                        <ul class="sub-menu">
-                            <li class="{{ Request::routeIs('kategori.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/kategori') }}"
-                                    class="{{ Request::routeIs('kategori.*') ? 'active' : '' }}">Kategori</a>
-                            </li>
-                            <li class="{{ Request::routeIs('galeri.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/galeri') }}"
-                                    class="{{ Request::routeIs('galeri.*') ? 'active' : '' }}">Galeri</a>
-                            </li>
-                            <li class="{{ Request::routeIs('transaksi.*') ? 'active-page' : '' }}">
-                                <a href="{{ url('/transaksi') }}"
-                                    class="{{ Request::routeIs('transaksi.*') ? 'active' : '' }}">Transaksi</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                        <li class="sidebar-title">Management</li>
+                        <li
+                            class="{{ Request::routeIs('kategori.*') || Request::routeIs('galeri.*') || Request::routeIs('admin.transaksi') ? 'active-page' : '' }}">
+                            <a href="#"><i class="material-icons">apps</i>Data<i
+                                    class="material-icons has-sub-menu">add</i></a>
+                            <ul class="sub-menu">
+                                <li class="{{ Request::routeIs('kategori.*') ? 'active-page' : '' }}">
+                                    <a href="{{ url('/kategori') }}"
+                                        class="{{ Request::routeIs('kategori.*') ? 'active' : '' }}">Kategori</a>
+                                </li>
+                                <li class="{{ Request::routeIs('galeri.*') ? 'active-page' : '' }}">
+                                    <a href="{{ url('/galeri') }}"
+                                        class="{{ Request::routeIs('galeri.*') ? 'active' : '' }}">Galeri</a>
+                                </li>
+                                <li class="{{ Request::routeIs('admin.transaksi') ? 'active-page' : '' }}">
+                                    <a href="{{ route('admin.transaksi') }}"
+                                        class="{{ Request::routeIs('admin.transaksi') ? 'active' : '' }}">
+                                        Transaksi
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 

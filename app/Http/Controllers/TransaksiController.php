@@ -29,13 +29,31 @@ class TransaksiController extends Controller
 
         return view('wisatawan.invoice', compact('pesanan'));
     }
-    public function adminIndex()
+    public function adminIndex(Request $request)
     {
-        $transaksi = Transaksi::all();
+        // Ambil semua pemilik wisata dan nama wisata yang sudah terdaftar
+        $pemilikWisata = Pemilikwisata::all();
+
+        // Ambil data transaksi berdasarkan pemilik wisata jika ada filter
+        if ($request->has('pemilik_wisata') && $request->pemilik_wisata != '') {
+            // Menyaring transaksi berdasarkan pemilik wisata yang dipilih
+            $transaksi = Transaksi::whereHas('destinasi', function ($query) use ($request) {
+                // Menyaring berdasarkan ID Pemilik Wisata (pemilik_wisata_id)
+                $query->whereHas('pemilikwisata', function ($query) use ($request) {
+                    $query->where('ID_Pemilik_Wisata', $request->pemilik_wisata);
+                });
+            })->get();
+        } else {
+            // Jika belum ada pemilik wisata yang dipilih, tampilkan transaksi kosong atau default
+            $transaksi = collect();
+        }
+
+        // Total statistik
         $totalTransaksi = Transaksi::count();
         $totalWisatawan = Wisatawan::count();
         $totalPemilik = Pemilikwisata::count();
 
+        // Update status transaksi jika ada tiket yang hangus
         foreach ($transaksi as $item) {
             if (
                 in_array($item->Status, ['Unpaid', 'Paid']) &&
@@ -46,8 +64,11 @@ class TransaksiController extends Controller
             }
         }
 
-        return view('admin.data-transaksi', compact('transaksi', 'totalTransaksi', 'totalWisatawan', 'totalPemilik'));
+        // Kirim data ke view
+        return view('admin.data-transaksi', compact('transaksi', 'totalTransaksi', 'totalWisatawan', 'totalPemilik', 'pemilikWisata'));
     }
+
+
     public function showtransaksipemilik()
     {
         $pemilik = Auth::guard('pemilikwisata')->user();

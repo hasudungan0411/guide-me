@@ -36,70 +36,74 @@
                     <div class="card">
                         <div class="card-body">
                             <a href="{{ route('akun_wisatawan.create') }}" class="btn btn-primary mb-3">Tambah Wisatawan</a>
-                            <table id="zero-conf" class="display" style="width:100%">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Email</th>
-                                        <th>Nomor HP</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($data as $index => $wisatawan)
+                            <div class="table-responsive">
+                                <table id="zero-conf" class="display" style="width:100%">
+                                    <thead class="thead-light">
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
-                                            <td>{{ $wisatawan->Nama }}</td>
-                                            <td><span class="badge"
-                                                    style="background-color: {!! generateColorFromText($wisatawan->Email) !!}; color: #fff;">
-                                                    {{ $wisatawan->Email }}
-                                                </span></td>
-                                            <td>{{ $wisatawan->Nomor_HP }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                    data-target="#modalHapus{{ $wisatawan->ID_Wisatawan }}">
-                                                    Hapus
-                                                </button>
-                                            </td>
+                                            <th>No</th>
+                                            <th>Nama</th>
+                                            <th>Email</th>
+                                            <th>Nomor HP</th>
+                                            <th>Aksi</th>
                                         </tr>
-                                        <!-- Modal Konfirmasi Hapus -->
-                                        <div class="modal fade" id="modalHapus{{ $wisatawan->ID_Wisatawan }}" tabindex="-1"
-                                            role="dialog" aria-labelledby="modalHapusLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Konfirmasi Hapus</h5>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <i class="material-icons">close</i>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Yakin ingin menghapus akun <strong>{{ $wisatawan->Nama }}</strong>?
-                                                        Aksi ini tidak bisa dibatalkan.
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-dismiss="modal">Batal</button>
-                                                        <form
-                                                            action="{{ route('akun_wisatawan.destroy', $wisatawan->ID_Wisatawan) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger">Hapus</button>
-                                                        </form>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($data as $index => $wisatawan)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $wisatawan->Nama }}</td>
+                                                <td><span class="badge"
+                                                        style="background-color: {!! generateColorFromText($wisatawan->Email) !!}; color: #fff;">
+                                                        {{ $wisatawan->Email }}
+                                                    </span></td>
+                                                <td>{{ $wisatawan->Nomor_HP }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                        data-target="#modalHapus{{ $wisatawan->ID_Wisatawan }}">
+                                                        Hapus
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <!-- Modal Konfirmasi Hapus -->
+                                            <div class="modal fade" id="modalHapus{{ $wisatawan->ID_Wisatawan }}"
+                                                tabindex="-1" role="dialog" aria-labelledby="modalHapusLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Konfirmasi Hapus</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <i class="material-icons">close</i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Yakin ingin menghapus akun
+                                                            <strong>{{ $wisatawan->Nama }}</strong>?
+                                                            Aksi ini tidak bisa dibatalkan.
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Batal</button>
+                                                            <form
+                                                                action="{{ route('akun_wisatawan.destroy', $wisatawan->ID_Wisatawan) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit" class="btn btn-danger">Hapus</button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="text-center">Tidak ada data wisatawan.</td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center">Tidak ada data wisatawan.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

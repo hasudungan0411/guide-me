@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\kategori;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class KategoriController extends Controller
 {
@@ -36,17 +37,18 @@ class KategoriController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // ambil dan simpan gambar nya 
+        // ambil dan simpan gambar nya
         $gambar = $request->file('gambar')->hashName();
         $request->file('gambar')->storeAs('images/kategori', $gambar, 'public');
 
-        // simpan ke database 
+        // simpan ke database
         kategori::create([
             'nama_kategori' => $request->nama_kategori,
             'gambar' => $gambar
         ]);
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan!');
+        alert::success('Berhasil', 'Kategori berhasil ditambahkan!');
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -79,7 +81,7 @@ class KategoriController extends Controller
             'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        // update data 
+        // update data
         $kategori->nama_kategori = $request->nama_kategori;
 
         if ($request->hasFile('gambar')) {
@@ -90,7 +92,8 @@ class KategoriController extends Controller
 
         $kategori->save();
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil diperbarui!');
+        alert::success('Berhasil', 'Kategori berhasil diperbarui!');
+        return redirect()->route('kategori.index');
     }
 
     /**
@@ -98,10 +101,10 @@ class KategoriController extends Controller
      */
     public function destroy(string $id)
     {
-        // mencari kategori berdasarkan ID 
+        // mencari kategori berdasarkan ID
         $kategori = kategori::findOrFail($id);
 
-        // hapus gambar dari storage 
+        // hapus gambar dari storage
         $gambarfields = ['gambar'];
         foreach ($gambarfields as $gambar) {
             if ($kategori->$gambar) {
@@ -111,6 +114,7 @@ class KategoriController extends Controller
 
         $kategori->delete();
 
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dihapus!');
+        alert::success('Berhasil', 'Kategori berhasil dihapus!');
+        return redirect()->route('kategori.index');
     }
 }

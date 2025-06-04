@@ -137,9 +137,21 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const chatbotTrigger = document.getElementById('chatbotTrigger');
-            if (chatbotTrigger) {
-                chatbotTrigger.addEventListener('click', function(event) {
+            const chatbotTriggerMobile = document.getElementById('chatbotTriggerMobile');
+            const chatbotTriggerDesktop = document.getElementById('chatbotTriggerDesktop');
+
+            // Event Listener untuk tombol mobile
+            if (chatbotTriggerMobile) {
+                chatbotTriggerMobile.addEventListener('click', function(event) {
+                    event.preventDefault(); // Mencegah link default action
+                    var myModal = new bootstrap.Modal(document.getElementById('chatbotModal'));
+                    myModal.show();
+                });
+            }
+
+            // Event Listener untuk tombol desktop
+            if (chatbotTriggerDesktop) {
+                chatbotTriggerDesktop.addEventListener('click', function(event) {
                     event.preventDefault(); // Mencegah link default action
                     var myModal = new bootstrap.Modal(document.getElementById('chatbotModal'));
                     myModal.show();
