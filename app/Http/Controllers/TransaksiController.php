@@ -82,8 +82,8 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::where('ID_Wisata', $destinasi->id)->get();
 
         // Inisialisasi variabel untuk total tiket dan total pendapatan
-        $totalTiketTerjual = 0;
-        $totalPendapatan = 0;
+        $totalTiketTerjual = $transaksi->sum('Jumlah_Tiket');
+        $totalPendapatan = $transaksi->sum('total_harga');
 
         foreach ($transaksi as $item) {
             if (
