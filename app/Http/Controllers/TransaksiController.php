@@ -81,7 +81,7 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::where('ID_Wisata', $destinasi->id)->get();
 
         $transaksiValid = $transaksi->filter(function ($item) {
-            return $item->Status !== 'Hangus';
+            return $item->Status == 'Paid';
         });
 
         $totalTiketTerjual = $transaksiValid->sum('Jumlah_Tiket');

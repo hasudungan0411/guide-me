@@ -15,14 +15,16 @@ class Websitemail extends Mailable
 
     public $mailMessage;
     public $subject;
+    public $resetLink;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($message, $subject)
+    public function __construct($message, $subject, $resetLink)
     {
         $this->mailMessage = $message;
         $this->subject = $subject;
+        $this->resetLink = $resetLink;
     }
 
     /**
@@ -41,7 +43,11 @@ class Websitemail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'wisatawan.welcome-email',
+            view: 'wisatawan.welcome-email',  // Pastikan ini mengarah ke view yang benar
+            with: [
+                'mailMessage' => $this->mailMessage,
+                'resetLink' => $this->resetLink,  // Menambahkan reset link ke view
+            ]
         );
     }
 

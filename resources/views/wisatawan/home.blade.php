@@ -10,7 +10,7 @@
                 @foreach ($destinations as $destination)
                     <div class="single-slider">
                         <div class="image-layer bg_cover"
-                            style="background-image: url('{{ asset('storage/images/destinasi/' . $destination->gambar) }}');">
+                            style="background-image: url('{{ asset('storage/images/destinasi/' . $destination->gambar) }}')">
                         </div>
                         <div class="container">
                             <div class="row align-items-center">
@@ -186,7 +186,7 @@
                                 src="{{ asset('storage/images/destinasi/' . $destination->gambar) }}" alt="Gallery Image">
                         </div>
                         <div class="content">
-                            <a href="{{ route('destinasi.show', $destination->id) }}">
+                            <a href="{{ route('wisatawan.detail_destinasi', $destination->id) }}">
                                 <h3 class="title">{{ $destination->tujuan }}</h3>
                             </a>
                             <p>{{ Str::limit(strip_tags($destination->desk), 150, '...') }}</p>

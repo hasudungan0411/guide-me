@@ -39,11 +39,6 @@
                     <div id="password-error" style="color:#ff4444; font-size:12px; margin-top:4px; height:16px;"></div>
                 </div>
 
-                <div style="font-size:13px; color:#333; margin:8px 0 20px 0; cursor:pointer;"
-                    onmouseover="this.style.color='#4CAF50'" onmouseout="this.style.color='#333'">
-                    Lupa Kata Sandi?
-                </div>
-
                 <button type="submit"
                     style="width:100%; box-sizing:border-box; padding:12px; border-radius:20px; border:none; background:linear-gradient(to right, #4CAF50, #8BC34A); color:white; font-weight:bold; font-size:14px; cursor:pointer; transition:all 0.3s ease;"
                     onmouseover="this.style.opacity='0.9'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(76,175,80,0.3)'"
@@ -52,10 +47,10 @@
                 </button>
                 <p>
                     <span style="font-size:14px; center; color:#333; margin:10px 0 25px 0; cursor:pointer;">
-                        Jika belum memiliki akun, silahkan hubungi admin guide me
+                        Jika belum memiliki akun atau masalah terhadap akun anda, silahkan hubungi admin guide me
                     </span>
                     <a href="https://wa.me/+6287867529822" target="blank"
-                        style="color:#4CAF50; text-decoration:none;">Klink link whatsapp ini
+                        style="color:#4CAF50; text-decoration:none;">Klink Disini
                     </a>
                 </p>
             </form>

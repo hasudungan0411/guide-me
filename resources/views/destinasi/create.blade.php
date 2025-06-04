@@ -22,7 +22,7 @@
     <div class="page-content">
         <div class="page-info">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Destination</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('destinasi.index') }}">Destination</a></li>
                 <li class="breadcrumb-item active">Tambah</li>
             </ol>
         </div>

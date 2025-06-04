@@ -8,7 +8,8 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="#">MeGuide</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('akun_pemilik-wisata.index') }}">Kelola Akun Pemilik</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('akun_pemilik-wisata.index') }}">Kelola Akun Pemilik</a>
+                    </li>
                     <li class="breadcrumb-item active" aria-current="page">Tambah Akun</li>
                 </ol>
             </nav>
@@ -32,7 +33,8 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('akun_pemilik-wisata.store') }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('akun_pemilik-wisata.store') }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="form-row">
@@ -85,7 +87,16 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="inputPassword">Kata Sandi</label>
-                                        <input type="password" name="password" class="form-control" id="inputPassword" required>
+                                        <div class="input-group">
+                                            <input type="password" name="password" class="form-control" id="inputPassword"
+                                                required>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    id="togglePassword">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                         @error('password')
                                             <small class="text-danger">{{ $message }}</small>
                                         @enderror
@@ -93,9 +104,30 @@
 
                                     <div class="form-group col-md-6">
                                         <label for="inputPasswordConfirm">Konfirmasi Kata Sandi</label>
-                                        <input type="password" name="password_confirmation" class="form-control" id="inputPasswordConfirm" required>
+                                        <div class="input-group">
+                                            <input type="password" name="password_confirmation" class="form-control"
+                                                id="inputPasswordConfirm" required>
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-outline-secondary"
+                                                    id="togglePasswordConfirm">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
                                     </div>
                                 </div>
+
+                                <script>
+                                    // Toggle password visibility untuk password input
+                                    document.getElementById('togglePassword').addEventListener('click', function() {
+                                        const passwordField = document.getElementById('inputPassword');
+                                        passwordField.type = (passwordField.type === 'password') ? 'text' : 'password';
+                                    });
+
+                                    // Toggle password visibility untuk confirm password input
+                                    document.getElementById('togglePasswordConfirm').addEventListener('click', function() {
+                                        const passwordFieldConfirm = document.getElementById('inputPasswordConfirm');
+                                        passwordFieldConfirm.type = (passwordFieldConfirm.type === 'password') ? 'text' : 'password';
+                                    });
+                                </script>
 
                                 <button type="submit" class="btn btn-primary mt-3">Simpan Data</button>
                             </form>

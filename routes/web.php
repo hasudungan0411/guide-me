@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PemilikController;
@@ -10,7 +8,6 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\layoutscontroller;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\GaleriController;
-use App\Http\Controllers\KelolaSaranController;
 use App\Http\Controllers\AcaraController;
 use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\KelolaAkunPemilikController;
@@ -32,7 +29,7 @@ use App\Http\Controllers\Auth\PemilikWisataAuthController as PemilikWisataAuthCo
 use App\Http\Controllers\Wisatawan\FavoritController as wisatawanFavoritController;
 
 // Rute login admin
-Route::get('/admin-login', [AdminController::class, 'showlogin'])->name('admin.login');
+Route::get('/admin-login-guide25', [AdminController::class, 'showlogin'])->name('admin.login');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login.proses');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
 

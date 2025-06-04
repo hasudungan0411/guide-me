@@ -41,7 +41,7 @@
                             <div class="main-post">
                                 <div class="entry-content">
                                     <h3 class="title">{{ $blog->judul }}</h3>
-                                    <p>{{ $blog->deskripsi }}</p>
+                                    <p>{!! strip_tags($blog->deskripsi) !!}</p>
                                 </div>
                             </div>
                         </div>

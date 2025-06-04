@@ -10,7 +10,7 @@
                     <div class="page-banner-content text-center text-white">
                         <h1 class="page-title">Blog List</h1>
                         <ul class="breadcrumb-link text-white">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{{ route('wisatawan.home') }}">Home</a></li>
                             <li class="active">Blog List</li>
                         </ul>
                     </div>

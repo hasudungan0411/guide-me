@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Wisatawan;
 use RealRashid\SweetAlert\Facades\Alert;
+
 class KelolaAkunController extends Controller
 {
     public function wisatawan()
@@ -20,6 +21,7 @@ class KelolaAkunController extends Controller
 
     public function storeWisatawan(Request $request)
     {
+        // Validasi input
         $request->validate([
             'nama' => 'required',
             'email' => 'required|email|unique:wisatawan,Email',
@@ -27,14 +29,16 @@ class KelolaAkunController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
 
+        // Simpan data wisatawan ke database
         Wisatawan::create([
             'Nama' => $request->nama,
             'Email' => $request->email,
             'Nomor_HP' => $request->nomor_hp,
-            'Kata_Sandi' => bcrypt($request->password),
-            'Foto_Profil' => null,
+            'Kata_Sandi' => bcrypt($request->password),  // Enkripsi password
+            'Foto_Profil' => null,  // Jika diperlukan upload foto profil
         ]);
 
+        // Tampilkan alert berhasil
         Alert::success('Berhasil', 'Wisatawan berhasil ditambahkan!');
         return redirect()->route('akun_wisatawan.index');
     }
@@ -46,5 +50,4 @@ class KelolaAkunController extends Controller
         Alert::success('Berhasil', 'Wisatawan berhasil dihapus');
         return redirect()->route('akun_wisatawan.index');
     }
-
 }

@@ -37,37 +37,42 @@
             $destination = auth()->guard('pemilikwisata')->user()?->destination;
         @endphp
         <div class="page-sidebar">
-            <div class="logo-box">
-                <a href="#" class="logo-text">MeGuide</a>
-            </div>
-            <div class="page-sidebar-inner slimscroll">
-                <ul class="accordion-menu">
-                    <li class="sidebar-title">Apps</li>
-                    <li class="{{ Request::routeIs('pemilik.index') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.index') }}"
-                            class="{{ Request::routeIs('pemilik.index') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">dashboard</i>Dashboard
-                        </a>
-                    </li>
+            <div class="page-sidebar">
+                <div class="logo-box"><a href="#" class="logo-text">MeGuide</a><a href="#"
+                        id="sidebar-close"><i class="material-icons">close</i></a> <a href="#"
+                        id="sidebar-state"><i class="material-icons">adjust</i><i
+                            class="material-icons compact-sidebar-icon">panorama_fish_eye</i></a></div>
+                <div class="page-sidebar-inner slimscroll">
+                    <ul class="accordion-menu">
+                        <li class="sidebar-title">Apps</li>
+                        <li class="{{ Request::routeIs('pemilik.index') ? 'active-page' : '' }}">
+                            <a href="{{ route('pemilik.index') }}"
+                                class="{{ Request::routeIs('pemilik.index') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">dashboard</i>Dashboard
+                            </a>
+                        </li>
 
-                    <li class="{{ Request::routeIs('pemilik.acara.*') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.acara.index') }}"
-                            class="{{ Request::routeIs('pemilik.acara.*') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">event</i>Acara
-                        </a>
-                    </li>
+                        <li class="{{ Request::routeIs('pemilik.acara.*') ? 'active-page' : '' }}">
+                            <a href="{{ route('pemilik.acara.index') }}"
+                                class="{{ Request::routeIs('pemilik.acara.*') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">event</i>Acara
+                            </a>
+                        </li>
 
-                    <li class="{{ Request::routeIs('pemilik.tiket') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.tiket') }}" class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">confirmation_number</i>Tiket
-                        </a>
-                    </li>
-                    <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
-                        <a href="{{ route('pemilik.transaksi') }}" class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
-                            <i class="material-icons-outlined">payments </i>Transaksi
-                        </a>
-                    </li>
-                </ul>
+                        <li class="{{ Request::routeIs('pemilik.tiket') ? 'active-page' : '' }}">
+                            <a href="{{ route('pemilik.tiket') }}"
+                                class="{{ Request::routeIs('pemilik.tiket') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">confirmation_number</i>Tiket
+                            </a>
+                        </li>
+                        <li class="{{ Request::routeIs('pemilik.transaksi') ? 'active-page' : '' }}">
+                            <a href="{{ route('pemilik.transaksi') }}"
+                                class="{{ Request::routeIs('pemilik.transaksi') ? 'active' : '' }}">
+                                <i class="material-icons-outlined">payments </i>Transaksi
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 

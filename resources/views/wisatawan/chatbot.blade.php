@@ -95,13 +95,7 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(res) {
-                        console.log(res); // Debugging - lihat data apa yang dikirim dari backend
-
-                        // Cek apakah ada error atau tidak
-                        if (res.error) {
-                            alert(res.error);
-                            return;
-                        }
+                        console.log(res);
 
                         // Proses balasan dari backend dan masukkan ke chat
                         let chatbotMessage = res.reply;

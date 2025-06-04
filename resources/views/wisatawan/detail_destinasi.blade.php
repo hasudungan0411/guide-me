@@ -290,7 +290,7 @@
                                 <div style="display: flex; align-items: flex-start;">
                                     <!-- Profil Image -->
                                     <div style="margin-right: 10px;">
-                                        <img src="{{ $ulasan->wisatawan->Foto_Profil }}" alt="foto-profil"
+                                        <img src="{{ $ulasan->wisatawan->Foto_Profil ?? asset('assets/images/avatars/profile-image-2.png') }}" alt="foto-profil"
                                             style="width: 40px; height: 40px; border-radius: 50%;">
                                     </div>
                                     <div>
