@@ -120,7 +120,7 @@
                                                     <td>{{ $i++ }}</td>
                                                     <td>{{ $tiket->ID_Tiket }}</td>
                                                     <td>{{ $tiket->destinasi->tujuan ?? 'N/A' }}</td>
-                                                    <td>{{ $tiket->wisatawan->Email }}</td>
+                                                    <td>{{ $tiket->wisatawan ? $tiket->wisatawan->Email : 'N/A' }}</td>
                                                     <td
                                                         class="
                                                     @if ($tiket->Status === 'Paid') text-success
