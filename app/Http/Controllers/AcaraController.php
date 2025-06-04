@@ -19,7 +19,7 @@ class AcaraController extends Controller
         $destinasi = $pemilik->destination;
 
         // Pastikan hanya acara dari destinasi miliknya yang diambil
-        $Acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_acara')->get() : [];
+        $Acara = $destinasi ? $destinasi->acara()->orderBy('Tanggal_mulai_acara')->get() : [];
 
         return view('pemilik.acara.index', compact('Acara', 'destinasi'));
     }
@@ -36,7 +36,8 @@ class AcaraController extends Controller
     {
         $request->validate([
             'Nama_acara' => 'required|string|max:255',
-            'Tanggal_acara' => 'required|date',
+            'Tanggal_mulai_acara' => 'required|date',
+            'Tanggal_berakhir_acara' => 'required|date',
             'Deskripsi' => 'required|string',
         ]);
 
@@ -50,7 +51,8 @@ class AcaraController extends Controller
         Acara::create([
             'ID_Wisata' => $destinasi->id,
             'Nama_acara' => $request->Nama_acara,
-            'Tanggal_acara' => $request->Tanggal_acara,
+            'Tanggal_mulai_acara' => $request->Tanggal_mulai_acara,
+            'Tanggal_berakhir_acara' => $request->Tanggal_berakhir_acara,
             'Deskripsi' => $request->Deskripsi,
         ]);
 
@@ -59,26 +61,28 @@ class AcaraController extends Controller
     }
 
     // Menampilkan form edit acara
-    public function edit($id)
+    public function edit($ID_Acara)
     {
-        $Acara = Acara::findOrFail($id);
+        $Acara = Acara::findOrFail($ID_Acara);
         return view('pemilik.acara.edit', compact('Acara'));
     }
 
     // Menyimpan perubahan acara
-    public function update(Request $request, $id)
+    public function update(Request $request, $ID_Acara)
     {
         $request->validate([
             'Nama_acara' => 'required|string|max:255',
-            'Tanggal_acara' => 'required|date',
+            'Tanggal_mulai_acara' => 'required|date',
+            'Tanggal_berakhir_acara' => 'required|date',
             'Deskripsi' => 'required|string',
         ]);
 
-        $acara = Acara::findOrFail($id);
+        $acara = Acara::findOrFail($ID_Acara);
 
         $acara->update([
             'Nama_acara' => $request->Nama_acara,
-            'Tanggal_acara' => $request->Tanggal_acara,
+            'Tanggal_mulai_acara' => $request->Tanggal_mulai_acara,
+            'Tanggal_berakhir_acara' => $request->Tanggal_berakhir_acara,
             'Deskripsi' => $request->Deskripsi,
         ]);
 
@@ -87,9 +91,9 @@ class AcaraController extends Controller
     }
 
     // Menghapus acara
-    public function destroy($id)
+    public function destroy($ID_Acara)
     {
-        $acara = Acara::findOrFail($id);
+        $acara = Acara::findOrFail($ID_Acara);
         $acara->delete();
 
         Alert::success('Success','Acara berhasil dihapus');

@@ -23,7 +23,7 @@
         <div class="page-info">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('pemilik.acara') }}">Acara</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('pemilik.acara.index') }}">Acara</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -36,8 +36,12 @@
                             <h5 class="card-title">Detail acara {{ $acara->Nama_acara }}</h5>
                             <form>
                             <div class="form-group">
-                                    <label>Tanggal</label>
-                                    <input name="tanggal_acara" type="date" class="form-control" value="{{ $acara->Tanggal_acara }}">
+                                    <label>Tanggal Mulai</label>
+                                    <input name="tanggal_mulai_acara" type="date" class="form-control" value="{{ $acara->Tanggal_mulai_acara }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Berakhir</label>
+                                    <input name="tanggal_berakhir_acara" type="date" class="form-control" value="{{ $acara->Tanggal_berakhir_acara }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Nama Acara</label>
@@ -48,7 +52,7 @@
                                     <textarea name="deskripsi" class="form-control" value="{{ $acara->Deskripsi }}"></textarea>
                                 </div>
                             </form>
-                            <a href="{{ route('pemilik.acara') }}" class="btn btn-primary mt-3">Kembali ke daftar</a>
+                            <a href="{{ route('pemilik.acara.index') }}" class="btn btn-primary mt-3">Kembali ke daftar</a>
                         </div>
                     </div>
                 </div>

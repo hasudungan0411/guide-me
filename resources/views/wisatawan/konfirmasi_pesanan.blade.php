@@ -142,7 +142,7 @@
                     <form action="{{ route('batal.pesanan') }}" method="POST" style="display:inline;">
                         @csrf
                         <button type="submit" class="btn-close" aria-label="Tutup"></button>
-                    </form>   
+                    </form>
                 </div>
 
                 <div class="card-body">
@@ -177,7 +177,7 @@
                                         <td>Rp {{ number_format($data['Total_Harga'], 0, ',', '.') }}</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Tanggal Pengunaan</strong></td>
+                                        <td><strong>Tanggal Berkunjung</strong></td>
                                         <td>:</td>
                                         <td><input type="date" name="Tanggal_Tiket"></td>
                                     </tr>
@@ -200,13 +200,13 @@
 
                         <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button>
 
-                        
-                        
+
+
                     </div>
 
 
 
-                                        
+
                 </div>
             </div>
         </div>
@@ -235,7 +235,7 @@
             </div>
         </div>
     </div>
-    
+
 
     {{-- Scripts --}}
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>

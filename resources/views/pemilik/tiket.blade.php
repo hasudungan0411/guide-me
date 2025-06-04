@@ -8,35 +8,11 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#">Pemilik</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Acara</li>
+                <li class="breadcrumb-item active" aria-current="page">Tiket</li>
             </ol>
         </nav>
     </div>
     <div class="main-wrapper">
-        <div class="row stats-row">
-                <div class="col-lg-4 col-md-12">
-                    <div class="card card-transparent stats-card">
-                        <div class="card-body">
-                            <div class="stats-info">
-                                <h5 class="card-title"><span class="stats-change stats-change-success"> Pembelian
-                                        Tiket</span></h5>
-                                <p class="stats-text">Total Pembelian Tiket</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="card card-transparent stats-card">
-                        <div class="card-body">
-                            <div class="stats-info">
-                                <h5 class="card-title"><span class="stats-change stats-change-success"> Pembelian
-                                        Pendapatan</span></h5>
-                                <p class="stats-text">Total Pemasukan</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         <div class="row">
             <div class="col">
                 <div class="card" >

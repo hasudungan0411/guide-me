@@ -67,29 +67,54 @@ class UlasanController extends Controller
         }
 
         // Generate HTML untuk ulasan baru
-        // $response = '';
-        // foreach ($ulasan as $ulasanItem) {
-        //     $response .= '<div class="ulasan-item" id="ulasan-' . $ulasanItem->id . '">
-        //            <h6>' . $ulasanItem->wisatawan->Nama . '</h6>
-        //            <small style="font-size: 15px;">' . $ulasanItem->created_at->format('d M Y') . '</small> ';
+        $response = '';
+        foreach ($ulasan as $ulasanItem) {
+            $response .= '<div class="ulasan-item" id="ulasan-' . $ulasanItem->id . '" style="margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: flex-start;">
+                        <!-- Profil Image -->
+                        <div style="margin-right: 10px;">
+                            <img src="' . $ulasanItem->wisatawan->Foto_Profil . '" alt="foto-profil"
+                                style="width: 40px; height: 40px; border-radius: 50%;">
+                        </div>
 
-        //     // Loop untuk bintang yang terisi
-        //     for ($i = 1; $i <= $ulasanItem->rating; $i++) {
-        //         $response .= '<span class="fa fa-star checked" style="margin-right: 3px;"></span>';  // Bintang terisi
-        //     }
+                        <!-- Nama, Tanggal, Rating, dan Ulasan -->
+                        <div>
+                            <!-- Nama Wisatawan -->
+                            <h6 style="font-size: 1.25rem; font-weight: bold; margin: 0;">' . $ulasanItem->wisatawan->Nama . '</h6>
 
-        //     // Loop untuk bintang yang kosong
-        //     for ($i = $ulasanItem->rating + 1; $i <= 5; $i++) {
-        //         $response .= '<span class="fa fa-star" style="margin-right: 3px;"></span>';  // Bintang kosong
-        //     }
+                            <!-- Tanggal -->
+                            <p style="font-size: 1rem; margin: 0;">
+                                ' . $ulasanItem->created_at->format('d M Y') . '
+                            </p>
 
-        //     $response .= '</p><p>' . $ulasanItem->ulasan . '</p><hr></div>';
-        // }
+                            <!-- Rating -->
+                            <div class="rating-container" style="font-size: 15px;" data-rating="' . $ulasanItem->rating . '">
+                                <p>';
+            // Loop untuk bintang yang terisi
+            for ($i = 1; $i <= $ulasanItem->rating; $i++) {
+                $response .= '<span class="fa fa-star checked" style="margin-right: 3px;"></span>';
+            }
 
-        // // Return json response dengan HTML dan status finished
-        // return response()->json([
-        //     'html' => $response,
-        //     'finished' => !$ulasan->hasMorePages(),
-        // ]);
+            // Loop untuk bintang yang kosong
+            for ($i = $ulasanItem->rating + 1; $i <= 5; $i++) {
+                $response .= '<span class="fa fa-star" style="margin-right: 3px;"></span>';
+            }
+
+            $response .= '</p>
+                            </div>
+
+                            <!-- Ulasan -->
+                            <p style="font-size: 1rem; margin: 0;">' . $ulasanItem->ulasan . '</p>
+                        </div>
+                    </div>
+                    <hr style="border: 1px solid #ddd;">
+                </div>';
+        }
+
+        // Return json response dengan HTML dan status finished
+        return response()->json([
+            'html' => $response,
+            'finished' => !$ulasan->hasMorePages(),
+        ]);
     }
 }

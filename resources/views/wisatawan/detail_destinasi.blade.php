@@ -63,42 +63,55 @@
                             @if ($acara->isEmpty())
                                 <p>Tidak ada event yang tersedia untuk destinasi ini.</p>
                             @else
-                                <ul>
-                                    @foreach ($acara as $event)
-                                        <li>
-                                            <h6>{{ $event->Nama_acara }}</h6>
-                                            <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
-                                                data-bs-target="#eventModal{{ $event->id }}">
-                                                Lihat
-                                            </button>
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="eventModal{{ $event->id }}" tabindex="-1"
-                                                aria-labelledby="eventModalLabel{{ $event->id }}" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="eventModalLabel{{ $event->id }}">
-                                                                {{ $event->Nama_acara }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Tutup"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <p><strong>Tanggal:</strong>
-                                                                {{ \Carbon\Carbon::parse($event->Tanggal_acara)->format('d F Y') }}
-                                                            </p>
-                                                            <p><strong>Deskripsi:</strong></p>
-                                                            <p>{!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}</p>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Tutup</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                <!-- Tombol untuk membuka modal -->
+                                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
+                                    data-bs-target="#eventModal">
+                                    Lihat Semua Acara
+                                </button>
+
+                                <!-- Modal untuk menampilkan semua acara -->
+                                <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content"
+                                            style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                                            <div class="modal-header"
+                                                style="background-color: #4CAF50; color: white; border-top-left-radius: 10px; border-top-right-radius: 10px;">
+                                                <h5 class="modal-title" id="eventModalLabel">Daftar Acara</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Tutup"></button>
                                             </div>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                            <div class="modal-body" style="padding: 15px; font-family: Arial, sans-serif;">
+                                                @foreach ($acara as $event)
+                                                    <div class="event-detail"
+                                                        style="padding: 10px; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
+                                                        <h6
+                                                            style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px;">
+                                                            {{ $event->Nama_acara }}</h6>
+                                                        <p style="margin: 5px 0; font-size: 20px; font-weight: normal; line-height: 1.5;">
+                                                            <strong>Tanggal Mulai:</strong>
+                                                            {{ \Carbon\Carbon::parse($event->Tanggal_mulai_acara)->format('d F Y') }}
+                                                        </p>
+                                                        <p style="margin: 5px 0; font-size: 20px; font-weight: normal; line-height: 1.5;">
+                                                            <strong>Tanggal Berakhir:</strong>
+                                                            {{ \Carbon\Carbon::parse($event->Tanggal_berakhir_acara)->format('d F Y') }}
+                                                        </p>
+                                                        <p style="margin: 5px 0; font-size: 0.9rem; line-height: 1.5;">
+                                                            <strong>Deskripsi:</strong> {!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}
+                                                        </p>
+                                                        <hr
+                                                            style="border: 0; border-top: 1px solid #eee; margin-top: 15px;">
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                            <div class="modal-footer"
+                                                style="background-color: #f9f9f9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
 
                             <h4 class="mt-4">Beli Tiket</h4>
@@ -272,38 +285,47 @@
                         </div>
 
                         {{-- Menampilkan ulasan yang sudah ada --}}
-                        <div id="reviews-list">
-                            @forelse ($destination->ulasan->take(3) as $ulasan)
-                                <div class="ulasan-item" id="ulasan-{{ $ulasan->id }}" style="margin-bottom: 1.5rem;">
-                                    <h6 style="font-size: 1.25rem; font-weight: bold;">{{ $ulasan->wisatawan->Nama }}</h6>
-                                    <p style="font-size: 1rem; margin: 0;">
-                                        {{-- <small><strong>Ditulis pada:</strong> --}}
-                                        {{ $ulasan->created_at->format('d M Y') }}</small>
-                                    </p>
-                                    <div class="rating-container" style="display: inline-block; font-size: 15px;"
-                                        data-rating="{{ $ulasan->rating }}">
-                                        <p>
-                                            {{-- <strong>Rating:</strong> --}}
-                                            @for ($i = 1; $i <= 5; $i++)
-                                                <span class="fa fa-star"></span>
-                                            @endfor
-                                        </p>
+                        @forelse ($destination->ulasan->take(3) as $ulasan)
+                            <div class="ulasan-item" id="ulasan-{{ $ulasan->id }}" style="margin-bottom: 1.5rem;">
+                                <div style="display: flex; align-items: flex-start;">
+                                    <!-- Profil Image -->
+                                    <div style="margin-right: 10px;">
+                                        <img src="{{ $ulasan->wisatawan->Foto_Profil }}" alt="foto-profil"
+                                            style="width: 40px; height: 40px; border-radius: 50%;">
                                     </div>
-                                    <p style="font-size: 1rem; margin: 0;">{{ $ulasan->ulasan }}</p>
-                                    <hr style="border: 1px solid #ddd;">
+                                    <div>
+                                        <!-- Nama Wisatawan -->
+                                        <h6 style="font-size: 1.25rem; font-weight: bold; margin: 0;">
+                                            {{ $ulasan->wisatawan->Nama }}</h6>
+                                        <!-- Tanggal -->
+                                        <p style="font-size: 1rem; margin: 0;">
+                                            {{ $ulasan->created_at->format('d M Y') }}
+                                        </p>
+                                        <!-- Rating -->
+                                        <div class="rating-container" style="font-size: 15px;"
+                                            data-rating="{{ $ulasan->rating }}">
+                                            <p>
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <span class="fa fa-star"></span>
+                                                @endfor
+                                            </p>
+                                        </div>
+                                        <!-- Ulasan -->
+                                        <p style="font-size: 1rem; margin: 0;">{{ $ulasan->ulasan }}</p>
+                                    </div>
                                 </div>
-                            @empty
-                                <p>Belum ada ulasan untuk destinasi ini.</p>
-                            @endforelse
-                        </div>
-
+                                <hr style="border: 1px solid #ddd;">
+                            </div>
+                        @empty
+                            <p>Belum ada ulasan untuk destinasi ini.</p>
+                        @endforelse
                         <style>
-                            /* CSS untuk rating */
+                            /* css utk rating */
                             .fa-star {
                                 color: #ddd;
-                                /* Warna default bintang: abu-abu */
+                                /* Default warna bintang: abu-abu */
                                 transition: color 0.2s ease;
-                                /* Efek transisi perubahan warna */
+                                /* Efek transisi untuk perubahan warna */
                             }
 
                             .fa-star.checked {
@@ -312,7 +334,7 @@
                             }
                         </style>
 
-                        {{-- Tombol untuk memuat lebih banyak ulasan --}}
+                        <!-- Tombol untuk memuat lebih banyak ulasan -->
                         <div class="post-title-date" style="margin-top: 1.5rem;">
                             @if ($destination->ulasan->count() > 3)
                                 <button id="load-more" data-destination-id="{{ $destination->id }}"
@@ -322,7 +344,6 @@
                                 </button>
                             @endif
                         </div>
-
                     </div>
 
                     <div class="col-xl-4">
@@ -337,7 +358,7 @@
                                                 alt="{{ $blog->judul }}">
                                             <div class="post-title-date">
                                                 <h5><a
-                                                        href="{{ route('blog.show', ['slug' => $blog->slug]) }}">{{ $blog->judul }}</a>
+                                                        href="{{ route('wisatawan.blog-detail', ['slug' => $blog->slug]) }}">{{ $blog->judul }}</a>
                                                 </h5>
                                                 <span class="posted-on"><i class="far fa-calendar-alt"></i><a
                                                         href="#">{{ $blog->tanggal->format('d F Y') }}</a></span>
@@ -464,95 +485,107 @@
             // Panggil fungsi pertama kali saat halaman dimuat
             initRatingStars();
 
-            // Ketika tombol 'Load More' diklik
+            // Handling load more ulasan via AJAX
             $('#load-more').click(function() {
                 var destinationId = $(this).data('destination-id'); // Ambil ID destinasi
-                var button = $(this); // Simpan tombol agar nanti bisa dihapus
+                var button = $(this); // Simpan tombol untuk dihapus nanti
 
-                // Cari ulasan yang tersembunyi
-                var hiddenReviews = $('.ulasan-item[style="display: none;"]');
+                currentPage++; // Naikkan halaman untuk request berikutnya
 
-                // Tampilkan 3 ulasan berikutnya
-                hiddenReviews.slice(0, 3).fadeIn();
-
-                // Jika tidak ada ulasan yang tersembunyi lagi, hapus tombol
-                if (hiddenReviews.length <= 3) {
-                    button.remove(); // Hapus tombol jika semua ulasan sudah ditampilkan
-                }
-            });
-        });
-
-        // Menampilkan modal saat tombol Kirim ditekan
-        $('#showRatingModal').click(function() {
-            $('#ratingModal').modal('show');
-        });
-
-        // Menambahkan event listener untuk input rating di dalam modal
-        $('#ratingModal input').on('change', function() {
-            const ratingValue = $(this).val(); // Ambil nilai rating yang dipilih
-            const ulasanText = $('textarea[name="ulasan"]').val(); // Ambil teks ulasan
-
-            // Cek apakah pengguna sudah login
-            @if (Auth::check()) // Laravel Blade directive untuk mengecek status login
-                // Kirim ulasan dan rating ke server
                 $.ajax({
-                    url: '{{ route('wisatawan.ulasan.store', $destination->id) }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        ulasan: ulasanText,
-                        rating: ratingValue
-                    },
+                    url: '/wisatawan/destinasi/' + destinationId + '/load-more-ulasan?page=' +
+                        currentPage, // Kirimkan parameter page
+                    method: 'GET',
                     success: function(response) {
-                        if (response.success) {
-                            // Tampilkan pesan sukses menggunakan SweetAlert
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Ulasan berhasil dikirim!',
-                                text: 'Terima kasih atas ulasan Anda!',
-                                confirmButtonText: 'OK'
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    // Tutup modal
-                                    $('#ratingModal').modal('hide');
-                                    // Reset form ulasan
-                                    $('textarea[name="ulasan"]').val('');
-                                    // Refresh halaman setelah ulasan dikirim
-                                    location
-                                        .reload(); // Refresh halaman untuk melihat ulasan baru
-                                }
-                            });
-                        } else {
+                        // Tambahkan ulasan baru ke halaman
+                        $('#load-more').before(response.html);
+
+                        // Jika sudah tidak ada ulasan lebih lanjut
+                        if (response.finished) {
+                            button.remove(); // Hapus tombol jika tidak ada ulasan lagi
+                        }
+
+                        // Panggil kembali fungsi untuk inisialisasi ulang rating stars pada ulasan yang baru dimuat
+                        initRatingStars();
+                    },
+                    error: function() {
+                        alert('Terjadi kesalahan saat memuat ulasan. Coba lagi nanti.');
+                    }
+                });
+            });
+
+            // Menampilkan modal saat tombol Kirim ditekan
+            $('#showRatingModal').click(function() {
+                $('#ratingModal').modal('show');
+            });
+
+            // Menambahkan event listener untuk input rating di dalam modal
+            $('#ratingModal input').on('change', function() {
+                const ratingValue = $(this).val(); // Ambil nilai rating yang dipilih
+                const ulasanText = $('textarea[name="ulasan"]').val(); // Ambil teks ulasan
+
+                // Cek apakah pengguna sudah login
+                @if (Auth::check()) // Laravel Blade directive untuk mengecek status login
+                    // Kirim ulasan dan rating ke server
+                    $.ajax({
+                        url: '{{ route('wisatawan.ulasan.store', $destination->id) }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            ulasan: ulasanText,
+                            rating: ratingValue
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                // Tampilkan pesan sukses menggunakan SweetAlert
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Ulasan berhasil dikirim!',
+                                    text: 'Terima kasih atas ulasan Anda!',
+                                    confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // Tutup modal
+                                        $('#ratingModal').modal('hide');
+                                        // Reset form ulasan
+                                        $('textarea[name="ulasan"]').val('');
+                                        // Refresh halaman setelah ulasan dikirim
+                                        location
+                                            .reload(); // Refresh halaman untuk melihat ulasan baru
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Terjadi kesalahan!',
+                                    text: 'Isi ulasan anda tidak boleh kosong.'
+                                });
+                            }
+                        },
+                        error: function() {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Terjadi kesalahan!',
                                 text: 'Isi ulasan anda tidak boleh kosong.'
                             });
                         }
-                    },
-                    error: function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Terjadi kesalahan!',
-                            text: 'Isi ulasan anda tidak boleh kosong.'
-                        });
-                    }
-                });
-            @else
-                // Jika belum login, tampilkan notifikasi dan arahkan ke halaman login
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Anda perlu login!',
-                    text: 'Silakan login terlebih dahulu untuk memberikan rating.',
-                    confirmButtonText: 'Login',
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Arahkan pengguna ke halaman login
-                        window.location.href =
-                            '{{ route('wisatawan.login') }}'; // Ganti dengan URL halaman login Anda
-                    }
-                });
-            @endif
+                    });
+                @else
+                    // Jika belum login, tampilkan notifikasi dan arahkan ke halaman login
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Anda perlu login!',
+                        text: 'Silakan login terlebih dahulu untuk memberikan rating.',
+                        confirmButtonText: 'Login',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Arahkan pengguna ke halaman login
+                            window.location.href =
+                                '{{ route('wisatawan.login') }}'; // Ganti dengan URL halaman login Anda
+                        }
+                    });
+                @endif
+            });
         });
     </script>
 

@@ -8,7 +8,7 @@
         "php": "^8.1",
         "barryvdh/laravel-dompdf": "^3.1",
         "doctrine/dbal": "^3.9",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
         "intervention/image": "^3.11",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
@@ -16,6 +16,7 @@
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.6",
         "midtrans/midtrans-php": "^2.6",
+        "openai-php/client": "^0.10.3",
         "openai-php/laravel": "^0.11.0",
         "realrashid/sweet-alert": "^7.3"
     },

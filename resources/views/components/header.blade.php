@@ -21,13 +21,11 @@
                                         alt="Site Logo">
                                 </a>
                             </li>
-                            <li
-                                class="me-0 menu-item has-children">
+                            <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/home') }}"
                                     class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/home') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Beranda</a>
                             </li>
-                            <li
-                                class="me-0 menu-item has-children">
+                            <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/destinasi') }}"
                                     class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/destinasi*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Destinasi</a>
                             </li>
@@ -35,13 +33,11 @@
                                 <a href="{{ url('/wisatawan/blog') }}"
                                     class="btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/blog*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Blog</a>
                             </li>
-                            <li
-                                class="me-0 menu-item has-children">
+                            <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/galeri') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/galeri') ?'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Galeri</a>
+                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/galeri') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Galeri</a>
                             </li>
-                            <li
-                                class="me-0 menu-item has-children">
+                            <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/acara') }}"
                                     class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/acara*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Acara</a>
                             </li>
@@ -76,8 +72,10 @@
                                     </button>
 
                                     <ul class="dropdown-menu mt-2">
-                                        <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a></li>
-                                        <li><a class="dropdown-item" href="{{ route('wisatawan.pesanan') }}">Pesanan</a></li>
+                                        <li><a class="dropdown-item" href="{{ route('wisatawan.favorit') }}">Favorit</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="{{ route('wisatawan.pesanan') }}">Pesanan</a>
+                                        </li>
                                         <li>
                                             <hr class="dropdown-divider">
                                         </li>
@@ -142,7 +140,7 @@
 
                     {{-- Tombol Teman Wisata desktopp --}}
                     <div class="menu-button d-none d-xl-block">
-                        <a href="{{ route('wisatawan.chatbot') }}" class="main-btn primary-btn px-3 py-2 text-right">
+                         <a href="#" id="chatbotTrigger" class="main-btn primary-btn px-3 py-2 text-right">
                             Teman Wisata <i class="fas fa-comments ms-1"></i>
                         </a>
                     </div>

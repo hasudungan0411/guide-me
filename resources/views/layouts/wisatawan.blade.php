@@ -54,6 +54,8 @@
     <!-- Header (Component) -->
     @include('components.header')
 
+    @include('wisatawan.chatbot')
+
     <!-- Main Content -->
     <div class="page-content">
         <div class="main-wrapper">

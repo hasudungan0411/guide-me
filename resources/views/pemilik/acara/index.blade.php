@@ -18,13 +18,14 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('acara.create') }}" class="btn btn-primary mb-3">Tambah Acara</a>
+                            <a href="{{ route('pemilik.acara.create') }}" class="btn btn-primary mb-3">Tambah Acara</a>
                             <table id="zero-conf" class="display" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Nama Acara</th>
-                                        <th>Tanggal</th>
+                                        <th>Tanggal Mulai</th>
+                                        <th>Tanggal Berakhir</th>
                                         <th>Deskripsi</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -34,7 +35,8 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $acara->Nama_acara }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($acara->Tanggal_acara)->format('d/m/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($acara->Tanggal_mulai_acara)->format('d/m/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($acara->Tanggal_berakhir_acara)->format('d/m/Y') }}</td>
                                             <td>
                                                 <button class="btn btn-sm btn-success" tabindex="0" data-toggle="popover"
                                                     data-trigger="focus" title="Deskripsi"
@@ -48,7 +50,7 @@
                                                     </button>
                                                     <div class="dropdown-menu">
                                                         <a class="dropdown-item"
-                                                            href="{{ route('acara.edit', $acara->ID_Acara) }}">Ubah</a>
+                                                            href="{{ route('pemilik.acara.edit', $acara->ID_Acara) }}">Ubah</a>
                                                         <div class="dropdown-divider"></div>
                                                         <a class="dropdown-item" href="#" data-toggle="modal"
                                                             data-target="#modalHapus{{ $acara->ID_Acara }}">Hapus</a>
@@ -74,7 +76,7 @@
                                                                 <button type="button" class="btn btn-secondary"
                                                                     data-dismiss="modal">Batal</button>
                                                                 <form
-                                                                    action="{{ route('acara.destroy', $acara->ID_Acara) }}"
+                                                                    action="{{ route('pemilik.acara.destroy', $acara->ID_Acara) }}"
                                                                     method="POST">
                                                                     @csrf
                                                                     @method('DELETE')

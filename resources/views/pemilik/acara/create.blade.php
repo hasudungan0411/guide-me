@@ -17,7 +17,7 @@
                 <div class="col-xl">
                     <div class="card">
                         <div class="card-body">
-                            <a href="{{ route('pemilik.acara') }}" class="btn btn-primary mb-3">Kembali</a>
+                            <a href="{{ route('pemilik.acara.index') }}" class="btn btn-primary mb-3">Kembali</a>
                             <h5 class="card-title">Tambah Acara Baru</h5>
 
                             @if ($errors->any())
@@ -30,7 +30,7 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('acara.store') }}" method="POST">
+                            <form action="{{ route('pemilik.acara.store') }}" method="POST">
                                 @csrf
 
                                 <div class="form-row">
@@ -44,9 +44,14 @@
 
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="Tanggal_acara">Tanggal Acara</label>
-                                        <input type="date" name="Tanggal_acara" id="Tanggal_acara" class="form-control"
-                                            value="{{ old('Tanggal_acara') }}" required>
+                                        <label for="Tanggal_mulai_acara">Tanggal Mulai Acara</label>
+                                        <input type="date" name="Tanggal_mulai_acara" id="Tanggal_mulai_acara" class="form-control"
+                                            value="{{ old('Tanggal_mulai_acara') }}" required>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="Tanggal_berakhir_acara">Tanggal Berakhir Acara</label>
+                                        <input type="date" name="Tanggal_berakhir_acara" id="Tanggal_berakhir_acara" class="form-control"
+                                            value="{{ old('Tanggal_berakhir_acara') }}" required>
                                     </div>
                                 </div>
 

@@ -12,30 +12,6 @@
                 </ol>
             </nav>
         </div>
-        <div class="main-wrapper">
-            <div class="row stats-row">
-                <div class="col-lg-4 col-md-12">
-                    <div class="card card-transparent stats-card">
-                        <div class="card-body">
-                            <div class="stats-info">
-                                <h5 class="card-title"><span class="stats-change stats-change-success"> Pembelian
-                                        Tiket</span></h5>
-                                <p class="stats-text">Total Pembelian Tiket</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-12">
-                    <div class="card card-transparent stats-card">
-                        <div class="card-body">
-                            <div class="stats-info">
-                                <h5 class="card-title"><span class="stats-change stats-change-success"> Tiket</span></h5>
-                                <p class="stats-text">Stok Tiket</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="container-fluid px-0">
                 <div class="row justify-content-center py-5">
                     <div class="col-12">

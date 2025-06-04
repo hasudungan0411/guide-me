@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('acara', function (Blueprint $table) {
             $table->integer('ID_Acara', true);
             $table->integer('ID_Wisata')->index('fk_destination_id');
-            $table->date('Tanggal_acara');
+            $table->date('Tanggal_mulai_acara');
+            $table->date('Tanggal_berakhir_acara');
             $table->string('Nama_acara');
             $table->text('Deskripsi');
             $table->timestamps();

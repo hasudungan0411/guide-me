@@ -11,10 +11,12 @@ class Acara extends Model
     use HasFactory;
 
     protected $table = 'acara';
+    protected $primaryKey = 'ID_Acara';
 
     protected $fillable = [
         'ID_Wisata',
-        'Tanggal_acara',
+        'Tanggal_mulai_acara',
+        'Tanggal_berakhir_acara',
         'Nama_acara',
         'Deskripsi'
     ];

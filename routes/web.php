@@ -93,7 +93,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/kategori/kategori-destinasi', [WisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
     Route::get('/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
     Route::get('/chatbot', [WisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
-    Route::post('/send', [WisatawanChatbotController::class, 'sendChat']);
+    Route::post('/chatbot/send', [WisatawanChatbotController::class, 'sendMessage']);
     Route::get('/search', [WisataSearchController::class, 'search'])->name('wisatawan.search');
 });
 
@@ -152,12 +152,12 @@ Route::prefix('pemilik')->group(function () {
         Route::get('/index', [PemilikController::class, 'index'])->name('pemilik.index');
 
         // Acara
-        Route::get('/acara', [AcaraController::class, 'index'])->name('pemilik.acara');
-        Route::get('/acara/create', [AcaraController::class, 'create'])->name('acara.create');
-        Route::post('/acara/create', [AcaraController::class, 'store'])->name('acara.store');
-        Route::get('/acara/edit/{id}', [AcaraController::class, 'edit'])->name('acara.edit');
-        Route::post('/acara/update/{id}', [AcaraController::class, 'update'])->name('acara.update');
-        Route::get('/acara/delete/{id}', [AcaraController::class, 'destroy'])->name('acara.destroy');
+        Route::get('/acara', [AcaraController::class, 'index'])->name('pemilik.acara.index');
+        Route::get('/acara/create', [AcaraController::class, 'create'])->name('pemilik.acara.create');
+        Route::post('/acara/create', [AcaraController::class, 'store'])->name('pemilik.acara.store');
+        Route::get('/acara/edit/{ID_Acara}', [AcaraController::class, 'edit'])->name('pemilik.acara.edit');
+        Route::put('/acara/update/{ID_Acara}', [AcaraController::class, 'update'])->name('pemilik.acara.update');
+        Route::delete('/acara/delete/{ID_Acara}', [AcaraController::class, 'destroy'])->name('pemilik.acara.destroy');
 
         // Tiket
         Route::get('/tiket', [TiketController::class, 'index'])->name('pemilik.tiket');

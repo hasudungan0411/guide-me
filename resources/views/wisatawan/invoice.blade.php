@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Invoice #{{ $pesanan->ID_Tiket }}</title>
     <style>
@@ -13,7 +14,7 @@
         .invoice-card {
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             max-width: 600px;
             margin: auto;
             overflow: hidden;
@@ -64,20 +65,6 @@
             color: #222;
         }
 
-        .terms-section {
-            border-top: 1px solid #eee;
-            margin-top: 30px;
-            padding-top: 16px;
-            color: #555;
-            font-size: 0.7em;
-        }
-
-        .terms-section h2 {
-            font-size: 0.85em;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
         .footer {
             text-align: center;
             margin-top: 24px;
@@ -108,8 +95,50 @@
                 display: none;
             }
         }
+
+        /* Menambahkan logo disamping syarat dan ketentuan */
+        .terms-section {
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+            padding-top: 16px;
+            color: #555;
+            font-size: 0.7em;
+            display: flex;
+            /* Flexbox untuk menempatkan logo di samping teks */
+            justify-content: space-between;
+            /* Jarak antara teks dan logo */
+            align-items: flex-start;
+            /* Pastikan logo dan teks sejajar */
+        }
+
+        .terms-section h2 {
+            font-size: 0.85em;
+            color: #333;
+            margin-bottom: 8px;
+            width: 70%;
+            /* Sisa ruang untuk teks */
+        }
+
+        .terms-section ol {
+            padding-left: 20px;
+        }
+
+        .logo-section {
+            width: 20%;
+            /* Lebar logo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-section img {
+            max-width: 90%;
+            max-height: 50px;
+            object-fit: contain;
+        }
     </style>
 </head>
+
 <body>
     <div class="invoice-card">
         <div class="invoice-image">
@@ -138,7 +167,7 @@
                     <td class="value">{{ \Carbon\Carbon::parse($pesanan->Tanggal_Transaksi)->format('d M Y') }}</td>
                 </tr>
                 <tr>
-                    <td class="label">TANGGAL TIKET</td>
+                    <td class="label">TANGGAL BERKUNJUNG</td>
                     <td class="value">{{ \Carbon\Carbon::parse($pesanan->Tanggal_Tiket)->format('d M Y') }}</td>
                 </tr>
                 <tr>
@@ -159,17 +188,24 @@
                 Terima kasih telah melakukan transaksi dengan kami.
             </div>
 
+            <!-- Menampilkan syarat dan ketentuan dengan logo di sebelah kanan -->
             <div class="terms-section">
-                <h2>Syarat dan Ketentuan</h2>
-                <ol>
-                    <li>Tiket yang sudah dibeli tidak dapat dikembalikan atau dibatalkan.</li>
-                    <li>Tiket hanya berlaku pada tanggal yang tertera di tiket.</li>
-                    <li>Kerusakan atau kehilangan tiket bukan tanggung jawab pihak penyelenggara.</li>
-                </ol>
+                <div>
+                    <h2>Syarat dan Ketentuan</h2>
+                    <ol>
+                        <li>Tiket yang sudah dibeli tidak dapat dikembalikan atau dibatalkan.</li>
+                        <li>Tiket hanya berlaku pada tanggal yang tertera di tiket.</li>
+                        <li>Kerusakan atau kehilangan tiket bukan tanggung jawab pihak penyelenggara.</li>
+                    </ol>
+                </div>
+                <div class="logo-section">
+                    <img src="{{ asset('assets/wisatawan/images/logo/logo-black.png') }}" alt="Logo">
+                </div>
             </div>
         </div>
     </div>
 
     <button class="download-btn" onclick="window.print()">Download Tiket</button>
 </body>
+
 </html>

@@ -10,7 +10,7 @@
                     <div class="page-banner-content text-center text-white">
                         <h1 class="page-title">Pesanan</h1>
                         <ul class="breadcrumb-link text-white">
-                            <li><a href="index.html">Home</a></li>
+                            <li><a href="{{ route('wisatawan.home') }}">Home</a></li>
                             <li class="active">Pesanan</li>
                         </ul>
                     </div>
@@ -27,17 +27,17 @@
                         @foreach ($transaksi as $item)
                             <div class="single-blog-post-four mb-30 wow fadeInDown">
                                 <div class="post-thumbnail">
-                                    <img src="{{ asset('storage/images/blog/' . $item->destinasi->gambar) }}" height="320px">
+                                    <img src="{{ asset('storage/images/destinasi/' . $item->destinasi->gambar) }}" height="320px">
                                 </div>
                                 <div class="entry-content">
                                     <div class="post-meta">
                                         <span><i class="far fa-calendar-alt"></i><a href="#">{{ \Carbon\Carbon::parse($item->Tanggal_Transaksi)->format('d F Y') }}</a></span>
                                         <span class="
                                         btn
-                                            @if($item->Status === 'Paid') btn-success 
-                                            @elseif($item->Status === 'Sudah Digunakan') btn-primary 
-                                            @elseif($item->Status === 'Pending') btn-warning 
-                                            @elseif($item->Status === 'Batal' || $item->Status === 'Hangus') btn-danger 
+                                            @if($item->Status === 'Paid') btn-success
+                                            @elseif($item->Status === 'Sudah Digunakan') btn-primary
+                                            @elseif($item->Status === 'Pending') btn-warning
+                                            @elseif($item->Status === 'Batal' || $item->Status === 'Hangus') btn-danger
                                             @endif
                                     ">
                                         {{ $item->Status }}</span>
@@ -53,7 +53,7 @@
                         @endforeach
                     </div>
                 </div>
-                    
+
                 <div class="col-xl-4">
                     <div class="sidebar-widget-area">
                         <!-- Calendar -->

@@ -23,7 +23,7 @@
         <div class="page-info">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ route('pemilik.acara') }}">Acara</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('pemilik.acara.index') }}">Acara</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Detail</li>
                 </ol>
             </nav>
@@ -33,21 +33,40 @@
                 <div class="col-xl">
                     <div class="card">
                         <div class="card-body">
+                            <a href="{{ route('pemilik.acara.index') }}" class="btn btn-primary mb-3">Kembali</a>
                             <h5 class="card-title">Detail Acara {{ $Acara->Nama_acara }}</h5>
-                            <form action="{{ route('acara.update', $Acara->ID_Acara) }}" method="POST" enctype="multipart/form-data">
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form action="{{ route('pemilik.acara.update', $Acara->ID_Acara) }}" method="POST"
+                                enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label>Tanggal</label>
-                                    <input name="tanggal_acara" type="date" class="form-control" value="{{ $Acara->Tanggal_acara }}">
+                                    <label>Tanggal Mulai</label>
+                                    <input name="Tanggal_mulai_acara" type="date" class="form-control"
+                                        value="{{ $Acara->Tanggal_mulai_acara }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tanggal Berakhir</label>
+                                    <input name="Tanggal_berakhir_acara" type="date" class="form-control"
+                                        value="{{ $Acara->Tanggal_berakhir_acara }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Nama Acara</label>
-                                    <input name="nama_acara" type="text" class="form-control" value="{{ $Acara->Nama_acara }}">
+                                    <input name="Nama_acara" type="text" class="form-control"
+                                        value="{{ $Acara->Nama_acara }}">
                                 </div>
                                 <div class="form-group">
                                     <label>Deskripsi</label>
-                                    <textarea name="deskripsi" class="form-control" value="{{ $Acara->Deskripsi }}"></textarea>
+                                    <textarea name="Deskripsi" class="form-control" id="Deskripsi">{{ $Acara->Deskripsi }}</textarea>
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-4">Simpan Perubahan</button>
                             </form>
@@ -60,7 +79,6 @@
 @endsection
 
 @push('scripts')
-
     {{-- untuk tnymce  --}}
     <script src="https://cdn.tiny.cloud/1/63zi9v8viv1kfc447qvzmn9ohrdjvkr3awyfdfr4nt2jtkvq/tinymce/6/tinymce.min.js"
         referrerpolicy="origin"></script>
@@ -68,7 +86,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             tinymce.init({
-                selector: 'textarea[name=desk], textarea[name=long_desk]',
+                selector: 'textarea[name=Deskripsi]',
                 plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
                 toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
                 setup: function(editor) {
@@ -76,7 +94,7 @@
 
                     editor.on('keyup', function() {
                         if (editor.targetElm && editor.targetElm.getAttribute('name') ===
-                            'desk') {
+                            'Deskripsi') {
                             var content = editor.getContent({
                                 format: 'text'
                             });

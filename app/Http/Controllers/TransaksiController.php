@@ -46,7 +46,7 @@ class TransaksiController extends Controller
             }
         }
 
-        return view('admin.data-transaksi', compact('transaksi','totalTransaksi','totalWisatawan','totalPemilik'));
+        return view('admin.data-transaksi', compact('transaksi', 'totalTransaksi', 'totalWisatawan', 'totalPemilik'));
     }
     public function showtransaksipemilik()
     {
@@ -57,20 +57,32 @@ class TransaksiController extends Controller
             abort(404, 'Destinasi tidak ditemukan');
         }
 
+        // ambil semua transaksi untuk destinasi ini
         $transaksi = Transaksi::where('ID_Wisata', $destinasi->id)->get();
 
+        // Inisialisasi variabel untuk total tiket dan total pendapatan
+        $totalTiketTerjual = 0;
+        $totalPendapatan = 0;
+
         foreach ($transaksi as $item) {
-        if (
-            in_array($item->Status, ['Unpaid', 'Paid']) &&
-            Carbon::parse($item->Tanggal_Tiket)->addDays(1)->isPast()
-        ) {
-            $item->Status = 'Hangus';
-            $item->save();
-        }
+            if (
+                in_array($item->Status, ['Unpaid', 'Paid']) &&
+                Carbon::parse($item->Tanggal_Tiket)->addDays(1)->isPast()
+            ) {
+                $item->Status = 'Hangus';
+                $item->save();
+            }
+
+            // Tambahkan tiket yang terjual ke total tiket terjual
+            $totalTiketTerjual += $item->jumlah_tiket;
+
+            // Hitung pendapatan dari transaksi ini dan tambahkan ke total pendapatan
+            $totalPendapatan += $item->jumlah_tiket * $item->harga_tiket;
         }
 
-        return view('pemilik.transaksi', compact('transaksi', 'destinasi'));
+        return view('pemilik.transaksi', compact('transaksi', 'destinasi', 'totalPendapatan', 'totalTiketTerjual'));
     }
+
 
     public function updateRekening(Request $request)
     {
@@ -106,7 +118,8 @@ class TransaksiController extends Controller
 
         $pemilik->save();
 
-        return redirect()->back()->with('success', 'Nomor rekening dan QRIS berhasil diperbarui.');
+        alert::success('Sukses', 'Nomor rekening dan QRIS berhasil diperbarui.');
+        return redirect()->back();
     }
 
     public function showpesananwisatawan()
@@ -171,8 +184,8 @@ class TransaksiController extends Controller
         $wisatawan = Auth::guard('wisatawan')->user();
 
         $tiket = Transaksi::where('ID_Transaksi', $id)
-                    ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
-                    ->first();
+            ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
+            ->first();
 
         if (!$tiket) {
             Alert::error('Error', 'Pesanan tidak ditemukan.');

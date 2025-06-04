@@ -39,6 +39,7 @@ class TiketController extends Controller
             'Harga' => $request->Harga,
         ]);
 
-        return redirect()->route('pemilik.tiket')->with('success', 'Tiket berhasil diperbarui');
+        alert::success('Sukses', 'Tiket berhasil diperbarui');
+        return redirect()->route('pemilik.tiket');
     }
 }

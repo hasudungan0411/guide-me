@@ -50,9 +50,9 @@
                         </a>
                     </li>
 
-                    <li class="{{ Request::routeIs('pemilik.acara') ? 'active-page' : '' }}">
-                        <a href="{{ $destination ? route('pemilik.acara') : '#' }}"
-                            class="{{ Request::routeIs('pemilik.acara') ? 'active' : '' }}">
+                    <li class="{{ Request::routeIs('pemilik.acara.*') ? 'active-page' : '' }}">
+                        <a href="{{ route('pemilik.acara.index') }}"
+                            class="{{ Request::routeIs('pemilik.acara.*') ? 'active' : '' }}">
                             <i class="material-icons-outlined">event</i>Acara
                         </a>
                     </li>
