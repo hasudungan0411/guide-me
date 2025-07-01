@@ -108,8 +108,8 @@
                                 <div class="form-row mt-4">
                                     <div class="form-group col-md-8">
                                         <label>Peta</label>
-                                        <div id="map" data-lng="{{ $destination->latitude }}"
-                                            data-lat="{{ $destination->longitude }}"></div>
+                                        <div id="map" data-lat="{{ $destination->latitude }}"
+                                            data-lng="{{ $destination->longitude }}"></div>
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>Navigasi</label>

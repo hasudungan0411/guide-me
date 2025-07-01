@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v12',
-        center: [lng, lat],
+        center: [lng, lat], // [lng, lat] format
         zoom: 10,
         maxZoom: 16,
         minZoom: 10

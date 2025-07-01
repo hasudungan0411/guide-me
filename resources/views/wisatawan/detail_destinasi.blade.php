@@ -175,8 +175,8 @@
                                 style="display: flex; flex-direction: row; height: 600px; width: 100%; position: relative;">
 
                                 <!-- MAP AREA -->
-                                <div id="map" data-lng="{{ $destination->latitude }}"
-                                    data-lat="{{ $destination->longitude }}"
+                                <div id="map" data-lat="{{ $destination->latitude }}"
+                                    data-lng="{{ $destination->longitude }}"
                                     style="flex: 3; border-radius: 8px; height: 100%;">
                                 </div>
 
