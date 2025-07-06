@@ -54,6 +54,11 @@ class Destination extends Model
         return $this->hasOne(Tiket::class, 'ID_Wisata', 'id');
     }
 
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'ID_Wisata');
+    }
+
     public function ulasan()
     {
         return $this->hasMany(Ulasan::class, 'destinations_id');

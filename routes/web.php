@@ -13,6 +13,7 @@ use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\KelolaAkunPemilikController;
 use App\Http\Controllers\WisataSearchController;
 use App\Http\Controllers\TiketController;
+use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Wisatawan\UlasanController;
@@ -130,6 +131,8 @@ Route::prefix('wisatawan')->group(function () {
         Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
         Route::post('/pesanan/batal', [TransaksiController::class, 'batalPesanan'])->name('batal.pesanan');
         Route::get('pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoicePDF'])->name('wisatawan.invoice');
+
+        Route::get('/rekomendasi', [RekomendasiController::class, 'rekomendasiTopK']);
 
     });
 });

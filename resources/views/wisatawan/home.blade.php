@@ -78,7 +78,7 @@
                                             gunung, di Batam adanya Bukit saja :)</p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                             <div class="col-md-6">
                                 <!--=== Fancy Icon Box ===-->
                                 <div class="fancy-icon-box-two mb-30">
@@ -123,18 +123,18 @@
                 </div>
             </div>
             <div class="slider-active-3-item">
-                @foreach ($popularDestinations as $dest)
+                @foreach ($recommendedItems as $item)
                     <div class="single-service-item-three mb-40">
                         <div class="content">
-                            <img style="height: 250px" src="{{ asset('storage/images/destinasi/' . $dest->gambar) }}"
+                            <img style="height: 250px" src="{{ asset('storage/images/destinasi/' . $item->gambar) }}"
                                 alt="service image">
                             <h3 class="title">
-                                <a href="">{{ $dest->tujuan }}</a>
+                                <a href="">{{ $item->tujuan }}</a>
                             </h3>
-                            <p>{{ Str::limit(strip_tags($dest->desk), 150) }}</p>
+                            <p>{{ Str::limit(strip_tags($item->desk), 150) }}</p>
                             <div class="meta">
                                 <span class="rate">
-                                    <a href="{{ route('wisatawan.detail_destinasi', $dest->id) }}"
+                                    <a href="{{ route('wisatawan.detail_destinasi', $item->id) }}"
                                         class="btn-link">Selengkapnya <i class="far fa-long-arrow-right"></i></a>
                                 </span>
                             </div>
