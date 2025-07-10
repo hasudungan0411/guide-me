@@ -3,7 +3,7 @@
     Template Name: MeGuide - Destination
     Template URI: site.com
     Description: Gowilds is a modern Adventure Tours and Travel HTML Template designed for all activities, sports, hiking, or outdoor adventures.
-    Author: WebTend 
+    Author: WebTend
     Author URI: https://webtend.net/
     Version: 1.0
 
@@ -11,7 +11,7 @@
     CSS INDEX
 --------------------------
 
-    01. Common css 
+    01. Common css
     02. Header css
     03. Hero css
     04. About css
@@ -30,7 +30,7 @@
     17. Footer css
     18. Sliders css
     19. Wrapper css
-    
+
 -----------------------------------------------------------------------------------*/
 h1,
 h2,
@@ -431,7 +431,7 @@ h6 {
 }
 
 /*---========================
-        01. Default css 
+        01. Default css
 =======================----*/
 /* Base CSS */
 html {
@@ -1183,10 +1183,10 @@ button {
 }
 
 /*====================
-    End COMMON css 
+    End COMMON css
 ======================*/
 /*---==================
-    02. Header css 
+    02. Header css
 =================----*/
 /* Transparent Header  */
 .transparent-header {
@@ -1700,7 +1700,7 @@ button {
 }
 
 /*---==================
-    03. Hero css 
+    03. Hero css
 =================----*/
 /* Hero Content */
 .hero-content h1 {
@@ -2199,7 +2199,7 @@ button {
 }
 
 /*---==================
-    04. About css 
+    04. About css
 =================----*/
 .about-two_content-box>p {
   margin-bottom: 45px;
@@ -2355,7 +2355,7 @@ button {
 }
 
 /*---==================
-    05. Elements css 
+    05. Elements css
 =================----*/
 /* Features Item */
 .single-features-item:hover .img-holder .content p {
@@ -3347,7 +3347,7 @@ button {
 }
 
 /*---==================
-    05. Features css 
+    05. Features css
 =================----*/
 .ratings li {
   display: inline-block;
@@ -3499,7 +3499,7 @@ button {
 }
 
 /*---==================
-    07. Services css 
+    07. Services css
 =================----*/
 .single-service-item {
   padding: 20px 20px 20px;
@@ -3772,7 +3772,7 @@ button {
 }
 
 /*---==================
-    08. Activity css 
+    08. Activity css
 =================----*/
 .activity-wrapper-bgc {
   padding: 100px 30px 50px;
@@ -3848,7 +3848,7 @@ button {
 }
 
 /*---==================
-    09. We css 
+    09. We css
 =================----*/
 @media (max-width: 991px) {
   .we-one_content-box {
@@ -3888,7 +3888,7 @@ button {
 }
 
 /*---==================
-    10. Gallery css 
+    10. Gallery css
 =================----*/
 .single-gallery-item:hover .gallery-img .hover-overlay {
   visibility: visible;
@@ -3960,7 +3960,7 @@ button {
 }
 
 /*---==================
-    11. Booking css 
+    11. Booking css
 =================----*/
 .booking-form-wrapper {
   padding: 33px 60px 40px;
@@ -4135,7 +4135,7 @@ button {
 }
 
 /*---==================
-    02. Places css 
+    02. Places css
 =================----*/
 .place-slider {
   margin-left: -15px;
@@ -4637,7 +4637,7 @@ button {
 }
 
 /*---==================
-    13. Testimonials css 
+    13. Testimonials css
 =================----*/
 .quote-rating-box {
   display: -webkit-box;
@@ -4777,7 +4777,7 @@ button {
 }
 
 /*---==================
-    14. Shop css 
+    14. Shop css
 =================----*/
 @media (max-width: 767px) {
   .page-item-filter .show-text {
@@ -5167,7 +5167,7 @@ button {
 }
 
 /*---==================
-    15. Blog css 
+    15. Blog css
 =================----*/
 .cat-btn {
   font: 500 18px "Prompt", sans-serif;
@@ -6317,7 +6317,7 @@ form.comment-form .form_control:focus {
 }
 
 /*---==================
-    16. Contact css 
+    16. Contact css
 =================----*/
 /* Contact Info Item */
 .contact-info-item {
@@ -6382,7 +6382,7 @@ form.comment-form .form_control:focus {
 }
 
 /*---==================
-    17. Footer css 
+    17. Footer css
 =================----*/
 .black-bg .footer-copyright,
 .black-bg .footer-widget {
@@ -6522,7 +6522,7 @@ form.comment-form .form_control:focus {
 }
 
 /*---==================
-    18. Sliders css 
+    18. Sliders css
 =================----*/
 /* Slider Dots */
 ul.slick-dots li {
@@ -6728,7 +6728,7 @@ ul.slick-dots li.slick-active {
 }
 
 /*---==================
-    19. Wrapper css 
+    19. Wrapper css
 =================----*/
 .overlay {
   position: relative;
@@ -6857,5 +6857,5 @@ ul.slick-dots li.slick-active {
 .menu-item.active a,
 .menu-item.active a:hover,
 .menu-item.active a:focus {
-  color: #63AB45; 
+  color: #63AB45;
 }

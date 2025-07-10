@@ -161,7 +161,7 @@ Route::prefix('pemilik')->group(function () {
         Route::put('/tiket/update', [TiketController::class, 'update'])->name('tiket.update');
 
 
-        // Transaksi
+        // Transaksii
         Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
         Route::put('/transaksi/update/rekening', [TransaksiController::class, 'updateRekening'])->name('pemilik.rekening_update');
         Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('tiket.konfirmasi');

@@ -78,7 +78,7 @@
                                             gunung, di Batam adanya Bukit saja :)</p>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="col-md-6">
                                 <!--=== Fancy Icon Box ===-->
                                 <div class="fancy-icon-box-two mb-30">

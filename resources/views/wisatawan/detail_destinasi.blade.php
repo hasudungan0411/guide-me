@@ -18,7 +18,7 @@
                     @if (!empty($destination->$gambar))
                         <div class="place-slider-item">
                             <div class="place-img">
-                                <img style="width: 950px; height: 630px;"
+                                <img style="width: 950px; height: 570px; overflow: hidden;"
                                     src="{{ asset('storage/images/destinasi/' . $destination->$gambar) }}"
                                     alt="Place Image">
                             </div>
@@ -54,7 +54,7 @@
                 <div class="row">
                     <div class="col-xl-8">
                         <div class="place-content-wrap pt-10 wow fadeInUp" style="margin-top: -51px !important;">
-                            <p>{!! strip_tags($destination->desk) !!}</p>
+                            <p style="text-align: justify;">{!! strip_tags($destination->desk) !!}</p>
                             <h4 class="mt-4">Deskripsi</h4>
                             <p class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
 

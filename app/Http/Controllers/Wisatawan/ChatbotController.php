@@ -54,7 +54,7 @@ class ChatbotController extends Controller
                 }
             }
 
-            // Jika tidak ada kata kunci spesifik tiket/acara, berikan informasi umum tentang destinasi
+            // Jika tidak ada kata kuncii spesifik tiket/acara, berikan informasi umum tentang destinasi
             return response()->json(['reply' => $this->formatDestinationResponse($destination)]);
         }
 
@@ -160,7 +160,12 @@ class ChatbotController extends Controller
             'dimana',
             'apa',
             'bagaimana',
+            'berapa',
+            'jumlah',
+            'ada berapa',
+            'total',
             'berapa harga tiket di',
+            'deskripsi',
             'stok tiket di',
             'acara di',
             'event di',
