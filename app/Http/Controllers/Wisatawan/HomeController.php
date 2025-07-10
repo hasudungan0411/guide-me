@@ -112,14 +112,14 @@ class HomeController extends Controller
             })
             ->select(
                 'destinations.id',
-                'destinations.nama',
+                'destinations.tujuan',
                 'destinations.gambar',
-                'destinations.deskripsi',
+                'destinations.desk',
                 DB::raw('AVG(ulasan.rating) as avg_rating'),
                 DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
                 DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
             )
-            ->groupBy('destinations.id', 'destinations.nama', 'destinations.gambar', 'destinations.deskripsi')
+            ->groupBy('destinations.id', 'destinations.tujuan', 'destinations.gambar', 'destinations.desk')
             ->orderByDesc('skor')
             ->limit(3)
             ->get();
