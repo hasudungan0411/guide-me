@@ -5,7 +5,7 @@ namespace App\Http\Controllers\wisatawan;
 use App\Http\Controllers\Controller;
 use App\Models\Destination;
 use App\Models\Blog;
-use App\Models\galeri;
+use App\Models\Galeri;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -14,19 +14,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Ambil semua destinasi untuk slider
         $destinations = Destination::all();
-
-        // // Ambil 3 destinasi terpopuler berdasarkan click_count
-        // $popularDestinations = Destination::orderBy('click_count', 'desc')->limit(3)->get();
-
-        // ambil blog nya 
         $blogs = Blog::orderBy('id_blog', 'desc')->limit(3)->get();
-
-        // ambil galerinya 
         $galery = Galeri::all();
 
-        // rekomendasi top 3 dan top k
+        $recommendedItems = collect(); // default empty collection
+
         if (Auth::check()) {
             $userId = Auth::id();
             $userHasRating = DB::table('ulasan')
@@ -52,7 +45,7 @@ class HomeController extends Controller
                     }
                 }
 
-                // Kesamaan antar item
+                // Similarityitem
                 $similarityMatrix = [];
                 foreach ($itemVectors as $itemA => $ratingsA) {
                     foreach ($itemVectors as $itemB => $ratingsB) {
@@ -86,33 +79,13 @@ class HomeController extends Controller
                 $topK = array_slice($predictions, 0, 3, true);
                 $recommendedItems = Destination::whereIn('id', array_keys($topK))->get();
             } else {
-                $bobotPembelian = 0.5;
-                $recommendedItems = DB::table('destinations')
-                    ->leftJoin('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
-                    ->leftJoin('transaksi', function ($join) {
-                        $join->on('destinations.id', '=', 'transaksi.ID_Wisata')
-                            ->where('transaksi.status', '=', 'paid');
-                    })
-                    ->select(
-                        'destinations.id',
-                        'destinations.tujuan',
-                        'destinations.gambar',
-                        'destinations.desk',
-                        DB::raw('AVG(ulasan.rating) as avg_rating'),
-                        DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
-                        DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
-                    )
-                    ->groupBy('destinations.id', 'destinations.tujuan', 'destinations.gambar', 'destinations.desk')
-                    ->orderByDesc('skor')
-                    ->limit(3)
-                    ->get();
+                $recommendedItems = $this->getTop3Popular();
             }
-
-            return view('wisatawan.home', compact('destinations', 'blogs', 'galery', 'recommendedItems'));
+        } else {
+            $recommendedItems = $this->getTop3Popular();
         }
 
-
-        
+        return view('wisatawan.home', compact('destinations', 'blogs', 'galery', 'recommendedItems'));
     }
 
     private function cosineSimilarity($vec1, $vec2)
@@ -126,5 +99,29 @@ class HomeController extends Controller
         }
         return ($normA && $normB) ? ($dot / (sqrt($normA) * sqrt($normB))) : 0;
     }
+
+    private function getTop3Popular()
+    {
+        $bobotPembelian = 0.5;
+
+        return DB::table('destinations')
+            ->leftJoin('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
+            ->leftJoin('transaksi', function ($join) {
+                $join->on('destinations.id', '=', 'transaksi.ID_Wisata')
+                    ->where('transaksi.status', '=', 'paid');
+            })
+            ->select(
+                'destinations.id',
+                'destinations.nama',
+                'destinations.gambar',
+                'destinations.deskripsi',
+                DB::raw('AVG(ulasan.rating) as avg_rating'),
+                DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
+                DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
+            )
+            ->groupBy('destinations.id', 'destinations.nama', 'destinations.gambar', 'destinations.deskripsi')
+            ->orderByDesc('skor')
+            ->limit(3)
+            ->get();
+    }
 }
- 
