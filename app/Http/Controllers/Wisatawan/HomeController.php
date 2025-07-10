@@ -22,7 +22,6 @@ class HomeController extends Controller
 
         if (Auth::check()) {
             $userId = Auth::id();
-
             $userHasRating = DB::table('ulasan')
                 ->where('wisatawan_id', $userId)
                 ->exists();
@@ -46,7 +45,7 @@ class HomeController extends Controller
                     }
                 }
 
-                // Similarity antar item
+                // Similarityitem
                 $similarityMatrix = [];
                 foreach ($itemVectors as $itemA => $ratingsA) {
                     foreach ($itemVectors as $itemB => $ratingsB) {
@@ -113,14 +112,14 @@ class HomeController extends Controller
             })
             ->select(
                 'destinations.id',
-                'destinations.tujuan',
+                'destinations.nama',
                 'destinations.gambar',
-                'destinations.desk',
+                'destinations.deskripsi',
                 DB::raw('AVG(ulasan.rating) as avg_rating'),
                 DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
                 DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
             )
-            ->groupBy('destinations.id', 'destinations.tujuan', 'destinations.gambar', 'destinations.desk')
+            ->groupBy('destinations.id', 'destinations.nama', 'destinations.gambar', 'destinations.deskripsi')
             ->orderByDesc('skor')
             ->limit(3)
             ->get();
