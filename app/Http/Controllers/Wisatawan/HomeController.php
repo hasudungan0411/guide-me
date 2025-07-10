@@ -28,87 +28,89 @@ class HomeController extends Controller
 
         // rekomendasi top 3 dan top k
         if (Auth::check()) {
-            $ratings = DB::table('ulasan')
-                ->select('wisatawan_id', 'destinations_id', 'rating')
-                ->get();
-
-            // matriks user-item
-            $matrix = [];
-            foreach ($ratings as $rating) {
-                $matrix[$rating->wisatawan_id][$rating->destinations_id] = $rating->rating;
-            }
-
-            // vektor item
-            $itemVectors = [];
-            foreach ($matrix as $userId => $userRatings) {
-                foreach ($userRatings as $itemId => $rating) {
-                    $itemVectors[$itemId][$userId] = $rating;
-                }
-            }
-
-            // similarity antar item
-            $similarityMatrix = [];
-            foreach ($itemVectors as $itemA => $ratingsA) {
-                foreach ($itemVectors as $itemB => $ratingsB) {
-                    if ($itemA == $itemB) continue;
-                    $similarityMatrix[$itemA][$itemB] = $this->cosineSimilarity($ratingsA, $ratingsB);
-                }
-            }
-
             $userId = Auth::id();
-            $userRatings = $matrix[$userId] ?? [];
-            $predictions = [];
+            $userHasRating = DB::table('ulasan')
+                ->where('wisatawan_id', $userId)
+                ->exists();
 
-            foreach ($similarityMatrix as $itemId => $similarItems) {
-                if (isset($userRatings[$itemId])) continue;
+            if ($userHasRating) {
+                $ratings = DB::table('ulasan')
+                    ->select('wisatawan_id', 'destinations_id', 'rating')
+                    ->get();
 
-                $score = 0;
-                $simTotal = 0;
+                // Matriks user-item
+                $matrix = [];
+                foreach ($ratings as $rating) {
+                    $matrix[$rating->wisatawan_id][$rating->destinations_id] = $rating->rating;
+                }
 
-                foreach ($similarItems as $otherItemId => $similarity) {
-                    if (isset($userRatings[$otherItemId])) {
-                        $score += $similarity * $userRatings[$otherItemId];
-                        $simTotal += $similarity;
+                // Vektor item
+                $itemVectors = [];
+                foreach ($matrix as $userIdLoop => $userRatings) {
+                    foreach ($userRatings as $itemId => $rating) {
+                        $itemVectors[$itemId][$userIdLoop] = $rating;
                     }
                 }
 
-                if ($simTotal > 0) {
-                    $predictions[$itemId] = $score / $simTotal;
+                // Kesamaan antar item
+                $similarityMatrix = [];
+                foreach ($itemVectors as $itemA => $ratingsA) {
+                    foreach ($itemVectors as $itemB => $ratingsB) {
+                        if ($itemA == $itemB) continue;
+                        $similarityMatrix[$itemA][$itemB] = $this->cosineSimilarity($ratingsA, $ratingsB);
+                    }
                 }
+
+                $userRatings = $matrix[$userId] ?? [];
+                $predictions = [];
+
+                foreach ($similarityMatrix as $itemId => $similarItems) {
+                    if (isset($userRatings[$itemId])) continue;
+
+                    $score = 0;
+                    $simTotal = 0;
+
+                    foreach ($similarItems as $otherItemId => $similarity) {
+                        if (isset($userRatings[$otherItemId])) {
+                            $score += $similarity * $userRatings[$otherItemId];
+                            $simTotal += $similarity;
+                        }
+                    }
+
+                    if ($simTotal > 0) {
+                        $predictions[$itemId] = $score / $simTotal;
+                    }
+                }
+
+                arsort($predictions);
+                $topK = array_slice($predictions, 0, 3, true);
+                $recommendedItems = Destination::whereIn('id', array_keys($topK))->get();
+            } else {
+                $bobotPembelian = 0.5;
+                $recommendedItems = DB::table('destinations')
+                    ->leftJoin('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
+                    ->leftJoin('transaksi', function ($join) {
+                        $join->on('destinations.id', '=', 'transaksi.ID_Wisata')
+                            ->where('transaksi.status', '=', 'paid');
+                    })
+                    ->select(
+                        'destinations.id',
+                        'destinations.tujuan',
+                        'destinations.gambar',
+                        'destinations.desk',
+                        DB::raw('AVG(ulasan.rating) as avg_rating'),
+                        DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
+                        DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
+                    )
+                    ->groupBy('destinations.id', 'destinations.tujuan', 'destinations.gambar', 'destinations.desk')
+                    ->orderByDesc('skor')
+                    ->limit(3)
+                    ->get();
             }
 
-            arsort($predictions);
-            $topK = array_slice($predictions, 0, 3, true); // mengambil top 3
-
-            $recommendedItems = Destination::whereIn('id', array_keys($topK))->get();
-
             return view('wisatawan.home', compact('destinations', 'blogs', 'galery', 'recommendedItems'));
         }
-        else {
-            $bobotPembelian = 0.5;
 
-            $recommendedItems = DB::table('destinations')
-                ->leftJoin('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
-                ->leftJoin('transaksi', function ($join) {
-                    $join->on('destinations.id', '=', 'transaksi.ID_Wisata')
-                         ->where('transaksi.status', '=', 'paid');
-                })
-                ->select(
-                    'destinations.id',
-                    'destinations.tujuan',
-                    'destinations.gambar',
-                    'destinations.desk',
-                    DB::raw('AVG(ulasan.rating) as avg_rating'),
-                    DB::raw('COUNT(DISTINCT transaksi.ID_Transaksi) as total_pembelian'),
-                    DB::raw('(IFNULL(AVG(ulasan.rating), 0) + COUNT(DISTINCT transaksi.ID_Transaksi) * ' . $bobotPembelian . ') as skor')
-                )
-                ->groupBy('destinations.id', 'destinations.tujuan','destinations.gambar','destinations.desk')
-                ->orderByDesc('skor')
-                ->limit(3)
-                ->get();
-
-            return view('wisatawan.home', compact('destinations', 'blogs', 'galery', 'recommendedItems'));
-        }
 
         
     }
