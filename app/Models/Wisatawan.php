@@ -21,6 +21,7 @@ class Wisatawan extends Authenticatable implements CanResetPassword
         'Kata_Sandi',
         'Nomor_HP',
         'Foto_Profil',
+        'email_verified_at',
     ];
 
     protected $hidden = [
