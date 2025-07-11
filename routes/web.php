@@ -16,6 +16,7 @@ use App\Http\Controllers\TiketController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerifikasiEmailController;
 use App\Http\Controllers\Wisatawan\UlasanController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
@@ -98,8 +99,13 @@ Route::prefix('wisatawan')->group(function () {
     Route::post('/login', [WisatawanAuthController::class, 'loginPost']);
     Route::get('/auth/google', [WisatawanAuthController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('/GuideMe/masuk/callback', [WisatawanAuthController::class, 'handleGoogleCallback']);
+
     Route::get('/Daftar-akun', [WisatawanAuthController::class, 'register'])->name('wisatawan.register');
     Route::post('/register', [WisatawanAuthController::class, 'registerPost'])->name('wisatawan.registerPost');
+
+    Route::get('/register/verifikasi', [WisatawanAuthController::class, 'showOtpForm'])->name('wisatawan.otp.form');
+    Route::post('/register/verifikasi', [WisatawanAuthController::class, 'verifyEmail'])->name('wisatawan.otp.verify');
+
     Route::post('/logout', [WisatawanAuthController::class, 'logout'])->name('wisatawan.logout');
     // Reset Password
     Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('wisatawan.password.request');

@@ -76,7 +76,7 @@ class HomeController extends Controller
                 }
 
                 arsort($predictions);
-                $topK = array_slice($predictions, 0, 3, true);
+                $topK = array_slice($predictions, 0, 6, true);
                 $recommendedItems = Destination::whereIn('id', array_keys($topK))->get();
             } else {
                 $recommendedItems = $this->getTop3Popular();
@@ -121,7 +121,7 @@ class HomeController extends Controller
             )
             ->groupBy('destinations.id', 'destinations.tujuan', 'destinations.gambar', 'destinations.desk')
             ->orderByDesc('skor')
-            ->limit(3)
+            ->limit(6)
             ->get();
     }
 }
