@@ -9,7 +9,14 @@
 </head>
 
 <body
-    style="margin:0; font-family:'Segoe UI', sans-serif; background:#f2f7fb; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; box-sizing:border-box;">
+    style="margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, rgba(76, 175, 80, 0.7), rgba(0, 123, 255, 0.5)), url('{{ asset('assets/wisatawan/images/background/bg.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;">
 
     <div id="container"
         style="display:flex; flex-direction:row; max-width:900px; width:100%; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition:transform 0.3s ease;"

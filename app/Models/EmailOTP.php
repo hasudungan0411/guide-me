@@ -10,7 +10,7 @@ class EmailOTP extends Model
     protected $table = "otp_email";
     protected $primaryKey = 'id';
     protected $fillable = ['email_wisatawan', 'otp', 'expires_at'];
-    public $timestamps = true;
+    public $timestamps = false;
 
     protected $dates = ['expires_at'];
 }

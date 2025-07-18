@@ -16,7 +16,6 @@ use App\Http\Controllers\TiketController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Auth\VerifikasiEmailController;
 use App\Http\Controllers\Wisatawan\UlasanController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
@@ -173,7 +172,5 @@ Route::prefix('pemilik')->group(function () {
         Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('tiket.konfirmasi');
         Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('tiket.gunakan');
         Route::delete('/transaksi/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('tiket.hapus');
-
-
     });
 });

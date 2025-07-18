@@ -9,11 +9,23 @@
 </head>
 
 <body
-    style="margin:0; font-family:'Segoe UI', sans-serif; background:#e8ebf9; display:flex; align-items:center; justify-content:center; min-height:100vh;">
+    style="margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, rgba(76, 175, 80, 0.7), rgba(0, 123, 255, 0.5)), url('{{ asset('assets/wisatawan/images/background/bg.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;">
 
     <div style="display:flex; max-width:900px; width:95%; height:650px; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition:transform 0.3s ease;"
         onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
 
+        <div class="kiri"
+            style="flex:1; min-height:300px; background:linear-gradient(to bottom right, #0917d5, #86e77a); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px; text-align:center; box-sizing:border-box;">
+            <img src="{{ asset('assets/wisatawan/images/logo/logo-white.png') }}" alt="Logo"
+                style="max-width:300px; width:100%; margin:0 auto; border-radius:12px; height:auto;">
+        </div>
         <!-- Kiri (form login) -->
         <div class="kiri"
             style="flex:1; background:#e8ebf9; padding:40px 30px; display:flex; flex-direction:column; justify-content:center;">
@@ -70,13 +82,7 @@
 
         </div>
 
-        <!-- Kanan (logo) -->
-        <div class="kanan"
-            style="flex:1; background:#7eabcb; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
-            <img src="{{ asset('assets/wisatawan/images/logo/logo-black.png') }}" alt="Logo"
-                style="width:300px; margin-bottom:10px; transition:transform 0.3s ease;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
-        </div>
+
     </div>
 
     <script>
