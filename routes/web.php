@@ -16,6 +16,7 @@ use App\Http\Controllers\TiketController;
 use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerifikasiEmailController;
 use App\Http\Controllers\Wisatawan\UlasanController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
