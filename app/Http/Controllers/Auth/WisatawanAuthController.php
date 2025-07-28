@@ -161,7 +161,7 @@ class WisatawanAuthController extends Controller
         $sessionData = session('wisatawan_register');
 
         if (!$sessionData) {
-            Alert::error('Gagal', 'Data pendaftaran tidak ditemukan.');
+            Alert::error('Gagal', 'Email tidak ditemukan.');
             return redirect()->route('wisatawan.register');
         }
 

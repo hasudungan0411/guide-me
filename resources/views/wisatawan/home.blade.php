@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Tempat Berkemah</h3>
-                                        <p>Bnyak tempat dibatam yang bisa jadikan bumi permekemahan, berkemah nuansa pantai
+                                        <p style="text-align: justify">Bnyak tempat dibatam yang bisa jadikan bumi permekemahan, berkemah nuansa pantai
                                             dan hutan juga tersedia</p>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@
                                             gunung, di Batam adanya Bukit saja :)</p>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                             <div class="col-md-6">
                                 <!--=== Fancy Icon Box ===-->
                                 <div class="fancy-icon-box-two mb-30">

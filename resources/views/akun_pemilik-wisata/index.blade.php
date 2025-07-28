@@ -64,10 +64,24 @@
                                                 <td>{{ $pemilik->Nama_Wisata }}</td>
                                                 <td>{{ $pemilik->Lokasi }}</td>
                                                 <td>
-                                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                        data-target="#modalHapus{{ $pemilik->ID_Pemilik_Wisata }}">
-                                                        Hapus
-                                                    </button>
+                                                    <div class="btn-group dropleft w-100">
+                                                        <button type="button" class="btn btn-secondary dropdown-toggle"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                            Aksi
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <a href="{{ route('akun_pemilik-wisata.edit', $pemilik->ID_Pemilik_Wisata) }}"
+                                                                class="dropdown-item">Ubah
+                                                            </a>
+                                                            <a href="{{ route('akun_pemilik-wisata.destroy', $pemilik->ID_Pemilik_Wisata) }}"
+                                                                class="dropdown-item text-danger"
+                                                                data-toggle="modal"
+                                                                data-target="#modalHapus{{ $pemilik->ID_Pemilik_Wisata }}">
+                                                                Hapus
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
 

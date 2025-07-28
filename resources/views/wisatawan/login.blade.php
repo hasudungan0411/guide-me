@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Guide ME</title>
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body
@@ -42,12 +44,16 @@
                         onblur="this.style.boxShadow='none'" />
                 </div>
 
-                <div style="margin-bottom:15px;">
+                <div style="margin-bottom:15px; position:relative;">
                     <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi:</label>
                     <input id="password" name="password" type="password" placeholder="********"
                         style="width:90%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s;"
                         onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
                         onblur="this.style.boxShadow='none'" />
+                    <i id="toggle-password"
+                        style="position:absolute; top:50%; right:15px; transform:translateY(-50%); cursor:pointer;">
+                        <i id="eye-icon" class="fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
+                    </i>
                     <div id="password-error" style="color:#ff4444; font-size:12px; margin-top:4px; height:16px;"></div>
                 </div>
 
@@ -104,6 +110,24 @@
 
         window.addEventListener('load', handleResponsiveLayout);
         window.addEventListener('resize', handleResponsiveLayout);
+    </script>
+
+    <script>
+        // Script icon mata pw
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            var passwordInput = document.getElementById('password');
+            var icon = document.getElementById('eye-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // menampilkan password
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password'; // Sembunyikan password
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
     </script>
 
     @include('sweetalert::alert')

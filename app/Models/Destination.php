@@ -10,6 +10,7 @@ class Destination extends Model
     use HasFactory;
 
     protected $table = 'destinations';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     // Kolom yang boleh diisi (mass assignable)

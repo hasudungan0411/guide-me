@@ -28,6 +28,46 @@ class KelolaAkunPemilikController extends Controller
         return view('akun_pemilik-wisata.create', compact('destinations'));
     }
 
+    public function edit($ID_Pemilik_Wisata)
+    {
+        $pemilik = Pemilikwisata::findOrFail($ID_Pemilik_Wisata);
+        $destinations = Destination::whereNotIn('tujuan', function ($query) {
+            $query->select('Nama_Wisata')->from('pemilik_wisata');
+        })
+        ->orderBy('tujuan', 'asc')
+        ->pluck('tujuan');
+
+        return view('akun_pemilik-wisata.edit', compact('pemilik', 'destinations'));
+    }
+
+    public function update(Request $request, string $ID_Pemilik_Wisata)
+    {
+
+        $request->validate([
+            'email' => 'required|email|unique:pemilik_wisata,Email,',
+            'nomor_hp' => 'required|min:10|max:15',
+            'nama_wisata' => 'required|exists:destinations,tujuan',
+            'lokasi' => 'required|string',
+            'password' => 'nullable|min:8',
+        ]);
+
+        $pemilik = Pemilikwisata::findOrFail($ID_Pemilik_Wisata);
+
+        $pemilik->Email = $request->email;
+        $pemilik->Nomor_HP = $request->nomor_hp;
+        $pemilik->Nama_Wisata = $request->nama_wisata;
+        $pemilik->Lokasi = $request->lokasi;
+
+        if ($request->filled('password')) {
+            $pemilik->Kata_Sandi = bcrypt($request->password);
+        }
+
+        $pemilik->save();
+
+        alert::success('Success', 'Akun Pemilik berhasil diperbarui');
+        return redirect()->route('akun_pemilik-wisata.index');
+    }
+
     public function store(Request $request)
     {
         $request->validate([

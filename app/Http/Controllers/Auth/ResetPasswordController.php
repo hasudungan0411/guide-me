@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 class ResetPasswordController extends Controller
 {
@@ -31,9 +31,9 @@ class ResetPasswordController extends Controller
         $status = Password::broker('wisatawan')->reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user, $password) {
+                // Perbarui kata sandi pengguna
                 $user->forceFill([
                     'Kata_Sandi' => Hash::make($password),
-                    // 'remember_token' => Str::random(60),
                 ])->save();
 
                 event(new PasswordReset($user));

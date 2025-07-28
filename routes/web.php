@@ -59,6 +59,8 @@ Route::middleware(['admin'])->group(function () {
     // Rute Kelola Akun Pemilik
     Route::get('/kelola-akun-pemilik-wisata', [KelolaAkunPemilikController::class, 'pemilik_wisata'])->name('akun_pemilik-wisata.index');
     Route::get('/kelola-akun-pemilik-wisata/create', [KelolaAkunPemilikController::class, 'create'])->name('akun_pemilik-wisata.create');
+    Route::get('/kelola-akun-pemilik-wisata/edit/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'edit'])->name('akun_pemilik-wisata.edit');
+    Route::put('/kelola-akun-pemilik-wisata/update/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'update'])->name('akun_pemilik-wisata.update');
     Route::post('/kelola-akun-pemilik-wisata/store', [KelolaAkunPemilikController::class, 'store'])->name('akun_pemilik-wisata.store');
     Route::delete('/kelola-akun-pemilik-wisata/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'destroy'])->name('akun_pemilik-wisata.destroy');
 
@@ -109,11 +111,8 @@ Route::prefix('wisatawan')->group(function () {
     Route::post('/logout', [WisatawanAuthController::class, 'logout'])->name('wisatawan.logout');
     // Reset Password
     Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('wisatawan.password.request');
-    // Kirim email reset password
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('wisatawan.password.email');
-    // Form reset password dengan token
     Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('wisatawan.password.reset');
-    // Submit form reset password (update password)
     Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('wisatawan.password.update');
 
     // rute tampilan ulasan

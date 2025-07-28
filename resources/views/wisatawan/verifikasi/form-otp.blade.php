@@ -131,9 +131,13 @@
                 <input type="text" id="otp6" class="otp-input" maxlength="1" oninput="moveFocus(event, 6)">
             </div>
 
-            @error('otp') <p style="color:red">{{ $message }}</p> @enderror
+            <!-- Hidden input untuk menyimpan OTP gabungan -->
+            <input type="hidden" name="otp" id="otp-field">
+
             <button type="submit">Verifikasi Email</button>
         </form>
+
+
     </div>
 
     <script>
@@ -145,8 +149,21 @@
             }
         }
 
-        // Fokus otomatis ke input pertama
-        document.getElementById('otp1').focus();
+        document.querySelector('form').onsubmit = function(event) {
+            const otp = [
+                document.getElementById('otp1').value,
+                document.getElementById('otp2').value,
+                document.getElementById('otp3').value,
+                document.getElementById('otp4').value,
+                document.getElementById('otp5').value,
+                document.getElementById('otp6').value
+            ].join('');
+
+            // simpan otp nya secara otomatis di sini
+            document.querySelector('input[name="otp"]').value = otp;
+        };
     </script>
+
+    @include('sweetalert::alert')
 </body>
 </html>

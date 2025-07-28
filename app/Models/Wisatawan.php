@@ -7,13 +7,14 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Notifications\Messages\MailMessage;
 
 class Wisatawan extends Authenticatable implements CanResetPassword
 {
     use HasFactory, Notifiable, CanResetPasswordTrait;
 
-    protected $table = 'wisatawan'; // Nama tabel di database
-    protected $primaryKey = 'ID_Wisatawan'; // Primary key tabel wisatawan jika berbeda dari default 'id'
+    protected $table = 'wisatawan';
+    protected $primaryKey = 'ID_Wisatawan';
 
     protected $fillable = [
         'Email',
@@ -25,7 +26,7 @@ class Wisatawan extends Authenticatable implements CanResetPassword
     ];
 
     protected $hidden = [
-        'Kata_Sandi', // Sembunyikan kata sandi dari array (misalnya saat ditampilkan)
+        'Kata_Sandi',
     ];
 
     public function getAuthPassword()
@@ -51,5 +52,35 @@ class Wisatawan extends Authenticatable implements CanResetPassword
     public function routeNotificationForMail()
     {
         return $this->Email;
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        // Buat URL reset password
+        $url = route('wisatawan.password.reset', [
+            'token' => $token,
+            'email' => $this->Email,
+        ]);
+
+        // Kirim email menggunakan MailMessage
+        $this->notify(new class($url) extends \Illuminate\Auth\Notifications\ResetPassword {
+            public $url;
+
+            public function __construct($url)
+            {
+                $this->url = $url;
+            }
+
+            public function toMail($notifiable)
+            {
+                return (new MailMessage)
+                            ->subject('Link untuk Mengatur Ulang Kata Sandi Anda') // Subjek email kustom
+                            ->view('wisatawan.password.proses-email', [
+                                'url' => $this->url,
+                                'namaPengguna' => $notifiable->Nama,
+                                'emailPengguna' => $notifiable->Email,
+                            ]);
+            }
+        });
     }
 }
