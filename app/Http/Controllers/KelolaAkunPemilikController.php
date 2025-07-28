@@ -44,7 +44,7 @@ class KelolaAkunPemilikController extends Controller
     {
 
         $request->validate([
-            'email' => 'required|email|unique:pemilik_wisata,Email,',
+            'email' => 'required|email|unique:pemilik_wisata,Email,' . $ID_Pemilik_Wisata . ',ID_Pemilik_Wisata',
             'nomor_hp' => 'required|min:10|max:15',
             'nama_wisata' => 'required|exists:destinations,tujuan',
             'lokasi' => 'required|string',

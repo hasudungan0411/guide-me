@@ -33,15 +33,15 @@
                                 <label>Email</label>
                                 <input type="email" name="email" class="form-control" value="{{ $pemilik->Email }}">
                             </div>
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label>Lokasi</label>
                                 <input type="text" name="lokasi" class="form-control" value="{{ $pemilik->Lokasi }}">
                             </div>
-                             <div class="form-group">
+                            <div class="form-group">
                                 <label>Nomor HP</label>
                                 <input type="text" name="nomor_hp" class="form-control" value="{{ $pemilik->Nomor_HP }}">
                             </div>
-                            {{-- <div class="form-group">
+                            <div class="form-group">
                                 <label>Kata Sandi</label>
                                 <div class="input-group">
                                     <input type="password" id="password" name="password" class="form-control"
@@ -52,9 +52,7 @@
                                         </span>
                                     </div>
                                 </div>
-                            </div> --}}
-
-
+                            </div>
                             <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                     </div>
