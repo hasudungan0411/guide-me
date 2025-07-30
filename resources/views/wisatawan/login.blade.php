@@ -25,11 +25,11 @@
 
         <div class="kiri"
             style="flex:1; min-height:300px; background:linear-gradient(to bottom right, #0917d5, #86e77a); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px; text-align:center; box-sizing:border-box;">
-            <img src="{{ asset('assets/wisatawan/images/logo/logo-white.png') }}" alt="Logo"
-                style="max-width:300px; width:100%; margin:0 auto; border-radius:12px; height:auto;">
+            <img id="logo-img" src="{{ asset('assets/wisatawan/images/logo/logo-white.png') }}" alt="Logo"
+            style="max-width:300px; width:100%; margin:0 auto; border-radius:12px; height:auto;">
         </div>
-        <!-- Kiri (form login) -->
-        <div class="kiri"
+        <!-- Kanan (form login) -->
+        <div class="kanan"
             style="flex:1; background:#e8ebf9; padding:40px 30px; display:flex; flex-direction:column; justify-content:center;">
             <h2 style="font-size:22px; text-align: center; margin-bottom:25px;">Silahkan Masuk!</h2>
 
@@ -85,32 +85,51 @@
                     alt="Google" style="width:18px; height:18px;" />
                 Login dengan Google
             </div>
-
         </div>
-
-
     </div>
 
     <script>
-        function handleResponsiveLayout() {
-            const kanan = document.querySelector('.kanan');
-            const kiri = document.querySelector('.kiri');
-            const container = document.querySelector('body > div');
+    function handleResponsiveLayout() {
+        const container = document.querySelector('body > div');
+        const kiri = document.querySelectorAll('.kiri')[0]; // bagian logo
+        const kanan = document.querySelectorAll('.kanan')[1]; // form login
+        const logo = document.getElementById('logo-img');
 
-            if (window.innerWidth <= 768) {
-                kanan.style.display = 'none';
-                kiri.style.width = '100%';
-                container.style.height = 'auto';
-            } else {
-                kanan.style.display = 'flex';
-                kiri.style.width = '50%';
-                container.style.height = '650px';
+        if (window.innerWidth <= 768) {
+            container.style.flexDirection = 'column';
+            container.style.height = 'auto';
+            container.style.width = '95%';
+            container.style.margin = '20px 0';
+
+            kiri.style.width = '100%';
+            kiri.style.minHeight = '150px';
+            kiri.style.padding = '20px';
+            if (logo) logo.style.maxWidth = '200px';
+
+            if (kanan) {
+                kanan.style.width = '100%';
+                kanan.style.padding = '30px 20px';
+            }
+        } else {
+            container.style.flexDirection = 'row';
+            container.style.height = '620px';
+            container.style.width = '95%';
+
+            kiri.style.width = '50%';
+            kiri.style.minHeight = '300px';
+            kiri.style.padding = '30px';
+            if (logo) logo.style.maxWidth = '300px';
+
+            if (kanan) {
+                kanan.style.width = '50%';
+                kanan.style.padding = '40px 30px';
             }
         }
+    }
 
-        window.addEventListener('load', handleResponsiveLayout);
-        window.addEventListener('resize', handleResponsiveLayout);
-    </script>
+    window.addEventListener('load', handleResponsiveLayout);
+    window.addEventListener('resize', handleResponsiveLayout);
+</script>
 
     <script>
         // Script icon mata pw

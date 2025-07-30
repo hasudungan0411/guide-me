@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Guide ME</title>
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body
@@ -42,57 +41,47 @@
                     <label for="name" style="font-size:14px; display:block; margin-bottom:5px;">Nama
                         Lengkap:</label>
                     <input id="name" name="name" type="text" placeholder="Nama Lengkap"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
                 <div style="margin-bottom:15px;">
                     <label for="email" style="font-size:14px; display:block; margin-bottom:5px;">Email:</label>
                     <input id="email" name="email" type="email" placeholder="email@example.com"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
                 <div style="margin-bottom:15px;">
                     <label for="phone" style="font-size:14px; display:block; margin-bottom:5px;">Nomor HP:</label>
                     <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
-                <div style="margin-bottom:15px; position:relative;">
+                <div style="margin-bottom:15px;">
                     <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi:</label>
                     <input id="password" name="password" type="password" placeholder="********"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s; box-sizing:border-box;"
-                        onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
-                        onblur="this.style.boxShadow='none'" />
-                    <i class="toggle-password"
-                        style="position:absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer;">
-                        <i class="eye-icon fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
-                    </i>
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
-                <div style="margin-bottom:15px; position:relative;">
+                <div style="margin-bottom:20px;">
                     <label for="password_confirmation"
-                        style="font-size:14px; display:block; margin-bottom:5px;">Konfirmasi Kata Sandi:</label>
+                        style="font-size:14px; display:block; margin-bottom:5px;">Konfirmasi
+                        Kata Sandi:</label>
                     <input id="password_confirmation" name="password_confirmation" type="password"
                         placeholder="********"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s; box-sizing:border-box;"
-                        onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
-                        onblur="this.style.boxShadow='none'" />
-                    <i class="toggle-password"
-                        style="position:absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer;">
-                        <i class="eye-icon fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
-                    </i>
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
                 <button type="submit"
-                    style="width:100%; padding:12px; border-radius:20px; border:none; background:linear-gradient(to right, #0917d5, #86e77a); color:white; font-weight:bold; font-size:14px; cursor:pointer; margin-bottom:20px;">
-                    Daftar
+                style="width:100%; padding:12px; border-radius:20px; border:none; background:#4caf50; color:white; font-weight:bold; font-size:14px; cursor:pointer; margin-bottom:20px;">
+                Daftar
                 </button>
+
             </form>
 
             <div style="text-align:center; font-size:14px; margin-top:0;">
                 Sudah punya akun?
                 <a href="{{ route('wisatawan.login') }}"
-                    style="color:#9575cd; text-decoration:none; font-weight:500;">Masuk</a>
+                    style="color:#4caf50; text-decoration:none; font-weight:500;">Masuk</a>
             </div>
         </div>
     </div>
@@ -136,6 +125,7 @@
             } else {
                 // Reset styles for desktop
                 container.style.flexDirection = 'row';
+                container.style.height = '620px';
                 container.style.width = '100%'; // Reset to default width within max-width
 
                 kiri.style.width = '50%'; // Reset to 50% for desktop
@@ -158,28 +148,6 @@
 
         window.addEventListener('load', responsive);
         window.addEventListener('resize', responsive);
-    </script>
-
-    <script>
-        // Script icon mata untuk kedua input password
-        const togglePasswordIcons = document.querySelectorAll('.toggle-password');
-
-        togglePasswordIcons.forEach(icon => {
-            icon.addEventListener('click', function() {
-                const passwordInput = this.previousElementSibling; // Input sebelum icon
-                const eyeIcon = this.querySelector('.eye-icon');
-
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text'; // Menampilkan password
-                    eyeIcon.classList.remove('fa-eye-slash');
-                    eyeIcon.classList.add('fa-eye');
-                } else {
-                    passwordInput.type = 'password'; // Menyembunyikan password
-                    eyeIcon.classList.remove('fa-eye');
-                    eyeIcon.classList.add('fa-eye-slash');
-                }
-            });
-        });
     </script>
 
     @include('sweetalert::alert')
