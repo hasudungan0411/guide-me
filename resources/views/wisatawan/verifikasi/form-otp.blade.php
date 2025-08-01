@@ -120,7 +120,10 @@
                 <i class="fa fa-shield"></i>
             </div>
             <h2>Masukkan Kode OTP</h2>
-            <p>Kode OTP sudah dikirim ke email anda!</p>
+            <p>
+                Kode OTP sudah dikirim ke email anda! <br/>
+                Kode OTP akan kedaluwarsa dalam <span id="timer">05:00</span>
+            </p>
 
             <div class="otp-input-container">
                 <input type="text" id="otp1" class="otp-input" maxlength="1" oninput="moveFocus(event, 1)">
@@ -131,7 +134,6 @@
                 <input type="text" id="otp6" class="otp-input" maxlength="1" oninput="moveFocus(event, 6)">
             </div>
 
-            <!-- Hidden input untuk menyimpan OTP gabungan -->
             <input type="hidden" name="otp" id="otp-field">
 
             <button type="submit">Verifikasi Email</button>
@@ -141,27 +143,63 @@
     </div>
 
     <script>
+        //form
         function moveFocus(event, current) {
-            if (event.target.value.length === 1 && current < 6) {
+            const value = event.target.value;
+
+            if (value.length === 1 && current < 6) {
                 document.getElementById(`otp${current + 1}`).focus();
-            } else if (event.target.value.length === 0 && current > 1) {
+            } else if (value.length === 0 && current > 1) {
                 document.getElementById(`otp${current - 1}`).focus();
             }
+
+            const otpValues = [];
+            for (let i = 1; i <= 6; i++) {
+                const val = document.getElementById(`otp${i}`).value;
+                if (val === '') return; 
+                otpValues.push(val);
+            }
+
+            const otp = otpValues.join('');
+            document.getElementById('otp-field').value = otp;
+
+            setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 100);
         }
 
-        document.querySelector('form').onsubmit = function(event) {
-            const otp = [
-                document.getElementById('otp1').value,
-                document.getElementById('otp2').value,
-                document.getElementById('otp3').value,
-                document.getElementById('otp4').value,
-                document.getElementById('otp5').value,
-                document.getElementById('otp6').value
-            ].join('');
+        // countdown 
+        let timeLeft = 300; 
 
-            // simpan otp nya secara otomatis di sini
-            document.querySelector('input[name="otp"]').value = otp;
-        };
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('timer').textContent = formatted;
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('countdown').textContent = "Kode OTP telah kedaluwarsa. Mengalihkan ke halaman sebelumnya...";
+                disableOtpInputs();
+
+                setTimeout(() => {
+                    window.history.back();
+                }, 1000);
+            }
+
+            timeLeft--;
+        }
+
+        function disableOtpInputs() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`otp${i}`).disabled = true;
+            }
+            document.querySelector('button[type="submit"]').disabled = true;
+            document.querySelector('button[type="submit"]').style.backgroundColor = '#aaa';
+            document.querySelector('button[type="submit"]').style.cursor = 'not-allowed';
+        }
+
+        const timerInterval = setInterval(updateCountdown, 1000);
     </script>
 
     @include('sweetalert::alert')
