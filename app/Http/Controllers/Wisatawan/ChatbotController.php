@@ -8,243 +8,386 @@ use App\Models\Acara;
 use App\Models\Kategori;
 use App\Models\Tiket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use OpenAI\Laravel\Facades\OpenAI;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ChatbotController extends Controller
 {
-    public function sendMessage(Request $request)
+    // treshold (batas minimum kemiripan) agar dianggap relevan
+    const AMBANG_BATAS_KEMIRIPAN = 0.75; // 75% kemiripan
+
+    public function balaspesan(Request $request)
     {
         // Validasi input
         $request->validate([
             'message' => 'required|string|max:255',
         ]);
 
-        // Ambil pesan dari user
-        $userMessage = strtolower($request->input('message')); // Ubah ke lowercase untuk pencarian yang lebih baik
+        $pesanPengguna = strtolower($request->input('message'));
 
-        // --- Pengecekan untuk pertanyaan statistik atau umum ---
-        if (stripos($userMessage, 'jumlah destinasi') !== false || stripos($userMessage, 'ada berapa destinasi') !== false) {
-            return response()->json(['reply' => $this->getDestinationCount()]);
+        if (empty($pesanPengguna)) {
+            return response()->json(['balasan' => 'Pesan tidak boleh kosong. Silakan coba lagi.'], 400);
         }
 
-        if (stripos($userMessage, 'jumlah kategori') !== false || stripos($userMessage, 'ada berapa kategori') !== false) {
-            return response()->json(['reply' => $this->getCategoryCount()]);
+        // cth pertanyaan simple dari db tanpa ai yg kompleks
+        // jumlah destinasi
+        if (str_contains($pesanPengguna, 'total destinasi') || str_contains($pesanPengguna, 'jumlah destinasi') !== false) {
+            $totalDestinasi = Destination::count();
+            return response()->json([
+                'balasan' => "Saat ini ada {$totalDestinasi} destinasi yang terdaftar di website kami.",
+                'dari_data_internal' => true
+            ]);
         }
 
-        // --- Pengecekan untuk pertanyaan terkait destinasi, acara, atau tiket ---
-        // Prioritaskan pencarian destinasi dari pesan pengguna yang lebih umum
-        $destination = $this->extractAndFindDestination($userMessage);
+        // deteksi permintaan lokasi destinasi
+        if (str_contains($pesanPengguna, 'maps') || str_contains($pesanPengguna, 'peta') || str_contains($pesanPengguna, 'lokasi')) {
+            $kataKunci = ['maps', 'lokasi', 'dimana', 'peta', 'berikan', 'saya', 'untuk', 'destinasi'];
+            $namaDestinasi = str_replace($kataKunci, '', $pesanPengguna);
+            $namaDestinasi = trim($namaDestinasi);
 
-        // Jika destinasi ditemukan, coba cari informasi detail, tiket, atau acara
-        if ($destination) {
-            if (stripos($userMessage, 'harga tiket') !== false || stripos($userMessage, 'stok tiket') !== false || stripos($userMessage, 'tiket') !== false) {
-                return response()->json(['reply' => $this->getTicketPrice($destination)]);
+            $destinasi = null;
+            if (!empty($namaDestinasi)) {
+                // mencari destinasi di db lngsng
+                $destinasi = Destination::where('tujuan', 'like', "%{$namaDestinasi}%")->first();
             }
 
-            if (stripos($userMessage, 'acara') !== false || stripos($userMessage, 'event') !== false) {
-                $acara = $this->findEventForDestination($destination);
-                if ($acara) {
-                    $response = "Acara di " . $destination->tujuan . ":\n";
-                    $response .= "Nama Acara: " . $acara->Nama_acara . "\n" .
-                        "Tanggal: " . $acara->Tanggal_acara . "\n" .
-                        "Deskripsi: " . substr($acara->Deskripsi, 0, 150) . "..."; // Deskripsi lebih panjang
-                    return response()->json(['reply' => $response]);
-                } else {
-                    return response()->json(['reply' => "Maaf, tidak ada acara yang terdaftar untuk destinasi " . $destination->tujuan . " saat ini."]);
+            // jika gagal, gunakan kemiripan RAG
+            if (!$destinasi) {
+                $informasiRelevan = $this->cariDataInternalRelevan($pesanPengguna);
+                $destinasiRAG = $informasiRelevan->Where('tipe', 'destinasi')->first();
+                if ($destinasiRAG) {
+                    $destinasi = $destinasiRAG['data'];
                 }
             }
 
-            // Jika tidak ada kata kuncii spesifik tiket/acara, berikan informasi umum tentang destinasi
-            return response()->json(['reply' => $this->formatDestinationResponse($destination)]);
+            if ($destinasi) {
+                $mapsUrl = "https://www.google.com/maps/search/?api=1&query={$destinasi->latitude},{$destinasi->longitude}";
+                return response()->json([
+                    'balasan' => "Berikut tautan Google Maps untuk lokasi {$destinasi->tujuan} dapat ditemukan di: {$mapsUrl}",
+                    'dari_data_internal' => true
+                ]);
+            }
         }
 
-        // Pengecekan untuk pertanyaan acara umum (jika tidak ada destinasi spesifik yang ditanyakan)
-        if (stripos($userMessage, 'acara apa saja') !== false || stripos($userMessage, 'event apa saja') !== false || stripos($userMessage, 'daftar acara') !== false) {
-            $destinationsWithEvents = $this->findDestinationsWithEvents();
-            if ($destinationsWithEvents->isEmpty()) {
-                return response()->json(['reply' => "Maaf, saat ini tidak ada destinasi yang memiliki acara."]);
-            } else {
-                $response = "Berikut adalah beberapa destinasi yang memiliki acara:\n";
-                foreach ($destinationsWithEvents as $destination) {
-                    $acara = $this->findEventForDestination($destination);
-                    if ($acara) { // Pastikan ada acara terkait
-                        $response .= "- " . $destination->tujuan . " (Acara: " . $acara->Nama_acara . ", Tanggal: " . $acara->Tanggal_acara . ")\n";
+        // deteksi perimntaan destinasi populer
+        if (str_contains($pesanPengguna, 'destinasi populer') || str_contains($pesanPengguna, 'destinasi disukasi')) {
+            $rekomendasi = $this->getTopRecommendations(); // ambil rekomendasi destinasi populer
+
+            if ($rekomendasi->isNotEmpty()) {
+                $balasanRekomendasi = "Berikut adalah beberapa destinasi populer yang sering dikunjungi:\n";
+                foreach ($rekomendasi as $index => $destinasi) {
+                    $balasanRekomendasi .= ($index + 1) . ".  . $destinasi->tujuan";
+                    if ($destinasi->kategori) {
+                        $balasanRekomendasi .= "({$destinasi->kategori->nama_kategori})";
                     }
+                    $balasanRekomendasi .= " - " . substr($destinasi->desk, 0, 100) . (strlen($destinasi->desk) > 100 ? '...' : '') . "\n";
                 }
-                $response .= "\nApakah Anda ingin melihat lebih lanjut tentang acara di destinasi tertentu?";
-                return response()->json(['reply' => $response]);
+                $balasanRekomendasi .= "semoga anda menemukan destinasi yang menarik!";
+
+                return response()->json([
+                    'balasan' => $balasanRekomendasi,
+                    'dari_data_internal' => true
+                ]);
             }
         }
 
-        // Jika pertanyaan tidak ada di database, kirimkan permintaan ke OpenAI
-        $openAiResponse = $this->getNLPResponse($userMessage);
-        return response()->json(['reply' => $openAiResponse]);
-    }
+        // detail destinasi
+        if (str_contains($pesanPengguna, 'detail destinasi') || str_contains($pesanPengguna, 'link destinasi')) {
+            $namaDestinasi = str_replace(['detail destinasi', 'link destinasi'], '', $pesanPengguna);
+            $namaDestinasi = trim($namaDestinasi);
 
-    // Fungsi untuk mendapatkan respons dari OpenAI (NLP)
-    private function getNLPResponse($message)
-    {
-        try {
-            $apiKey = env('OPENAI_API_KEY');
-            if (!$apiKey) {
-                return "Kunci API OpenAI tidak ditemukan. Silakan atur variabel lingkungan OPENAI_API_KEY.";
-            }
+            if (!empty($pesanPengguna)) {
+                $destinasi = Destination::where('tujuan', 'like', "%{$namaDestinasi}%")->first();
 
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $apiKey,
-                'Content-Type' => 'application/json', // Tambahkan header ini
-            ])->post('https://api.openai.com/v1/chat/completions', [
-                        'model' => 'gpt-4.1-mini', //
-                        'messages' => [
-                            ['role' => 'user', 'content' => $message],
-                        ],
-                        'max_tokens' => 100,
-                        'temperature' => 0.5, // Sesuaikan untuk kreativitas vs. faktual
+                if ($destinasi) {
+                    $detailUrl = route('wisatawan.detail_destinasi', ['id' => $destinasi->id]);
+                    return response()->json([
+                        'balasan' => "Berikut link detail destinasi {$destinasi->tujuan} dapat ditemukan di: {$detailUrl}",
+                        'dari_data_internal' => true
                     ]);
-
-            if ($response->successful()) {
-                $responseBody = $response->json();
-                if (isset($responseBody['choices'][0]['message']['content'])) {
-                    return $responseBody['choices'][0]['message']['content'];
                 }
-            } else {
-                return "Gagal mendapatkan respons dari OpenAI. Status: " . $response->status() . ", Pesan: " . ($response->json()['error']['message'] ?? 'Tidak ada pesan kesalahan.');
             }
-        } catch (\Exception $e) {
-            return "Terjadi kesalahan saat menghubungi API eksternal: " . $e->getMessage();
         }
 
-        return "Maaf, saya tidak bisa memahami pertanyaan Anda.";
-    }
-
-    // Fungsi untuk menghitung jumlah destinasi
-    private function getDestinationCount()
-    {
-        $count = Destination::count();
-        return "Saat ini ada " . $count . " destinasi yang tersedia di website kami.";
-    }
-
-    // Fungsi untuk menghitung jumlah kategori
-    private function getCategoryCount()
-    {
-        $categoryCount = Kategori::count();
-        return "Saat ini ada " . $categoryCount . " kategori yang tersedia.";
-    }
-
-    // Fungsi untuk mendapatkan harga tiket di destinasi
-    private function getTicketPrice($destination)
-    {
-        $tickets = Tiket::where('ID_Wisata', $destination->id)->get();
-        if ($tickets->isEmpty()) {
-            return "Saat ini tidak ada harga tiket yang terdaftar untuk destinasi " . $destination->tujuan . ".";
+        // deteksi permintaan total kategori
+        if (str_contains($pesanPengguna, 'total kategori') || str_contains($pesanPengguna, 'jumlah kategori') !== false) {
+            $totalKategori = Kategori::count();
+            return response()->json([
+                'balasan' => "Saat ini ada {$totalKategori} kategori yang terdaftar di website kami.",
+                'dari_data_internal' => true
+            ]);
         }
 
-        $response = "Harga tiket di destinasi " . $destination->tujuan . ":\n";
-        foreach ($tickets as $ticket) {
-            $response .= "- Rp" . number_format($ticket->Harga, 0, ',', '.') . " per tiket, dengan " .
-                $ticket->Persediaan . " tiket tersedia.\n";
-        }
-        return $response;
-    }
+        // konsep internal RAG
+        $informasiRelevan = $this->cariDataInternalRelevan($pesanPengguna);
 
-    /**
-     * Fungsi untuk mengekstrak nama destinasi dari pesan pengguna dan mencarinya.
-     * Meningkatkan fleksibilitas pencarian.
-     */
-    private function extractAndFindDestination($message)
-    {
-        // Daftar kata kunci yang mungkin mendahului nama destinasi atau frasa yang diikuti nama destinasi
-        $keywords = [
-            'tentang',
-            'informasi',
-            'dimana',
-            'apa',
-            'bagaimana',
-            'berapa',
-            'jumlah',
-            'ada berapa',
-            'total',
-            'berapa harga tiket di',
-            'deskripsi',
-            'stok tiket di',
-            'acara di',
-            'event di',
-            'wisata',
-            'destinasi',
-            'tempat'
+        $konteksUntukAI = '';
+        $apakahPakaiDataInternal = false;
+
+        if ($informasiRelevan->isNotEmpty()) {
+            $konteksUntukAI = "Berikut adalah informasi yang relevan dari data kami:\n";
+            foreach ($informasiRelevan as $item) {
+                // ambil data relevan dari destinasi atau acara
+                if ($item['tipe'] === 'destinasi') {
+                    $destinasi = $item['data'];
+                    $konteksUntukAI .= "--- informasi destinasi ---\n";
+                    $konteksUntukAI .= "Nama Destinasi: {$destinasi->tujuan}\n";
+                    $konteksUntukAI .= "Deskripsi: {$destinasi->long_desk}\n";
+                    if ($destinasi->kategori) {
+                        $konteksUntukAI .= "Kategori: {$destinasi->kategori->nama_kategori}\n";
+                    }
+                    if ($destinasi->tiket) {
+                        $konteksUntukAI .= "Harga Tiket: Rp " . number_format($destinasi->tiket->Harga, 0, ',', '.') . "\n";
+                        $konteksUntukAI .= "Stok Tiket: {$destinasi->tiket->Persediaan} unit\n";
+                    }
+                    if ($destinasi->acara->isNotEmpty()) {
+                        $konteksUntukAI .= "Acara Terkait: " . $destinasi->acara->pluck('Nama_acara')->implode(', ') . "\n";
+                    }
+                    if ($destinasi->ulasan->isNotEmpty()) {
+                        $ulasanSingkat = $destinasi->ulasan->pluck('ulasan')->implode('; ');
+                        $konteksUntukAI .= "Ulasan Pengunjung singkat: " . substr($ulasanSingkat, 0, 100) . (strlen($ulasanSingkat) > 100 ? '...' : '') . "\n";
+                    }
+                    $konteksUntukAI .= "\n";
+                } elseif ($item['tipe'] === 'acara') {
+                    $acara = $item['data'];
+                    $konteksUntukAI .= "--- informasi acara ---\n";
+                    $konteksUntukAI .= "Nama Acara: {$acara->Nama_acara}\n";
+                    $konteksUntukAI .= "Lokasi: " . ($acara->destination ? $acara->destination->tujuan : 'Tidak diketahui') . "\n"; // cari relasi destinasi
+                    $konteksUntukAI .= "Tanggal: " . Carbon::parse($acara->Tanggal_mulai_acara)->format('d F Y') . " - " . Carbon::parse($acara->Tanggal_berakhir_acara)->format('d F Y') . "\n";
+                    $konteksUntukAI .= "Deskripsi: {$acara->Deskripsi}\n";
+                    $konteksUntukAI .= "\n";
+                }
+            }
+            $apakahPakaiDataInternal = true; // ada data internal yang relevan
+
+        }
+
+        // bantuan AI tanpa konteks
+        $pesanUntukAI = [];
+
+        // intuksi untuk AI
+        $pesanUntukAI[] = [
+            'role' => 'system',
+            'content' => 'Anda adalah asisten informasi wisata di Batam, Riau Islands, Indonesia. ' .
+                'Jawab pertanyaan pengguna dengan jelas dan ringkas. ' .
+                'Prioritaskan informasi dari data internal jika relevan. ' .
+                'Jika informasi internal digunakan, sebutkan bahwa jawaban didasarkan pada data internal. ' .
+                'Jika tidak ada data internal yang cocok, jawab berdasarkan pengetahuan umum Anda sebagai AI. ' .
+                'Sebutkan jika Anda tidak menemukan informasi spesifik di database internal.'
         ];
 
-        // Coba mencari nama destinasi dengan menghapus kata kunci umum
-        $cleanedMessage = $message;
-        foreach ($keywords as $keyword) {
-            $cleanedMessage = str_ireplace($keyword, '', $cleanedMessage);
+        if ($apakahPakaiDataInternal) {
+            $pesanUntukAI[] = [
+                'role' => 'user',
+                'content' => $konteksUntukAI . "\n\nPertanyaan" . $pesanPengguna .
+                    "\n\nBerdasarkan informasi di atas (jika relevan), jawablah pertanyaan.
+                Jika informasinya tidak cukup, sebutkan itu dan berikan jawaban umum."
+            ];
+        } else {
+            $pesanUntukAI[] = [
+                'role' => 'user',
+                'content' => $pesanPengguna
+            ];
         }
-        $cleanedMessage = trim($cleanedMessage);
 
-        // Coba cari destinasi berdasarkan bagian-bagian pesan
-        $words = explode(' ', $cleanedMessage);
-        foreach ($words as $word) {
-            if (strlen($word) > 2) { // Hindari kata terlalu pendek
-                $destination = Destination::where('tujuan', 'LIKE', '%' . $word . '%')->first();
-                if ($destination) {
-                    return $destination;
-                }
+        try {
+            $responsAI = OpenAI::chat()->create([
+                'model' => 'gpt-4.1-mini',
+                'messages' => $pesanUntukAI,
+                'max_tokens' => 250,
+            ]);
+
+            $balasanBot = $responsAI->choices[0]->message->content;
+
+            return response()->json([
+                'balasan' => $balasanBot,
+                'dari_data_internal' => $apakahPakaiDataInternal
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error saat memanggil OpenAI: ' . $e->getMessage());
+            return response()->json([
+                'balasan' => 'Maaf, Terjadi masalah teknis saat memproses permintaan anda.'
+            ], 500);
+        }
+    }
+
+    // fungsi untuk mendapatkan rekomendasi destinasi populer
+    private function getTopRecommendations()
+    {
+        // Pastikan user sudah login untuk rekomendasi personal
+        if (!Auth::check()) {
+            return collect(); // Kembalikan koleksi kosong jika tidak login
+        }
+
+        $userId = Auth::id();
+        $ratings = DB::table('ulasan')
+            ->select('wisatawan_id', 'destinations_id', 'rating')
+            ->get();
+
+        // matriks user-item
+        $matrix = [];
+        foreach ($ratings as $rating) {
+            $matrix[$rating->wisatawan_id][$rating->destinations_id] = $rating->rating;
+        }
+
+        // Jika user yang login belum punya rating atau tidak ada data rating
+        if (!isset($matrix[$userId]) || empty($matrix)) {
+            // Fallback: Ambil destinasi dengan rating rata-rata tertinggi secara umum
+            return Destination::with('kategori')
+                ->has('ulasan') // Pastikan ada ulasan
+                ->select('destinations.*', DB::raw('AVG(ulasan.rating) as avg_rating'))
+                ->join('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
+                ->groupBy('destinations.id')
+                ->orderByDesc('avg_rating')
+                ->take(6) // Ambil 6 destinasi terbaik
+                ->get();
+        }
+
+        // vektor item
+        $itemVectors = [];
+        foreach ($matrix as $uId => $userRatings) {
+            foreach ($userRatings as $itemId => $rating) {
+                $itemVectors[$itemId][$uId] = $rating;
             }
         }
 
-        // Coba cari langsung dari pesan asli jika ada yang cocok
-        $destination = Destination::where('tujuan', 'LIKE', '%' . $message . '%')->first();
-        if ($destination) {
-            return $destination;
+        // similarity antar item
+        $similarityMatrix = [];
+        foreach ($itemVectors as $itemA => $ratingsA) {
+            foreach ($itemVectors as $itemB => $ratingsB) {
+                if ($itemA == $itemB)
+                    continue;
+                $similarityMatrix[$itemA][$itemB] = $this->hitungKemiripanVektorKecil($ratingsA, $ratingsB); // Menggunakan fungsi hitungKemiripanVektorKecil
+            }
         }
 
-        return null; // Tidak ditemukan
-    }
+        $userRatings = $matrix[$userId] ?? [];
+        $predictions = [];
 
-    // Menemukan acara terkait destinasi
-    private function findEventForDestination($destination)
-    {
-        return Acara::where('ID_Wisata', $destination->id)->first();
-    }
+        foreach ($similarityMatrix as $itemId => $similarItems) {
+            if (isset($userRatings[$itemId]))
+                continue; // Lewati item yang sudah di-rating user
 
-    // Menemukan tiket terkait destinasi
-    private function findTicketForDestination($destination)
-    {
-        return Tiket::where('ID_Wisata', $destination->id)->first();
-    }
+            $score = 0;
+            $simTotal = 0;
 
-    // Menemukan destinasi yang memiliki acara terkait
-    private function findDestinationsWithEvents()
-    {
-        return Destination::whereHas('acara')->get();
-    }
+            foreach ($similarItems as $otherItemId => $similarity) {
+                if (isset($userRatings[$otherItemId])) {
+                    $score += $similarity * $userRatings[$otherItemId];
+                    $simTotal += $similarity;
+                }
+            }
 
-    // Format respons destinasi
-    private function formatDestinationResponse($destination)
-    {
-        $response = "Informasi Destinasi: " . $destination->tujuan . "\n";
-        $response .= "Deskripsi: " . substr($destination->desk, 0, 200) . "...\n"; // Deskripsi lebih panjang
-
-        // Menambahkan kategori destinasi
-        $kategori = $destination->kategori;
-        if ($kategori) {
-            $response .= "Kategori: " . $kategori->nama_kategori . "\n";
+            if ($simTotal > 0) {
+                $predictions[$itemId] = $score / $simTotal;
+            }
         }
 
-        // Menambahkan acara terkait destinasi
-        $acara = $this->findEventForDestination($destination);
-        if ($acara) {
-            $response .= "Acara Terkait: " . $acara->Nama_acara . " (Tanggal: " . $acara->Tanggal_acara . ")\n";
+        arsort($predictions);
+        $topK = array_slice($predictions, 0, 6, true); // Top-6 item sesuai permintaan
+
+        // Load relasi kategori untuk ditampilkan di chatbot
+        $recommendedItems = Destination::with('kategori')->whereIn('id', array_keys($topK))->get();
+
+        // Jika rekomendasi personal kosong, fallback ke top-rated umum
+        if ($recommendedItems->isEmpty() && !empty($matrix[$userId])) {
+            return Destination::with('kategori')
+                ->has('ulasan')
+                ->select('destinations.*', DB::raw('AVG(ulasan.rating) as avg_rating'))
+                ->join('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
+                ->groupBy('destinations.id')
+                ->orderByDesc('avg_rating')
+                ->take(6)
+                ->get();
         }
 
-        // Menambahkan tiket terkait destinasi
-        $tiket = $this->findTicketForDestination($destination);
-        if ($tiket) {
-            $response .= "Harga Tiket: Rp" . number_format($tiket->Harga, 0, ',', '.') . "\n";
-            $response .= "Tersedia: " . $tiket->Persediaan . " tiket\n";
-        }
-
-        $response .= "Klik untuk detail: " . route('wisatawan.detail_destinasi', ['id' => $destination->id]);
-        return $response;
+        return $recommendedItems;
     }
+
+    // Fungsi Pembantu untuk menghitung kemiripan vektor (Cosine Similarity)
+    // Diberi nama berbeda agar tidak bentrok dengan hitungKemiripan di bawah
+    private function hitungKemiripanVektorKecil($vec1, $vec2)
+    {
+        $dot = 0;
+        $normA = 0;
+        $normB = 0;
+        foreach ($vec1 as $key => $val) {
+            $v2 = $vec2[$key] ?? 0;
+            $dot += $val * $v2;
+            $normA += $val * $val;
+            $normB += $v2 * $v2;
+        }
+        return ($normA && $normB) ? ($dot / (sqrt($normA) * sqrt($normB))) : 0;
+    }
+
+    // fungsi utk bantu cari data internal relevan
+    private function cariDataInternalRelevan(string $kataKunciPengguna)
+    {
+        try {
+            // ubah pertanyaan menjadi embedding
+            $responEmbeddingQuery = OpenAI::embeddings()->create([
+                'model' => 'text-embedding-ada-002',
+                'input' => $kataKunciPengguna,
+            ]);
+            $vektorPesanPengguna = $responEmbeddingQuery->embeddings[0]->embedding;
+        } catch (\Exception $e) {
+            \Log::error('Error saat membuat embedding untuk pertanyaan: ' . $e->getMessage());
+            return collect();
+        }
+
+        $itemRelevan = collect();
+
+        // cari data relevan dari destinasi
+        foreach (Destination::whereNotNull('embedding')->cursor() as $destinasi) {
+            $vektorData = json_decode($destinasi->embedding, true);
+            $tingkatKemiripan = $this->hitungKemiripan($vektorPesanPengguna, $vektorData);
+
+            if ($tingkatKemiripan >= self::AMBANG_BATAS_KEMIRIPAN) {
+                $itemRelevan->push([
+                    'tipe' => 'destinasi',
+                    'skor' => $tingkatKemiripan,
+                    'data' => $destinasi->load('kategori', 'acara', 'tiket', 'ulasan'),
+                ]);
+            }
+        }
+
+        // cari data relevan dari acara
+        foreach (Acara::whereNotNull('embedding')->cursor() as $acara) {
+            $vektorData = json_decode($acara->embedding, true);
+            $tingkatKemiripan = $this->hitungKemiripan($vektorPesanPengguna, $vektorData);
+
+            if ($tingkatKemiripan >= self::AMBANG_BATAS_KEMIRIPAN) {
+                $itemRelevan->push([
+                    'tipe' => 'acara',
+                    'skor' => $tingkatKemiripan,
+                    'data' => $acara->load('destination'),
+                ]);
+            }
+        }
+
+        // urutkan dan ambil berdasarkan skor kemiripan tertinggi (max 5 item)
+        return $itemRelevan->sortByDesc('skor')->take(5);
+    }
+
+
+    // Fungsi Pembantu untuk menghitung kemiripan vektor (Cosine Similarity)
+    private function hitungKemiripan(array $vektorA, array $vektorB)
+    {
+        $produkTitik = 0.0;
+        $normA = 0.0;
+        $normB = 0.0;
+
+        for ($i = 0; $i < count($vektorA); $i++) {
+            $produkTitik += $vektorA[$i] * $vektorB[$i];
+            $normA += $vektorA[$i] * $vektorA[$i];
+            $normB += $vektorB[$i] * $vektorB[$i];
+        }
+
+        $pembagi = sqrt($normA) * sqrt($normB);
+        return $pembagi > 0 ? $produkTitik / $pembagi : 0.0;
+    }
+
 }

@@ -91,7 +91,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/kategori/kategori-destinasi', [WisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
     Route::get('/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
     Route::get('/chatbot', [WisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
-    Route::post('/chatbot/send', [WisatawanChatbotController::class, 'sendMessage']);
+    Route::post('/chatbot/send', [WisatawanChatbotController::class, 'balaspesan']);
     Route::get('/search', [WisataSearchController::class, 'search'])->name('wisatawan.search');
 });
 
