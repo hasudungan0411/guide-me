@@ -97,60 +97,62 @@ class WisatawanAuthController extends Controller
     }
 
     public function registerPost(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:wisatawan,Email',
-            'phone' => 'required|string|min:10|max:15',
-            'password' => [
-                'required',
-                'min:8',
-                'regex:/[a-z]/',     // huruf kecil
-                'regex:/[A-Z]/',     // huruf kapital
-                'regex:/[0-9]/',     // angka
-                'confirmed'
-            ],
-        ], [
-            'name.required' => 'Nama wajib diisi',
-            'email.required' => 'Email wajib diisi',
-            'email.email' => 'Email tidak valid',
-            'email.unique' => 'Email sudah terdaftar',
-            'phone.required' => 'Nomor HP wajib diisi',
-            'password.required' => 'Kata sandi wajib diisi',
-            'password.min' => 'Kata Sandi wajib minimal 8 karakter',
-            'password.regex' => 'Kata sandi wajib mengandung huruf kecil, kapital, dan angka',
-            'password.confirmed' => 'Konfirmasi tidak sama',
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:wisatawan,Email',
+        'phone' => 'required|string|min:10|max:15',
+        'password' => [
+            'required',
+            'min:8',
+            'regex:/[a-z]/',     // huruf kecil
+            'regex:/[A-Z]/',     // huruf kapital
+            'regex:/[0-9]/',     // angka
+            'confirmed'
+        ],
+    ], [
+        'name.required' => 'Nama wajib diisi',
+        'email.required' => 'Email wajib diisi',
+        'email.email' => 'Email tidak valid',
+        'email.unique' => 'Email sudah terdaftar',
+        'phone.required' => 'Nomor HP wajib diisi',
+        'password.required' => 'Kata sandi wajib diisi',
+        'password.min' => 'Kata Sandi wajib minimal 8 karakter',
+        'password.regex' => 'Kata sandi wajib mengandung huruf kecil, kapital, dan angka',
+        'password.confirmed' => 'Konfirmasi tidak sama',
+    ]);
 
-        if ($validator->fails()) {
-            Alert::error('Error', $validator->errors()->first());
-            return redirect()->route('wisatawan.register');
-        }
+    if ($validator->fails()) {
+        Alert::error('Error', $validator->errors()->first());
+        return redirect()->route('wisatawan.register');
+    }
 
-        session([
-            'wisatawan_register' => [
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => bcrypt($request->password)
-            ]
-        ]);
+      session([
+        'wisatawan_register' => [
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => bcrypt($request->password)
+          ]
+       ]);
 
         $otp = rand(100000, 999999);
 
         EmailOtp::updateOrCreate(
-            ['email_wisatawan' => $request->email],
-            [
-                'otp' => $otp,
-                'expires_at' => Carbon::now()->addMinutes(5),
-            ]
+        ['email_wisatawan' => $request->email],
+         [
+            'otp' => $otp,
+            'expires_at' => Carbon::now()->addMinutes(5),
+           ]
         );
 
         Mail::to($request->email)->send(new EmailOtpMail($otp));
 
-        Alert::success('OTP Dikirim', 'Kode OTP telah dikirim ke email Anda.');
+        $maskedEmail = $this->maskEmail($request->email);
+        Alert::html('OTP Dikirim', 'Kode OTP telah dikirim ke email <b>' . $maskedEmail . '</b>.', 'success');
+
         return redirect()->route('wisatawan.otp.form');
-    }
+}
 
     public function verifyEmail(Request $request)
     {
@@ -204,5 +206,17 @@ class WisatawanAuthController extends Controller
 
         // Alert::success('success', 'Anda Berhasil Keluar');
         return redirect()->route('wisatawan.home')->with('success', 'Anda Berhasil Keluar');
+    }
+
+    private function maskEmail($email)
+    {
+    $emailParts = explode("@", $email);
+    $namePart = $emailParts[0];
+    $domainPart = $emailParts[1];
+
+    $visibleChars = strlen($namePart) >= 3 ? 2 : 1;
+    $maskedName = substr($namePart, 0, $visibleChars) . str_repeat("*", max(1, strlen($namePart) - $visibleChars - 1)) . substr($namePart, -1);
+
+    return $maskedName . '@' . $domainPart;
     }
 }
