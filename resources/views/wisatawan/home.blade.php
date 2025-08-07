@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Perbukitan</h3>
-                                        <p>Banyak bukit di batam yang bisa dijadikan alternative bagi yang tidak suka naik
+                                        <p style="text-align: justify;">Banyak bukit di batam yang bisa dijadikan alternative bagi yang tidak suka naik
                                             gunung, di Batam adanya Bukit saja :)</p>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Pantai</h3>
-                                        <p>Pantai di batam sangat banyak, mualai dari pantai nuansa tradisional bahkan
+                                        <p style="text-align: justify;">Pantai di batam sangat banyak, mualai dari pantai nuansa tradisional bahkan
                                             modern juga ada, pilihannya banyak :)</p>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Hutan</h3>
-                                        <p>Walaupun batam terkenal dengan kota industri batam masih punya hutan yang dapat
+                                        <p style="text-align: justify;">Walaupun batam terkenal dengan kota industri batam masih punya hutan yang dapat
                                             dikunjungi, ada yang hutan wisata dan ada juga hutan yang dilindungi</p>
                                     </div>
                                 </div>
@@ -131,7 +131,7 @@
                             <h3 class="title">
                                 <a href="">{{ $item->tujuan }}</a>
                             </h3>
-                            <p>{{ Str::limit(strip_tags($item->desk), 150) }}</p>
+                            <p style="text-align: justify;">{{ Str::limit(strip_tags($item->desk), 150) }}</p>
                             <div class="meta">
                                 <span class="rate">
                                     <a href="{{ route('wisatawan.detail_destinasi', $item->id) }}"
@@ -189,7 +189,7 @@
                             <a href="{{ route('wisatawan.detail_destinasi', $destination->id) }}">
                                 <h3 class="title">{{ $destination->tujuan }}</h3>
                             </a>
-                            <p>{{ Str::limit(strip_tags($destination->desk), 150, '...') }}</p>
+                            <p style="text-align: justify;">{{ Str::limit(strip_tags($destination->desk), 150, '...') }}</p>
                         </div>
                     </div>
                 @endforeach

@@ -56,7 +56,7 @@
                         <div class="place-content-wrap pt-10 wow fadeInUp" style="margin-top: -51px !important;">
                             <p style="text-align: justify;">{!! strip_tags($destination->desk) !!}</p>
                             <h4 class="mt-4">Deskripsi</h4>
-                            <p class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
+                            <p style="text-align: justify;" class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
 
                             <!--=== Acara Section ===-->
                             <h4 class="mt-4">Acara di {{ $destination->tujuan }}</h4>

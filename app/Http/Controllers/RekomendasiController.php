@@ -60,7 +60,7 @@ class RekomendasiController extends Controller
         }
 
         arsort($predictions);
-        $topK = array_slice($predictions, 0, 3, true); // Top-5 item
+        $topK = array_slice($predictions, 0, 6, true); // Top-6 item
 
         $recommendedItems = Destination::whereIn('id', array_keys($topK))->get();
 

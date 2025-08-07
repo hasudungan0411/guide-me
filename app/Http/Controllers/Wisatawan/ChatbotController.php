@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use OpenAI\Laravel\Facades\OpenAI;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use function Symfony\Component\Translation\t;
 
 class ChatbotController extends Controller
 {
@@ -72,13 +73,22 @@ class ChatbotController extends Controller
         }
 
         // deteksi perimntaan destinasi populer
-        if (str_contains($pesanPengguna, 'destinasi populer') || str_contains($pesanPengguna, 'destinasi disukasi')) {
+        $kataKunci = ['destinasi populer', 'wisata populer', 'wisata rekomendasi', 'destinasi disukai', 'rekomendasi destinasi', 'rekomendasi wisata'];
+        $isPopuler = false;
+        foreach ($kataKunci as $kata) {
+            if (str_contains($pesanPengguna, $kata)) {
+                $isPopuler = true;
+                break;
+            }
+        }
+
+        if ($isPopuler) {
             $rekomendasi = $this->getTopRecommendations(); // ambil rekomendasi destinasi populer
 
             if ($rekomendasi->isNotEmpty()) {
                 $balasanRekomendasi = "Berikut adalah beberapa destinasi populer yang sering dikunjungi:\n";
                 foreach ($rekomendasi as $index => $destinasi) {
-                    $balasanRekomendasi .= ($index + 1) . ".  . $destinasi->tujuan";
+                    $balasanRekomendasi .= ($index + 1) . ". $destinasi->tujuan";
                     if ($destinasi->kategori) {
                         $balasanRekomendasi .= "({$destinasi->kategori->nama_kategori})";
                     }
@@ -214,97 +224,45 @@ class ChatbotController extends Controller
         }
     }
 
-    // fungsi untuk mendapatkan rekomendasi destinasi populer
+    // Fungsi untuk mendapatkan rekomendasi destinasi populer
     private function getTopRecommendations()
     {
-        // Pastikan user sudah login untuk rekomendasi personal
-        if (!Auth::check()) {
-            return collect(); // Kembalikan koleksi kosong jika tidak login
-        }
-
-        $userId = Auth::id();
-        $ratings = DB::table('ulasan')
-            ->select('wisatawan_id', 'destinations_id', 'rating')
+        // Mengambil destinasi berdasarkan jumlah ulasan dan pembelian tiket terbanyak
+        $rekomendasi = Destination::with('kategori')
+            ->leftJoin('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
+            ->leftJoin('transaksi', 'destinations.id', '=', 'transaksi.ID_Wisata')
+            ->select(
+                'destinations.id',
+                'destinations.tujuan',
+                'destinations.desk',
+                'destinations.gambar',
+                'destinations.latitude',
+                'destinations.longitude',
+                'destinations.kategori_id',
+                DB::raw('COUNT(ulasan.destinations_id) as ulasan_count'),
+                DB::raw('COUNT(transaksi.ID_Wisata) as tiket_count')
+            )
+            // Menambahkan semua kolom non-agregat ke dalam GROUP BY
+            ->groupBy(
+                'destinations.id',
+                'destinations.tujuan',
+                'destinations.desk',
+                'destinations.gambar',
+                'destinations.latitude',
+                'destinations.longitude',
+                'destinations.kategori_id'
+            )
+            ->orderByDesc('ulasan_count')
+            ->orderByDesc('tiket_count')
+            ->take(6)
             ->get();
 
-        // matriks user-item
-        $matrix = [];
-        foreach ($ratings as $rating) {
-            $matrix[$rating->wisatawan_id][$rating->destinations_id] = $rating->rating;
+        // Jika hasilnya kosong, fallback ke semua destinasi
+        if ($rekomendasi->isEmpty()) {
+            $rekomendasi = Destination::with('kategori')->take(6)->get();
         }
 
-        // Jika user yang login belum punya rating atau tidak ada data rating
-        if (!isset($matrix[$userId]) || empty($matrix)) {
-            // Fallback: Ambil destinasi dengan rating rata-rata tertinggi secara umum
-            return Destination::with('kategori')
-                ->has('ulasan') // Pastikan ada ulasan
-                ->select('destinations.*', DB::raw('AVG(ulasan.rating) as avg_rating'))
-                ->join('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
-                ->groupBy('destinations.id')
-                ->orderByDesc('avg_rating')
-                ->take(6) // Ambil 6 destinasi terbaik
-                ->get();
-        }
-
-        // vektor item
-        $itemVectors = [];
-        foreach ($matrix as $uId => $userRatings) {
-            foreach ($userRatings as $itemId => $rating) {
-                $itemVectors[$itemId][$uId] = $rating;
-            }
-        }
-
-        // similarity antar item
-        $similarityMatrix = [];
-        foreach ($itemVectors as $itemA => $ratingsA) {
-            foreach ($itemVectors as $itemB => $ratingsB) {
-                if ($itemA == $itemB)
-                    continue;
-                $similarityMatrix[$itemA][$itemB] = $this->hitungKemiripanVektorKecil($ratingsA, $ratingsB); // Menggunakan fungsi hitungKemiripanVektorKecil
-            }
-        }
-
-        $userRatings = $matrix[$userId] ?? [];
-        $predictions = [];
-
-        foreach ($similarityMatrix as $itemId => $similarItems) {
-            if (isset($userRatings[$itemId]))
-                continue; // Lewati item yang sudah di-rating user
-
-            $score = 0;
-            $simTotal = 0;
-
-            foreach ($similarItems as $otherItemId => $similarity) {
-                if (isset($userRatings[$otherItemId])) {
-                    $score += $similarity * $userRatings[$otherItemId];
-                    $simTotal += $similarity;
-                }
-            }
-
-            if ($simTotal > 0) {
-                $predictions[$itemId] = $score / $simTotal;
-            }
-        }
-
-        arsort($predictions);
-        $topK = array_slice($predictions, 0, 6, true); // Top-6 item sesuai permintaan
-
-        // Load relasi kategori untuk ditampilkan di chatbot
-        $recommendedItems = Destination::with('kategori')->whereIn('id', array_keys($topK))->get();
-
-        // Jika rekomendasi personal kosong, fallback ke top-rated umum
-        if ($recommendedItems->isEmpty() && !empty($matrix[$userId])) {
-            return Destination::with('kategori')
-                ->has('ulasan')
-                ->select('destinations.*', DB::raw('AVG(ulasan.rating) as avg_rating'))
-                ->join('ulasan', 'destinations.id', '=', 'ulasan.destinations_id')
-                ->groupBy('destinations.id')
-                ->orderByDesc('avg_rating')
-                ->take(6)
-                ->get();
-        }
-
-        return $recommendedItems;
+        return $rekomendasi;
     }
 
     // Fungsi Pembantu untuk menghitung kemiripan vektor (Cosine Similarity)
