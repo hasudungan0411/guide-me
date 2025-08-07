@@ -104,6 +104,7 @@ Route::prefix('wisatawan')->group(function () {
 
     Route::get('/Daftar-akun', [WisatawanAuthController::class, 'register'])->name('wisatawan.register');
     Route::post('/register', [WisatawanAuthController::class, 'registerPost'])->name('wisatawan.registerPost');
+    Route::get('wisatawan/otp/resend', [WisatawanAuthController::class, 'resendOtp'])->name('wisatawan.otp.resend');
 
     Route::get('/register/verifikasi', [WisatawanAuthController::class, 'showOtpForm'])->name('wisatawan.otp.form');
     Route::post('/register/verifikasi', [WisatawanAuthController::class, 'verifyEmail'])->name('wisatawan.otp.verify');

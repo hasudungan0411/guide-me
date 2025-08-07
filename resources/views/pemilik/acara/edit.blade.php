@@ -50,6 +50,11 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
+                                    <label>Gambar</label>
+                                    <input name="Gambar_acara" type="file" class="form-control"
+                                        value="{{ $Acara->Gambar_acara }}">
+                                </div>
+                                <div class="form-group">
                                     <label>Tanggal Mulai</label>
                                     <input name="Tanggal_mulai_acara" type="date" class="form-control"
                                         value="{{ $Acara->Tanggal_mulai_acara }}">

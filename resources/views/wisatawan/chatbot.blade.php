@@ -10,6 +10,8 @@
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body>
@@ -42,6 +44,11 @@
                         <input type="text" id="user-input" class="form-control"
                             placeholder="Apa yang mau kamu tanya?" aria-label="Apa yang mau kamu tanya?"
                             style="border-radius: 20px; padding: 10px 15px; border-color: #bababa;">
+
+                        <button class="btn" type="button" id="button-mic"
+                            style="background-color: #28a745; color: white; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-left: 10px;">
+                            <i class="fas fa-microphone"></i>
+                        </button>
                         <button class="btn" type="button" id="button-send"
                             style="background-color: #200381; color: white; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; margin-left: 10px;">
                             <i class="fas fa-paper-plane"></i>
@@ -53,6 +60,62 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        const micButton = document.getElementById('button-mic');
+        const inputField = document.getElementById('user-input');
+        const sendButton = document.getElementById('button-send');
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+        if (!SpeechRecognition) {
+            alert("Browser tidak mendukung voice recognition.");
+        } else {
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'id-ID';
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            let finalTranscript = '';
+
+            micButton.addEventListener('click', () => {
+                finalTranscript = '';
+                inputField.value = '';
+                recognition.start();
+                micButton.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i>`;
+            });
+
+            recognition.onresult = (event) => {
+                let interimTranscript = '';
+
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    const result = event.results[i];
+                    if (result.isFinal) {
+                        finalTranscript += result[0].transcript + ' ';
+                    } else {
+                        interimTranscript += result[0].transcript;
+                    }
+                }
+
+                inputField.value = finalTranscript + interimTranscript;
+
+                if (finalTranscript.trim() !== '') {
+                    sendButton.click();
+                    recognition.stop(); 
+                }
+            };
+
+            recognition.onend = () => {
+                micButton.innerHTML = `<i class="fas fa-microphone"></i>`;
+            };
+
+            recognition.onerror = (event) => {
+                console.warn("Voice error:", event.error);
+                micButton.innerHTML = `<i class="fas fa-microphone"></i>`;
+            };
+        }
+    </script>
+
     <script>
         $(document).ready(function() {
             // Kirim pesan saat tombol "Kirim" diklik
@@ -98,13 +161,16 @@
                         console.log(res);
 
                         // Proses balasan dari backend dan masukkan ke chat
-                        let chatbotMessage = res.balasan;
+                        let chatbotMessage = res.reply;
 
-                        // Tambahkan logika untuk mendeteksi URL dan mengubahnya menjadi tautan
-                        const urlRegex = /(https?:\/\/[^\s]+)/g;
-                        chatbotMessage = chatbotMessage.replace(urlRegex, function(url) {
-                            return `<a href="${url}" target="_blank" style="color: blue;">${url}</a>`;
-                        });
+                        const regex = /(Klik untuk detail: )(.+)/;
+                        if (regex.test(chatbotMessage)) {
+                            // Mengganti bagian "Klik untuk detail:" dengan link
+                            chatbotMessage = chatbotMessage.replace(regex, function(match, p1, p2) {
+                                const detailLink = `<a href="${p2}" target="_blank">${p2}</a>`;
+                                return p1 + detailLink;
+                            });
+                        }
 
                         chatBox.append(`
                             <div class="d-flex mb-3 align-items-start">

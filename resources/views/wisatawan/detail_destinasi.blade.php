@@ -88,7 +88,7 @@
                                             <div class="modal-body" style="padding: 15px; font-family: Arial, sans-serif; max-height: 400px; overflow-y: auto;">
                                                 @foreach ($acara as $event)
                                                     <div class="card mb-4" style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                                                        <img src="{{ asset('storage/images/event/1.png') }}" class="card-img-top" alt="Gambar {{ $event->Nama_acara }}" style="height: 180px; object-fit: cover;">
+                                                        <img src="{{ asset('storage/images/event/' .  $event->Gambar_acara) }}" class="card-img-top" alt="Gambar {{ $event->Nama_acara }}" style="height: 180px; object-fit: cover;">
                                                         <div class="card-body" style="font-family: Arial, sans-serif;">
                                                             <h5 class="card-title" style="font-weight: bold;">{{ $event->Nama_acara }}</h5>
                                                             <p class="card-text mb-1" style="font-size: 14px;">

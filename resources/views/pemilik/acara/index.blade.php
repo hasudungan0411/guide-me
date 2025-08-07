@@ -25,6 +25,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Nama Acara</th>
+                                            <th>Gambar</th>
                                             <th>Tanggal Mulai</th>
                                             <th>Tanggal Berakhir</th>
                                             <th>Deskripsi</th>
@@ -36,6 +37,10 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $acara->Nama_acara }}</td>
+                                                <td>
+                                                    <a class="btn btn-success" href="#" data-toggle="modal"
+                                                        data-target="#ModalGambar{{ $acara->ID_Acara }}">Lihat</a>
+                                                </td>
                                                 <td>{{ \Carbon\Carbon::parse($acara->Tanggal_mulai_acara)->format('d/m/Y') }}
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($acara->Tanggal_berakhir_acara)->format('d/m/Y') }}
@@ -94,6 +99,29 @@
                                                         </div>
                                                     </div>
                                                     <!-- End Modal -->
+
+                                                    <!-- Modal Gambar -->
+                                                    <div class="modal fade" id="ModalGambar{{ $acara->ID_Acara }}"
+                                                        tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalCenterTitle">Gambar Acara</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <i class="material-icons">close</i>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <img src="{{ asset('storage/images/event/' . $acara->Gambar_acara) }}"
+                                                                        alt="Gambar Acara" class="img-fluid w-200"
+                                                                        style="max-height: 600px; object-fit: contain;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- end modal -->
                                                 </td>
                                             </tr>
                                         @endforeach

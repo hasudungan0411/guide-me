@@ -63,7 +63,7 @@
     gap: 6px;
     flex-wrap: nowrap; /* agar tidak turun */
     overflow-x: auto; /* bisa scroll kanan kiri kalau terlalu sempit */
-    margin-bottom: 30px;
+    margin-bottom: 5px;
   }
 
   .otp-input {
@@ -80,6 +80,40 @@
 
   .otp-input:focus {
     border-color: #4CAF50;
+  }
+
+  .resend-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end; 
+      margin-top: 10px;
+      margin-bottom: 40px;
+
+  }
+
+  .resend-link {
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+      display: inline-block;
+      transition: color 0.3s ease;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      border: none;
+      align-self: flex-end; 
+      text-align: right;
+
+      margin-bottom: 40px
+  }
+
+        
+  .resend-link:hover {
+      color:rgb(24, 110, 28);
+      text-decoration: none;
   }
 
   button {
@@ -124,8 +158,7 @@
       </div>
       <h2>Masukkan Kode OTP</h2>
       <p>
-        Kode OTP sudah dikirim ke email anda! <br />
-        Kode OTP akan kedaluwarsa dalam <span id="timer">05:00</span>
+        Kode OTP akan kedaluwarsa dalam <span id="timer"></span>
       </p>
 
       <div class="otp-input-container">
@@ -137,68 +170,81 @@
         <input type="text" id="otp6" class="otp-input" maxlength="1" oninput="moveFocus(event, 6)">
       </div>
 
+   
+        <a href="{{ route('wisatawan.otp.resend') }}" class="resend-link">Kirim ulang</a>
+
+
       <input type="hidden" name="otp" id="otp-field">
       <button type="submit">Verifikasi Email</button>
     </form>
   </div>
 
-  <script>
-    function moveFocus(event, current) {
-      const value = event.target.value;
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        //form
+        function moveFocus(event, current) {
+            const value = event.target.value;
 
-      if (value.length === 1 && current < 6) {
-        document.getElementById(`otp${current + 1}`).focus();
-      } else if (value.length === 0 && current > 1) {
-        document.getElementById(`otp${current - 1}`).focus();
-      }
+            if (value.length === 1 && current < 6) {
+                document.getElementById(`otp${current + 1}`).focus();
+            } else if (value.length === 0 && current > 1) {
+                document.getElementById(`otp${current - 1}`).focus();
+            }
 
-      const otpValues = [];
-      for (let i = 1; i <= 6; i++) {
-        const val = document.getElementById(`otp${i}`).value;
-        if (val === '') return;
-        otpValues.push(val);
-      }
+            const otpValues = [];
+            for (let i = 1; i <= 6; i++) {
+                const val = document.getElementById(`otp${i}`).value;
+                if (val === '') return; 
+                otpValues.push(val);
+            }
 
-      const otp = otpValues.join('');
-      document.getElementById('otp-field').value = otp;
+            const otp = otpValues.join('');
+            document.getElementById('otp-field').value = otp;
 
-      setTimeout(() => {
-        document.querySelector('form').submit();
-      }, 100);
-    }
+            setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 100);
+        }
 
-    let timeLeft = 300;
+        // countdown 
+        let timeLeft = 300; 
 
-    function updateCountdown() {
-      const minutes = Math.floor(timeLeft / 60);
-      const seconds = timeLeft % 60;
-      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      document.getElementById('timer').textContent = formatted;
+        function updateCountdown() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('timer').textContent = formatted;
 
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        document.getElementById('countdown').textContent = "Kode OTP telah kedaluwarsa. Mengalihkan ke halaman sebelumnya...";
-        disableOtpInputs();
-        setTimeout(() => {
-          window.history.back();
-        }, 1000);
-      }
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                disableOtpInputs();
 
-      timeLeft--;
-    }
+                Swal.fire({
+                    title: 'Waktu Habis!',
+                    text: 'Kode OTP telah kedaluwarsa. Kamu akan diarahkan kembali ke halaman pendaftaran.',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false
+                }).then(() => {
+                    window.location.href = "{{ route('wisatawan.register') }}"; // arahkan ke halaman pendaftaran
+                });
+            }
 
-    function disableOtpInputs() {
-      for (let i = 1; i <= 6; i++) {
-        document.getElementById(`otp${i}`).disabled = true;
-      }
-      const button = document.querySelector('button[type="submit"]');
-      button.disabled = true;
-      button.style.backgroundColor = '#aaa';
-      button.style.cursor = 'not-allowed';
-    }
 
-    const timerInterval = setInterval(updateCountdown, 1000);
-  </script>
+            timeLeft--;
+        }
+
+        function disableOtpInputs() {
+            for (let i = 1; i <= 6; i++) {
+                document.getElementById(`otp${i}`).disabled = true;
+            }
+            document.querySelector('button[type="submit"]').disabled = true;
+            document.querySelector('button[type="submit"]').style.backgroundColor = '#aaa';
+            document.querySelector('button[type="submit"]').style.cursor = 'not-allowed';
+        }
+
+        const timerInterval = setInterval(updateCountdown, 1000);
+    </script>
 
   @include('sweetalert::alert')
 </body>

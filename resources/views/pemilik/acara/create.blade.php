@@ -30,7 +30,7 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('pemilik.acara.store') }}" method="POST">
+                            <form action="{{ route('pemilik.acara.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
 
                                 <div class="form-row">
@@ -38,6 +38,15 @@
                                         <label for="Nama_acara">Nama Acara</label>
                                         <input type="text" name="Nama_acara" id="Nama_acara" class="form-control"
                                             placeholder="Contoh: Festival Budaya Sekupang" value="{{ old('Nama_acara') }}"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="Gambar_acara">Gambar</label>
+                                        <input type="file" name="Gambar_acara" id="Gambar_acara" class="form-control"
+                                            placeholder="Contoh: Festival Budaya Sekupang" value="{{ old('Gambar_acara') }}"
                                             required>
                                     </div>
                                 </div>
