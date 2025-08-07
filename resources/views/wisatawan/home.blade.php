@@ -236,22 +236,23 @@
 
     <!--====== Start Gallery Section ======-->
     <section class="gallery-section mbm-150">
-        <div class="container-fluid">
-            <div class="slider-active-5-item wow fadeInUp">
-                <!--=== Single Gallery Item ===-->
-                @foreach ($galery as $item)
-                    <div class="single-gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('storage/images/galeri/' . $item->gambar) }}" alt="Gallery Image">
-                            <div class="hover-overlay">
-                                <a href="{{ asset('storage/images/galeri/' . $item->gambar) }}"
-                                    class="icon-btn img-popup"><i class="far fa-plus"></i></a>
-                            </div>
+    <div class="container-fluid">
+        <div class="slider-active-5-item wow fadeInUp">
+            <!--=== Single Gallery Item ===-->
+            @foreach ($galery as $item)
+                <div class="single-gallery-item">
+                    <div class="gallery-img" style="width: 100%; height: 220px; overflow: hidden; border-radius: 10px;">
+                        <img src="{{ asset('storage/images/galeri/' . $item->gambar) }}" alt="Gallery Image"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="hover-overlay">
+                            <a href="{{ asset('storage/images/galeri/' . $item->gambar) }}"
+                                class="icon-btn img-popup"><i class="far fa-plus"></i></a>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
-    </section>
+      </div>
+   </section>
 
 @endsection

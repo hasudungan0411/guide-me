@@ -66,18 +66,18 @@
             // Mobile: Logo di atas, form di bawah
             container.style.flexDirection = 'column-reverse';
             container.style.height = 'auto';
-            container.style.width = '95%'; // Lebar dikurangi sedikit
+            container.style.width = '95%'; // Lebar
             container.style.margin = '20px 0';
 
             form.style.width = '100%';
-            form.style.padding = '15px 10px'; // Padding diperkecil
+            form.style.padding = '15px 10px'; // Padding 
             form.style.borderRadius = '0 0 12px 12px';
 
             logo.style.width = '100%';
-            logo.style.minHeight = '120px'; // Tinggi diperkecil
-            logo.style.padding = '15px'; // Padding diperkecil
+            logo.style.minHeight = '120px'; // Tinggi 
+            logo.style.padding = '15px'; // Padding 
             logo.style.borderRadius = '12px 12px 0 0';
-            if (logoImg) logoImg.style.maxWidth = '180px'; // Ukuran logo diperkecil
+            if (logoImg) logoImg.style.maxWidth = '180px'; // Ukuran logo
         } else {
             // Desktop: Form di kiri, logo di kanan
             container.style.flexDirection = 'row';
@@ -98,6 +98,23 @@
 
     window.addEventListener('load', handleResponsiveLayout);
     window.addEventListener('resize', handleResponsiveLayout);
+    </script>
+    
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+       @if (session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        html: `{!! session('success') !!}`
+    });
+    @elseif ($errors->any())
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: '{{ $errors->first() }}'
+    });
+  @endif
     </script>
 
     @include('sweetalert::alert')

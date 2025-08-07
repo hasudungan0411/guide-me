@@ -40,9 +40,29 @@ class ForgotPasswordController extends Controller
 
         // Mengecek status pengiriman email
         if ($status === Password::RESET_LINK_SENT) {
-            return redirect()->back()->with('success', 'Link Atur Ulang Kata Sandi telah dikirim ke email Anda.');
+            $maskedEmail = $this->maskEmail($request->email);
+            return redirect()->back()->with('success', "Link sudah dikirim ke email <b>$maskedEmail</b>.");
         } else {
             return back()->withErrors(['email' => trans($status)]);
         }
+    }
+
+    /**
+     * Masking alamat email menjadi format seperti ka*****4@gmail.com
+     */
+    private function maskEmail($email)
+    {
+        [$name, $domain] = explode('@', $email);
+
+        if (strlen($name) <= 3) {
+            // Jika terlalu pendek, jangan mask terlalu banyak
+            $masked = substr($name, 0, 1) . str_repeat('*', max(0, strlen($name) - 1));
+        } else {
+            $firstTwo = substr($name, 0, 2);
+            $lastChar = substr($name, -1);
+            $masked = $firstTwo . str_repeat('*', strlen($name) - 3) . $lastChar;
+        }
+
+        return $masked . '@' . $domain;
     }
 }
