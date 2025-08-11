@@ -6,10 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Guide ME</title>
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body
-    style="margin:0; font-family:'Segoe UI', sans-serif; background:#f2f7fb; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; box-sizing:border-box;">
+    style="margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, rgba(76, 175, 80, 0.7), rgba(0, 123, 255, 0.5)), url('{{ asset('assets/wisatawan/images/background/bg.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            min-height: 100vh;">
 
     <div id="container"
         style="display:flex; flex-direction:row; max-width:900px; width:100%; background:#fff; border-radius:14px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition:transform 0.3s ease;"
@@ -34,106 +44,107 @@
                     <label for="name" style="font-size:14px; display:block; margin-bottom:5px;">Nama
                         Lengkap:</label>
                     <input id="name" name="name" type="text" placeholder="Nama Lengkap"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #9575cd; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
                 <div style="margin-bottom:15px;">
                     <label for="email" style="font-size:14px; display:block; margin-bottom:5px;">Email:</label>
                     <input id="email" name="email" type="email" placeholder="email@example.com"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #9575cd; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
                 <div style="margin-bottom:15px;">
                     <label for="phone" style="font-size:14px; display:block; margin-bottom:5px;">Nomor HP:</label>
                     <input id="phone" name="phone" type="tel" placeholder="08xxxxxxxxxx"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #9575cd; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
                 </div>
 
-                <div style="margin-bottom:15px;">
+                <div style="margin-bottom:15px; position:relative;">
                     <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi:</label>
                     <input id="password" name="password" type="password" placeholder="********"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #9575cd; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
+                    <i class="fa fa-eye-slash toggle-icon" data-target="password"
+                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer; font-size:20px; color:#4CAF50;"></i>
                 </div>
 
-                <div style="margin-bottom:20px;">
+                <div style="margin-bottom:20px; position: relative;">
                     <label for="password_confirmation"
                         style="font-size:14px; display:block; margin-bottom:5px;">Konfirmasi
                         Kata Sandi:</label>
                     <input id="password_confirmation" name="password_confirmation" type="password"
                         placeholder="********"
-                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #9575cd; outline:none; box-sizing:border-box;" />
+                        style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
+                    <i class="fa fa-eye-slash toggle-icon" data-target="password_confirmation"
+                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer; font-size:20px; color:#4CAF50;"></i>
                 </div>
 
                 <button type="submit"
-                    style="width:100%; padding:12px; border-radius:20px; border:none; background:linear-gradient(to right, #0917d5, #86e77a); color:white; font-weight:bold; font-size:14px; cursor:pointer; margin-bottom:20px;">
+                    style="width:100%; padding:12px; border-radius:20px; border:none; background:#4caf50; color:white; font-weight:bold; font-size:14px; cursor:pointer; margin-bottom:20px;">
                     Daftar
                 </button>
+
             </form>
 
             <div style="text-align:center; font-size:14px; margin-top:0;">
                 Sudah punya akun?
                 <a href="{{ route('wisatawan.login') }}"
-                    style="color:#9575cd; text-decoration:none; font-weight:500;">Masuk</a>
+                    style="color:#4caf50; text-decoration:none; font-weight:500;">Masuk</a>
             </div>
         </div>
     </div>
 
     <script>
+        // Ambil semua ikon dengan kelas 'toggle-icon'
+        const toggleIcons = document.querySelectorAll('.toggle-icon');
+
+        // Tambahkan event listener untuk setiap ikon
+        toggleIcons.forEach(icon => {
+            icon.addEventListener('click', () => {
+                // Ambil ID dari atribut data-target pada ikon
+                const targetId = icon.getAttribute('data-target');
+                // Temukan input yang sesuai dengan ID tersebut
+                const passwordInput = document.getElementById(targetId);
+
+                // Ubah tipe input dan kelas ikon
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            });
+        });
+
+        // script utk responsive
         function responsive() {
             const container = document.getElementById('container');
             const kiri = document.querySelector('.kiri');
             const kanan = document.querySelector('.kanan');
             const logo = kiri.querySelector('img');
-            const form = kanan.querySelector('form');
-            const h2 = kanan.querySelector('h2');
-            const loginLinkDiv = kanan.querySelector('div:last-of-type');
 
 
             if (window.innerWidth <= 768) {
-                // Styles for Container
                 container.style.flexDirection = 'column';
-                container.style.width = '100%'; // Ensure it takes full width of parent (body padding applied)
-
-                // Styles for Kiri (Left Section)
+                container.style.height = '';
                 kiri.style.width = '100%';
-                kiri.style.minHeight = '150px'; // Reduced min-height for mobile
+                kiri.style.minHeight = '150px';
                 kiri.style.padding = '20px';
                 logo.style.maxWidth = '200px'; // Smaller logo for mobile
-                logo.style.width = '100%'; // Ensure logo scales within its max-width
-
-                // Styles for Kanan (Right Section)
                 kanan.style.width = '100%';
                 kanan.style.padding = '30px 20px'; // Adjusted padding for mobile
-
-                // Styles for H2 inside Kanan
-                h2.style.fontSize = '20px'; // Slightly smaller font size for mobile H2
-
-                // Styles for Form inside Kanan
-                form.style.maxWidth = '100%'; // Allow form to take full width within padding
-                form.style.margin = '0 auto'; // Keep it centered
-
-                // Styles for Login link div
-                loginLinkDiv.style.marginTop = '15px'; // Ensure consistent margin
             } else {
                 // Reset styles for desktop
                 container.style.flexDirection = 'row';
-                container.style.width = '100%'; // Reset to default width within max-width
-
+                container.style.height = '';
                 kiri.style.width = '50%'; // Reset to 50% for desktop
                 kiri.style.minHeight = '300px'; // Reset min-height
                 kiri.style.padding = '30px'; // Reset padding
                 logo.style.maxWidth = '300px'; // Reset max-width for logo
-                logo.style.width = '100%';
-
                 kanan.style.width = '50%'; // Reset to 50% for desktop
                 kanan.style.padding = '40px 30px'; // Reset padding
-
-                h2.style.fontSize = '22px'; // Reset H2 font size
-
-                form.style.maxWidth = '400px'; // Reset max-width for form
-                form.style.margin = '0 auto';
-
-                loginLinkDiv.style.marginTop = '15px'; // Reset margin
             }
         }
 

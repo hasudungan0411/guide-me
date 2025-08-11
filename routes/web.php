@@ -13,8 +13,10 @@ use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\KelolaAkunPemilikController;
 use App\Http\Controllers\WisataSearchController;
 use App\Http\Controllers\TiketController;
+use App\Http\Controllers\RekomendasiController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\VerifikasiEmailController;
 use App\Http\Controllers\Wisatawan\UlasanController;
 use App\Http\Controllers\Wisatawan\DestinasiController as wisatawanDestinasiController;
 use App\Http\Controllers\Wisatawan\HomeController as WisatawanHomeController;
@@ -57,6 +59,8 @@ Route::middleware(['admin'])->group(function () {
     // Rute Kelola Akun Pemilik
     Route::get('/kelola-akun-pemilik-wisata', [KelolaAkunPemilikController::class, 'pemilik_wisata'])->name('akun_pemilik-wisata.index');
     Route::get('/kelola-akun-pemilik-wisata/create', [KelolaAkunPemilikController::class, 'create'])->name('akun_pemilik-wisata.create');
+    Route::get('/kelola-akun-pemilik-wisata/edit/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'edit'])->name('akun_pemilik-wisata.edit');
+    Route::put('/kelola-akun-pemilik-wisata/update/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'update'])->name('akun_pemilik-wisata.update');
     Route::post('/kelola-akun-pemilik-wisata/store', [KelolaAkunPemilikController::class, 'store'])->name('akun_pemilik-wisata.store');
     Route::delete('/kelola-akun-pemilik-wisata/{ID_Pemilik_Wisata}', [KelolaAkunPemilikController::class, 'destroy'])->name('akun_pemilik-wisata.destroy');
 
@@ -87,7 +91,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/kategori/kategori-destinasi', [WisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
     Route::get('/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
     Route::get('/chatbot', [WisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
-    Route::post('/chatbot/send', [WisatawanChatbotController::class, 'sendMessage']);
+    Route::post('/chatbot/send', [WisatawanChatbotController::class, 'balaspesan']);
     Route::get('/search', [WisataSearchController::class, 'search'])->name('wisatawan.search');
 });
 
@@ -97,16 +101,19 @@ Route::prefix('wisatawan')->group(function () {
     Route::post('/login', [WisatawanAuthController::class, 'loginPost']);
     Route::get('/auth/google', [WisatawanAuthController::class, 'redirectToGoogle'])->name('auth.google');
     Route::get('/GuideMe/masuk/callback', [WisatawanAuthController::class, 'handleGoogleCallback']);
+
     Route::get('/Daftar-akun', [WisatawanAuthController::class, 'register'])->name('wisatawan.register');
     Route::post('/register', [WisatawanAuthController::class, 'registerPost'])->name('wisatawan.registerPost');
+    Route::get('wisatawan/otp/resend', [WisatawanAuthController::class, 'resendOtp'])->name('wisatawan.otp.resend');
+
+    Route::get('/register/verifikasi', [WisatawanAuthController::class, 'showOtpForm'])->name('wisatawan.otp.form');
+    Route::post('/register/verifikasi', [WisatawanAuthController::class, 'verifyEmail'])->name('wisatawan.otp.verify');
+
     Route::post('/logout', [WisatawanAuthController::class, 'logout'])->name('wisatawan.logout');
     // Reset Password
     Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('wisatawan.password.request');
-    // Kirim email reset password
     Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('wisatawan.password.email');
-    // Form reset password dengan token
     Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('wisatawan.password.reset');
-    // Submit form reset password (update password)
     Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('wisatawan.password.update');
 
     // rute tampilan ulasan
@@ -130,6 +137,8 @@ Route::prefix('wisatawan')->group(function () {
         Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
         Route::post('/pesanan/batal', [TransaksiController::class, 'batalPesanan'])->name('batal.pesanan');
         Route::get('pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoicePDF'])->name('wisatawan.invoice');
+
+        Route::get('/rekomendasi', [RekomendasiController::class, 'rekomendasiTopK']);
 
     });
 });
@@ -158,13 +167,11 @@ Route::prefix('pemilik')->group(function () {
         Route::put('/tiket/update', [TiketController::class, 'update'])->name('tiket.update');
 
 
-        // Transaksi
+        // Transaksii
         Route::get('/transaksi', [TransaksiController::class, 'showtransaksipemilik'])->name('pemilik.transaksi');
         Route::put('/transaksi/update/rekening', [TransaksiController::class, 'updateRekening'])->name('pemilik.rekening_update');
         Route::put('/transaksi/konfirmasi/{id}', [TransaksiController::class, 'konfirmasitiket'])->name('tiket.konfirmasi');
         Route::put('/transaksi/gunakan/{id}', [TransaksiController::class, 'gunakantiket'])->name('tiket.gunakan');
         Route::delete('/transaksi/hapus/{id}', [TransaksiController::class, 'hapustiket'])->name('tiket.hapus');
-
-
     });
 });

@@ -28,7 +28,8 @@
                         <!--=== Single Gallery Item ===-->
                         <div class="single-gallery-item mb-30 wow fadeInUp">
                             <div class="gallery-img">
-                                <img src="{{ asset('storage/images/galeri/' . $galeri->gambar) }}" alt="Gallery Image">
+                            <img src="{{ asset('storage/images/galeri/' . $galeri->gambar) }}" alt="Gallery Image"
+                            style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
                                 <div class="hover-overlay">
                                     <a href="{{ asset('storage/images/galeri/' . $galeri->gambar) }}"
                                         class="icon-btn img-popup"><i class="far fa-plus"></i></a>

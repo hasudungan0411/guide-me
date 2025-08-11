@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Tempat Berkemah</h3>
-                                        <p>Bnyak tempat dibatam yang bisa jadikan bumi permekemahan, berkemah nuansa pantai
+                                        <p style="text-align: justify">Bnyak tempat dibatam yang bisa jadikan bumi permekemahan, berkemah nuansa pantai
                                             dan hutan juga tersedia</p>
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Perbukitan</h3>
-                                        <p>Banyak bukit di batam yang bisa dijadikan alternative bagi yang tidak suka naik
+                                        <p style="text-align: justify;">Banyak bukit di batam yang bisa dijadikan alternative bagi yang tidak suka naik
                                             gunung, di Batam adanya Bukit saja :)</p>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Pantai</h3>
-                                        <p>Pantai di batam sangat banyak, mualai dari pantai nuansa tradisional bahkan
+                                        <p style="text-align: justify;">Pantai di batam sangat banyak, mualai dari pantai nuansa tradisional bahkan
                                             modern juga ada, pilihannya banyak :)</p>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                     </div>
                                     <div class="text">
                                         <h3 class="title">Hutan</h3>
-                                        <p>Walaupun batam terkenal dengan kota industri batam masih punya hutan yang dapat
+                                        <p style="text-align: justify;">Walaupun batam terkenal dengan kota industri batam masih punya hutan yang dapat
                                             dikunjungi, ada yang hutan wisata dan ada juga hutan yang dilindungi</p>
                                     </div>
                                 </div>
@@ -123,18 +123,18 @@
                 </div>
             </div>
             <div class="slider-active-3-item">
-                @foreach ($popularDestinations as $dest)
+                @foreach ($recommendedItems as $item)
                     <div class="single-service-item-three mb-40">
                         <div class="content">
-                            <img style="height: 250px" src="{{ asset('storage/images/destinasi/' . $dest->gambar) }}"
+                            <img style="height: 250px" src="{{ asset('storage/images/destinasi/' . $item->gambar) }}"
                                 alt="service image">
                             <h3 class="title">
-                                <a href="">{{ $dest->tujuan }}</a>
+                                <a href="">{{ $item->tujuan }}</a>
                             </h3>
-                            <p>{{ Str::limit(strip_tags($dest->desk), 150) }}</p>
+                            <p style="text-align: justify;">{{ Str::limit(strip_tags($item->desk), 150) }}</p>
                             <div class="meta">
                                 <span class="rate">
-                                    <a href="{{ route('wisatawan.detail_destinasi', $dest->id) }}"
+                                    <a href="{{ route('wisatawan.detail_destinasi', $item->id) }}"
                                         class="btn-link">Selengkapnya <i class="far fa-long-arrow-right"></i></a>
                                 </span>
                             </div>
@@ -189,7 +189,7 @@
                             <a href="{{ route('wisatawan.detail_destinasi', $destination->id) }}">
                                 <h3 class="title">{{ $destination->tujuan }}</h3>
                             </a>
-                            <p>{{ Str::limit(strip_tags($destination->desk), 150, '...') }}</p>
+                            <p style="text-align: justify;">{{ Str::limit(strip_tags($destination->desk), 150, '...') }}</p>
                         </div>
                     </div>
                 @endforeach
@@ -236,22 +236,23 @@
 
     <!--====== Start Gallery Section ======-->
     <section class="gallery-section mbm-150">
-        <div class="container-fluid">
-            <div class="slider-active-5-item wow fadeInUp">
-                <!--=== Single Gallery Item ===-->
-                @foreach ($galery as $item)
-                    <div class="single-gallery-item">
-                        <div class="gallery-img">
-                            <img src="{{ asset('storage/images/galeri/' . $item->gambar) }}" alt="Gallery Image">
-                            <div class="hover-overlay">
-                                <a href="{{ asset('storage/images/galeri/' . $item->gambar) }}"
-                                    class="icon-btn img-popup"><i class="far fa-plus"></i></a>
-                            </div>
+    <div class="container-fluid">
+        <div class="slider-active-5-item wow fadeInUp">
+            <!--=== Single Gallery Item ===-->
+            @foreach ($galery as $item)
+                <div class="single-gallery-item">
+                    <div class="gallery-img" style="width: 100%; height: 220px; overflow: hidden; border-radius: 10px;">
+                        <img src="{{ asset('storage/images/galeri/' . $item->gambar) }}" alt="Gallery Image"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="hover-overlay">
+                            <a href="{{ asset('storage/images/galeri/' . $item->gambar) }}"
+                                class="icon-btn img-popup"><i class="far fa-plus"></i></a>
                         </div>
                     </div>
-                @endforeach
-            </div>
+                </div>
+            @endforeach
         </div>
-    </section>
+      </div>
+   </section>
 
 @endsection

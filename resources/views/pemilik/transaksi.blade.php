@@ -72,9 +72,10 @@
                                                 <td>{{ $i++ }}</td>
                                                 <td>{{ $tiket->ID_Tiket }}</td>
                                                 <td><span class="badge"
-                                                        style="background-color: {!! generateColorFromText($tiket->wisatawan->Email) !!}; color: #fff;">
-                                                        {{ $tiket->wisatawan->Email }}
+                                                        style="background-color: {!! $tiket->wisatawan ? generateColorFromText($tiket->wisatawan->Email) : '#ccc' !!}; color: #fff;">
+                                                        {{ $tiket->wisatawan ? $tiket->wisatawan->Email : 'Tidak ada email' }}
                                                     </span></td>
+
                                                 <td
                                                     class="
                                             @if ($tiket->Status === 'Paid') text-success

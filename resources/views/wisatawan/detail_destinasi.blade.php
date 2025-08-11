@@ -18,7 +18,7 @@
                     @if (!empty($destination->$gambar))
                         <div class="place-slider-item">
                             <div class="place-img">
-                                <img style="width: 950px; height: 630px;"
+                                <img style="width: 950px; height: 570px; overflow: hidden;"
                                     src="{{ asset('storage/images/destinasi/' . $destination->$gambar) }}"
                                     alt="Place Image">
                             </div>
@@ -54,9 +54,9 @@
                 <div class="row">
                     <div class="col-xl-8">
                         <div class="place-content-wrap pt-10 wow fadeInUp" style="margin-top: -51px !important;">
-                            <p>{!! strip_tags($destination->desk) !!}</p>
+                            <p style="text-align: justify;">{!! strip_tags($destination->desk) !!}</p>
                             <h4 class="mt-4">Deskripsi</h4>
-                            <p class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
+                            <p style="text-align: justify;" class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
 
                             <!--=== Acara Section ===-->
                             <h4 class="mt-4">Acara di {{ $destination->tujuan }}</h4>
@@ -70,6 +70,10 @@
                                 </button>
 
                                 <!-- Modal untuk menampilkan semua acara -->
+
+
+
+
                                 <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel"
                                     aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
@@ -81,26 +85,24 @@
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Tutup"></button>
                                             </div>
-                                            <div class="modal-body" style="padding: 15px; font-family: Arial, sans-serif;">
+                                            <div class="modal-body" style="padding: 15px; font-family: Arial, sans-serif; max-height: 400px; overflow-y: auto;">
                                                 @foreach ($acara as $event)
-                                                    <div class="event-detail"
-                                                        style="padding: 10px; border-bottom: 1px solid #ddd; margin-bottom: 15px;">
-                                                        <h6
-                                                            style="font-size: 1.3rem; font-weight: bold; margin-bottom: 10px;">
-                                                            {{ $event->Nama_acara }}</h6>
-                                                        <p style="margin: 5px 0; font-size: 20px; font-weight: normal; line-height: 1.5;">
-                                                            <strong>Tanggal Mulai:</strong>
-                                                            {{ \Carbon\Carbon::parse($event->Tanggal_mulai_acara)->format('d F Y') }}
-                                                        </p>
-                                                        <p style="margin: 5px 0; font-size: 20px; font-weight: normal; line-height: 1.5;">
-                                                            <strong>Tanggal Berakhir:</strong>
-                                                            {{ \Carbon\Carbon::parse($event->Tanggal_berakhir_acara)->format('d F Y') }}
-                                                        </p>
-                                                        <p style="margin: 5px 0; font-size: 0.9rem; line-height: 1.5;">
-                                                            <strong>Deskripsi:</strong> {!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}
-                                                        </p>
-                                                        <hr
-                                                            style="border: 0; border-top: 1px solid #eee; margin-top: 15px;">
+                                                    <div class="card mb-4" style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
+                                                        <img src="{{ asset('storage/images/event/' .  $event->Gambar_acara) }}" class="card-img-top" alt="Gambar {{ $event->Nama_acara }}" style="height: 180px; object-fit: cover;">
+                                                        <div class="card-body" style="font-family: Arial, sans-serif;">
+                                                            <h5 class="card-title" style="font-weight: bold;">{{ $event->Nama_acara }}</h5>
+                                                            <p class="card-text mb-1" style="font-size: 14px;">
+                                                                <strong>Tanggal Mulai:</strong>
+                                                                {{ \Carbon\Carbon::parse($event->Tanggal_mulai_acara)->format('d F Y') }}
+                                                            </p>
+                                                            <p class="card-text mb-1" style="font-size: 14px;">
+                                                                <strong>Tanggal Berakhir:</strong>
+                                                                {{ \Carbon\Carbon::parse($event->Tanggal_berakhir_acara)->format('d F Y') }}
+                                                            </p>
+                                                            <p class="card-text" style="font-size: 0.9rem; color: #555;">
+                                                                {!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -175,8 +177,8 @@
                                 style="display: flex; flex-direction: row; height: 600px; width: 100%; position: relative;">
 
                                 <!-- MAP AREA -->
-                                <div id="map" data-lng="{{ $destination->latitude }}"
-                                    data-lat="{{ $destination->longitude }}"
+                                <div id="map" data-lat="{{ $destination->latitude }}"
+                                    data-lng="{{ $destination->longitude }}"
                                     style="flex: 3; border-radius: 8px; height: 100%;">
                                 </div>
 

@@ -6,16 +6,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Guide ME</title>
     <link rel="shortcut icon" href="{{ asset('assets/wisatawan/images/favicon.ico') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body
-    style="margin:0; font-family:'Segoe UI', sans-serif; background:#e8ebf9; display:flex; align-items:center; justify-content:center; min-height:100vh;">
+    style="margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, rgba(76, 175, 80, 0.7), rgba(0, 123, 255, 0.5)), url('{{ asset('assets/wisatawan/images/background/bg.png') }}') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;">
 
     <div style="display:flex; max-width:900px; width:95%; height:650px; background:#fff; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1); transition:transform 0.3s ease;"
         onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
 
-        <!-- Kiri (form login) -->
         <div class="kiri"
+            style="flex:1; min-height:300px; background:linear-gradient(to bottom right, #0917d5, #86e77a); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:30px; text-align:center; box-sizing:border-box;">
+            <img id="logo-img" src="{{ asset('assets/wisatawan/images/logo/logo-white.png') }}" alt="Logo"
+            style="max-width:300px; width:100%; margin:0 auto; border-radius:12px; height:auto;">
+        </div>
+        <!-- Kanan (form login) -->
+        <div class="kanan"
             style="flex:1; background:#e8ebf9; padding:40px 30px; display:flex; flex-direction:column; justify-content:center;">
             <h2 style="font-size:22px; text-align: center; margin-bottom:25px;">Silahkan Masuk!</h2>
 
@@ -30,12 +44,16 @@
                         onblur="this.style.boxShadow='none'" />
                 </div>
 
-                <div style="margin-bottom:15px;">
+                <div style="margin-bottom:15px; position:relative;">
                     <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi:</label>
                     <input id="password" name="password" type="password" placeholder="********"
                         style="width:90%; padding:12px 20px; border-radius:20px; border:1.5px solid #4CAF50; outline:none; transition:0.3s;"
                         onfocus="this.style.boxShadow='0 0 8px rgba(76,175,80,0.3)'"
                         onblur="this.style.boxShadow='none'" />
+                    <i id="toggle-password"
+                        style="position:absolute; top:50%; right:15px; transform:translateY(-50%); cursor:pointer;">
+                        <i id="eye-icon" class="fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
+                    </i>
                     <div id="password-error" style="color:#ff4444; font-size:12px; margin-top:4px; height:16px;"></div>
                 </div>
 
@@ -67,37 +85,68 @@
                     alt="Google" style="width:18px; height:18px;" />
                 Login dengan Google
             </div>
-
-        </div>
-
-        <!-- Kanan (logo) -->
-        <div class="kanan"
-            style="flex:1; background:#7eabcb; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
-            <img src="{{ asset('assets/wisatawan/images/logo/logo-black.png') }}" alt="Logo"
-                style="width:300px; margin-bottom:10px; transition:transform 0.3s ease;"
-                onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
         </div>
     </div>
 
     <script>
-        function handleResponsiveLayout() {
-            const kanan = document.querySelector('.kanan');
-            const kiri = document.querySelector('.kiri');
-            const container = document.querySelector('body > div');
+    function handleResponsiveLayout() {
+        const container = document.querySelector('body > div');
+        const kiri = document.querySelectorAll('.kiri')[0]; // bagian logo
+        const kanan = document.querySelectorAll('.kanan')[1]; // form login
+        const logo = document.getElementById('logo-img');
 
-            if (window.innerWidth <= 768) {
-                kanan.style.display = 'none';
-                kiri.style.width = '100%';
-                container.style.height = 'auto';
-            } else {
-                kanan.style.display = 'flex';
-                kiri.style.width = '50%';
-                container.style.height = '650px';
+        if (window.innerWidth <= 768) {
+            container.style.flexDirection = 'column';
+            container.style.height = 'auto';
+            container.style.width = '95%';
+            container.style.margin = '20px 0';
+
+            kiri.style.width = '100%';
+            kiri.style.minHeight = '150px';
+            kiri.style.padding = '20px';
+            if (logo) logo.style.maxWidth = '200px';
+
+            if (kanan) {
+                kanan.style.width = '100%';
+                kanan.style.padding = '30px 20px';
+            }
+        } else {
+            container.style.flexDirection = 'row';
+            container.style.height = '620px';
+            container.style.width = '95%';
+
+            kiri.style.width = '50%';
+            kiri.style.minHeight = '300px';
+            kiri.style.padding = '30px';
+            if (logo) logo.style.maxWidth = '300px';
+
+            if (kanan) {
+                kanan.style.width = '50%';
+                kanan.style.padding = '40px 30px';
             }
         }
+    }
 
-        window.addEventListener('load', handleResponsiveLayout);
-        window.addEventListener('resize', handleResponsiveLayout);
+    window.addEventListener('load', handleResponsiveLayout);
+    window.addEventListener('resize', handleResponsiveLayout);
+</script>
+
+    <script>
+        // Script icon mata pw
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            var passwordInput = document.getElementById('password');
+            var icon = document.getElementById('eye-icon');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // menampilkan password
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password'; // Sembunyikan password
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        });
     </script>
 
     @include('sweetalert::alert')

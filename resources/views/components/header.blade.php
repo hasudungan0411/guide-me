@@ -23,23 +23,23 @@
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/home') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/home') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Beranda</a>
+                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/home') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">Beranda</a>
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/destinasi') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/destinasi*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Destinasi</a>
+                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/destinasi*') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">Destinasi</a>
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/blog') }}"
-                                    class="btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/blog*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Blog</a>
+                                    class="btn d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/blog*') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">Blog</a>
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/galeri') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/galeri') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Galeri</a>
+                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/galeri') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">Galeri</a>
                             </li>
                             <li class="me-0 menu-item has-children">
                                 <a href="{{ url('/wisatawan/acara') }}"
-                                    class="btn btn-outline-info d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/acara*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">Acara</a>
+                                    class="btn btn-outline-success d-flex align-items-center px-2 py-3 border-0 {{ Request::is('wisatawan/acara*') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">Acara</a>
                             </li>
                             <li class="me-0 menu-item has-children d-block d-xl-none">
                                 <a href="#" id="chatbotTriggerMobile"
@@ -51,7 +51,7 @@
                             <li class="me-0 menu-item">
                                 <a href="{{ route('wisatawan.kategori-destinasi') }}"
                                     class="nav-link py-1 btn d-flex align-items-center px-2 py-3 border-0
-                                    {{ Request::is('wisatawan/kategori*') ? 'bg-info text-white border border-info' : 'btn-outline-info text-dark' }}">
+                                    {{ Request::is('wisatawan/kategori*') ? 'bg-success text-white border border-success' : 'btn-outline-success text-dark' }}">
                                     Kategori
                                 </a>
                             </li>

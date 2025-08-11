@@ -44,7 +44,7 @@
                                                     {{ $destination->tujuan }}
                                                 </a>
                                             </h4>
-                                            <p>
+                                            <p style="text-align: justify;">
                                                 {{ Str::limit(strip_tags($destination->desk), 150) }}
                                             </p>
                                             <div align="right" class="meta">
