@@ -17,8 +17,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
             min-height: 100vh;">
 
     <div id="container"
@@ -63,19 +61,23 @@
                     <label for="password" style="font-size:14px; display:block; margin-bottom:5px;">Kata Sandi:</label>
                     <input id="password" name="password" type="password" placeholder="********"
                         style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
-                    <i class="fa fa-eye-slash toggle-icon" data-target="password"
-                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer; font-size:20px; color:#4CAF50;"></i>
+                    <i id="toggle-password"
+                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer;">
+                        <i id="eye-icon" class="fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
+                    </i>
                 </div>
 
                 <div style="margin-bottom:20px; position: relative;">
                     <label for="password_confirmation"
                         style="font-size:14px; display:block; margin-bottom:5px;">Konfirmasi
                         Kata Sandi:</label>
+                    <i id="toggle-password"
+                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer;">
+                        <i id="eye-icon" class="fa fa-eye-slash" style="font-size:20px; color:#4CAF50;"></i>
+                    </i>
                     <input id="password_confirmation" name="password_confirmation" type="password"
                         placeholder="********"
                         style="width:100%; padding:12px 20px; border-radius:20px; border:1.5px solid #4caf50; outline:none; box-sizing:border-box;" />
-                    <i class="fa fa-eye-slash toggle-icon" data-target="password_confirmation"
-                        style="position: absolute; top:70%; right:15px; transform:translateY(-50%); cursor:pointer; font-size:20px; color:#4CAF50;"></i>
                 </div>
 
                 <button type="submit"
@@ -138,7 +140,9 @@
             } else {
                 // Reset styles for desktop
                 container.style.flexDirection = 'row';
-                container.style.height = '';
+                container.style.height = '620px';
+                container.style.width = '100%'; // Reset to default width within max-width
+
                 kiri.style.width = '50%'; // Reset to 50% for desktop
                 kiri.style.minHeight = '300px'; // Reset min-height
                 kiri.style.padding = '30px'; // Reset padding

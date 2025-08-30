@@ -15,6 +15,7 @@ class Acara extends Model
 
     protected $fillable = [
         'ID_Wisata',
+        'Gambar_acara',
         'Tanggal_mulai_acara',
         'Tanggal_berakhir_acara',
         'Nama_acara',

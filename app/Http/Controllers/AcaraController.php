@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Acara;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AcaraController extends Controller
 {
@@ -36,6 +38,7 @@ class AcaraController extends Controller
     {
         $request->validate([
             'Nama_acara' => 'required|string|max:255',
+            'Gambar_acara' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'Tanggal_mulai_acara' => 'required|date',
             'Tanggal_berakhir_acara' => 'required|date',
             'Deskripsi' => 'required|string',
@@ -48,9 +51,16 @@ class AcaraController extends Controller
             return redirect()->back()->with('error', 'Destinasi tidak ditemukan.');
         }
 
+        $namaAcara = Str::slug($request->Nama_acara); 
+        $ext = $request->file('Gambar_acara')->getClientOriginalExtension();
+        $filename = $namaAcara . '_gambar.' . $ext;
+
+        $request->file('Gambar_acara')->storeAs('images/event', $filename, 'public');
+
         Acara::create([
             'ID_Wisata' => $destinasi->id,
             'Nama_acara' => $request->Nama_acara,
+            'Gambar_acara' => $filename, 
             'Tanggal_mulai_acara' => $request->Tanggal_mulai_acara,
             'Tanggal_berakhir_acara' => $request->Tanggal_berakhir_acara,
             'Deskripsi' => $request->Deskripsi,
@@ -59,6 +69,7 @@ class AcaraController extends Controller
         Alert::success('Success','Acara berhasil ditambahkan');
         return redirect()->route('pemilik.acara.index');
     }
+
 
     // Menampilkan form edit acara
     public function edit($ID_Acara)
@@ -72,23 +83,43 @@ class AcaraController extends Controller
     {
         $request->validate([
             'Nama_acara' => 'required|string|max:255',
+            'Gambar_acara' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'Tanggal_mulai_acara' => 'required|date',
-            'Tanggal_berakhir_acara' => 'required|date',
+            'Tanggal_berakhir_acara' => 'required|date|after_or_equal:Tanggal_mulai_acara',
             'Deskripsi' => 'required|string',
         ]);
 
         $acara = Acara::findOrFail($ID_Acara);
 
-        $acara->update([
+        $data = [
             'Nama_acara' => $request->Nama_acara,
             'Tanggal_mulai_acara' => $request->Tanggal_mulai_acara,
             'Tanggal_berakhir_acara' => $request->Tanggal_berakhir_acara,
             'Deskripsi' => $request->Deskripsi,
-        ]);
+        ];
 
-        Alert::success('Success','Acara berhasil diubah');
+        if ($request->hasFile('Gambar_acara')) {
+            // Hapus gambar lama
+            if ($acara->Gambar_acara && Storage::disk('public')->exists('images/event/' . $acara->Gambar_acara)) {
+                Storage::disk('public')->delete('images/event/' . $acara->Gambar_acara);
+            }
+
+            $namaAcara = Str::slug($request->Nama_acara);
+            $ext = $request->file('Gambar_acara')->getClientOriginalExtension();
+            $filename = $namaAcara . '_gambar.' . $ext;
+
+            $request->file('Gambar_acara')->storeAs('images/event', $filename, 'public');
+
+            $data['Gambar_acara'] = $filename;
+        }
+
+        $acara->update($data);
+
+        Alert::success('Success', 'Acara berhasil diubah');
         return redirect()->route('pemilik.acara.index');
     }
+
+
 
     // Menghapus acara
     public function destroy($ID_Acara)

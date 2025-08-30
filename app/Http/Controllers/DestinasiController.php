@@ -127,18 +127,6 @@ class DestinasiController extends Controller
         // mencari destinasi berdasarkan ID
         $destination = Destination::findOrFail($id);
 
-        // karna dia kebalik jadi Cek dan swap koordinat kalau terbalik (data lama)
-        if (
-            // longitude valid sebagai latitude
-            $destination->longitude >= -90 && $destination->longitude <= 90 &&
-            // latitude valid sebagai longitude
-            ($destination->latitude < -90 || $destination->latitude > 90)
-        ) {
-            $temp = $destination->latitude;
-            $destination->latitude = $destination->longitude;
-            $destination->longitude = $temp;
-        }
-
         return view('destinasi.show', compact('destination'));
     }
 

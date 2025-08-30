@@ -10,6 +10,7 @@ class Destination extends Model
     use HasFactory;
 
     protected $table = 'destinations';
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
     // Kolom yang boleh diisi (mass assignable)
@@ -52,6 +53,11 @@ class Destination extends Model
     public function tiket()
     {
         return $this->hasOne(Tiket::class, 'ID_Wisata', 'id');
+    }
+
+    public function transaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'ID_Wisata');
     }
 
     public function ulasan()

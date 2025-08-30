@@ -163,15 +163,21 @@
                         // Proses balasan dari backend dan masukkan ke chat
                         let chatbotMessage = res.balasan;
 
-                        const regex = /(Klik untuk detail: )(.+)/;
-                        if (regex.test(chatbotMessage)) {
+                        // menggunakan reguler expresion utk semua url
+                        const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+
+
+
+                        if (urlRegex.test(chatbotMessage)) {
                             // Mengganti bagian "Klik untuk detail:" dengan link
-                            chatbotMessage = chatbotMessage.replace(regex, function(match, p1, p2) {
-                                const detailLink = `<a href="${p2}" target="_blank">${p2}</a>`;
-                                return p1 + detailLink;
+                            chatbotMessage = chatbotMessage.replace(urlRegex, function(url) {
+                                return `<a href="${url}" target="_blank">${url}</a>`;
                             });
                         }
 
+                        // Menambahkan pesan chatbot ke chat
+                        const chatBox = $('.chat-messages');
                         chatBox.append(`
                             <div class="d-flex mb-3 align-items-start">
                                 <img src="{{ asset('assets/wisatawan/images/logo/logo-white1.png') }}" class="me-2" style="height: 30px;">

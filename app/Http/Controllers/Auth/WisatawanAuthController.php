@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Wisatawan;
 use Illuminate\Http\Request;
+use App\Models\EmailOtp;
+use App\Mail\EmailOtpMail;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -83,6 +87,15 @@ class WisatawanAuthController extends Controller
         return view('wisatawan.register');
     }
 
+    public function showOtpForm()
+    {
+        if (!session('wisatawan_register')) {
+            return redirect()->route('wisatawan.register');
+        }
+
+        return view('wisatawan.verifikasi.form-otp');
+    }
+
     public function registerPost(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -114,15 +127,93 @@ class WisatawanAuthController extends Controller
             return redirect()->route('wisatawan.register');
         }
 
-        Wisatawan::create([
-            'Nama' => $request->name,
-            'Email' => $request->email,
-            'Nomor_HP' => $request->phone,
-            'Kata_Sandi' => bcrypt($request->password),
-            'Foto_Profil' => null,
+        session([
+            'wisatawan_register' => [
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => bcrypt($request->password)
+            ]
         ]);
 
-        Alert::success('Success', 'Akun berhasil dibuat');
+            $otp = rand(100000, 999999);
+
+            EmailOtp::updateOrCreate(
+            ['email_wisatawan' => $request->email],
+            [
+                'otp' => $otp,
+                'expires_at' => Carbon::now()->addMinutes(5),
+            ]
+            );
+
+            Mail::to($request->email)->send(new EmailOtpMail($otp));
+
+            $maskedEmail = $this->maskEmail($request->email);
+            Alert::html('OTP Dikirim', 'Kode OTP telah dikirim ke email <b>' . $maskedEmail . '</b>.', 'success');
+
+            return redirect()->route('wisatawan.otp.form');
+    }
+
+    public function resendOtp(Request $request)
+    {
+        $data = session('wisatawan_register');
+
+        if (!$data) {
+            return redirect()->route('wisatawan.register')->with('error', 'Data tidak ditemukan. Silakan daftar ulang.');
+        }
+
+        $otp = rand(100000, 999999);
+
+        EmailOtp::updateOrCreate(
+            ['email_wisatawan' => $data['email']],
+            [
+                'otp' => $otp,
+                'expires_at' => Carbon::now()->addMinutes(5),
+            ]
+        );
+
+        Mail::to($data['email'])->send(new EmailOtpMail($otp));
+
+        Alert::success('OTP Dikirim Ulang', 'Kode OTP baru telah dikirim ke email ' . $data['email']);
+        return redirect()->route('wisatawan.otp.form');
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|digits:6'
+        ]);
+
+        $sessionData = session('wisatawan_register');
+
+        if (!$sessionData) {
+            Alert::error('Gagal', 'Email tidak ditemukan.');
+            return redirect()->route('wisatawan.register');
+        }
+
+        $otpData = EmailOtp::where('email_wisatawan', $sessionData['email'])
+            ->where('otp', $request->otp)
+            ->where('expires_at', '>', Carbon::now())
+            ->first();
+
+        if (!$otpData) {
+            Alert::error('OTP Salah', 'Kode OTP tidak valid atau sudah kedaluwarsa.');
+            return redirect()->route('wisatawan.otp.form');
+        }
+
+        Wisatawan::create([
+            'Nama' => $sessionData['name'],
+            'Email' => $sessionData['email'],
+            'Nomor_HP' => $sessionData['phone'],
+            'Kata_Sandi' => $sessionData['password'],
+            'Foto_Profil' => null,
+            'email_verified_at' => now(),
+        ]);
+
+        session()->forget('wisatawan_register');
+        EmailOtp::where('email_wisatawan', $sessionData['email'])->delete();
+
+        Alert::success('Berhasil', 'Akun berhasil dibuat. Silakan login.');
         return redirect()->route('wisatawan.login');
     }
 
@@ -139,5 +230,17 @@ class WisatawanAuthController extends Controller
 
         // Alert::success('success', 'Anda Berhasil Keluar');
         return redirect()->route('wisatawan.home')->with('success', 'Anda Berhasil Keluar');
+    }
+
+    private function maskEmail($email)
+    {
+    $emailParts = explode("@", $email);
+    $namePart = $emailParts[0];
+    $domainPart = $emailParts[1];
+
+    $visibleChars = strlen($namePart) >= 3 ? 2 : 1;
+    $maskedName = substr($namePart, 0, $visibleChars) . str_repeat("*", max(1, strlen($namePart) - $visibleChars - 1)) . substr($namePart, -1);
+
+    return $maskedName . '@' . $domainPart;
     }
 }
