@@ -181,13 +181,13 @@
                                         <td>:</td>
                                         <td><input type="date" name="Tanggal_Tiket"></td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><strong>Bukti Bayar</strong></td>
                                         <td>:</td>
                                         <td>
                                             <input type="file" name="bukti_transaksi" accept="image/*" required>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
 
@@ -198,7 +198,7 @@
                             <button type="submit" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengkonfirmasi pesanan ini?')">Konfirmasi Pesanan</button>
                         </form>
 
-                        <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button>
+                        <!-- <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button> -->
 
 
 

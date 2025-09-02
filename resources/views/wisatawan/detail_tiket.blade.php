@@ -28,12 +28,14 @@
                                     ">
                                         {{ $tiket->Status }}</span>                                
                         </p>
-                        <p><strong>Bukti Pembayaran:</strong> {{ $tiket->Bukti_Transaksi }} <br>
-                            <img src="{{ asset('bukti/' . $tiket->Bukti_Transaksi) }}" alt="Bukti Pembayaran" width="300">
+                        
+                        <!-- <p><strong>Bukti Pembayaran:</strong> {{ $tiket->Bukti_Transaksi }} <br>
+                            <img src="{{ asset('bukti/' . $tiket->Bukti_Transaksi) }}" alt="Bukti Pembayaran" width="300"> -->
                     </div>
                 </div>
                 <hr>
                 <a href="{{ route('wisatawan.pesanan') }}" class="btn btn-secondary">Kembali ke Daftar Pesanan</a>
+                <button type="submit" class="btn btn-success" id="pay-button">Konfirmasi Pesanan</button>
                 @if($tiket->Status === 'Paid')
                     <a href="{{ route('wisatawan.invoice', $tiket->ID_Transaksi) }}" class="btn btn-primary">Cetak Invoice</a>
                 @endif
@@ -41,4 +43,29 @@
 
         </div>
     </div>
+
+
+@endsection
+
+@section('script-midtrans')
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script type="text/javascript">
+      document.getElementById('pay-button').onclick = function(){
+        // SnapToken acquired from previous step
+        snap.pay('{{ $tiket->snap_token }}', {
+          // Optional
+          onSuccess: function(result){
+            window.location.href = "{{ route('transaksi.sukses', ':id') }}".replace(':id', {{ $tiket->ID_Transaksi }});
+          },
+          // Optional
+          onPending: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onError: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          }
+        });
+      };
+    </script>
 @endsection

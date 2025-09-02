@@ -23,6 +23,7 @@ class Transaksi extends Model
         'Tanggal_Transaksi',
         'Tanggal_Tiket',
         'Bukti_Transaksi',
+        'snap_token'
     ];
 
     public function destinasi()

@@ -157,28 +157,28 @@ class TransaksiController extends Controller
             'Jumlah_Tiket' => 'required|integer|min:1',
             'Harga_Satuan' => 'required|numeric|min:0',
             'Tanggal_Tiket' => 'required|date',
-            'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            // 'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $wisatawan = Auth::guard('wisatawan')->user();
-
         $tiket = Tiket::where('ID_Wisata', $request->ID_Wisata)->first();
 
         if ($tiket->Persediaan < $request->Jumlah_Tiket) {
             return redirect()->back()->with('error', 'Tiket tidak cukup.');
         }
 
-        $kodeInvoice = 'INV-' . now()->format('Ymd-His') . '-' . strtoupper(Str::random(5));
-
+        // Generate kode invoice unik
+        $kodeInvoice = 'INV-' . $wisatawan->ID_Wisatawan . '-' . time() . '-' . strtoupper(Str::random(5));
         $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
 
-        $file = $request->file('bukti_transaksi');
-        $filename = time() . '_' . $file->getClientOriginalName();
+        // Upload bukti
+        // $file = $request->file('bukti_transaksi');
+        // $filename = time() . '_' . $file->getClientOriginalName();
+        // $file->move(public_path('bukti'), $filename);
 
-        $file->move(public_path('bukti'), $filename);
-
+        // Simpan transaksi
         $pesanan = new Transaksi();
-        $pesanan->ID_Tiket = $kodeInvoice;
+        $pesanan->ID_Tiket = $kodeInvoice; // BIKIN FIELD BARU DI TABEL
         $pesanan->ID_Wisata = $request->ID_Wisata;
         $pesanan->ID_Wisatawan = $wisatawan->ID_Wisatawan;
         $pesanan->Jumlah_Tiket = $request->Jumlah_Tiket;
@@ -186,15 +186,45 @@ class TransaksiController extends Controller
         $pesanan->Status = 'Pending';
         $pesanan->Tanggal_Transaksi = now();
         $pesanan->Tanggal_Tiket = $request->Tanggal_Tiket;
-        $pesanan->Bukti_Transaksi = $filename;
+        // $pesanan->Bukti_Transaksi = $filename;
         $pesanan->save();
 
-
-        $tiket->Persediaan -= $request->Jumlah_Tiket;
+        $tiket->Persediaan -= $request->Jumlah_Tiket; 
         $tiket->save();
+
+        // Konfigurasi Midtrans
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        // Buat request Midtrans
+        $params = [
+            'transaction_details' => [
+                'order_id' => $kodeInvoice,
+                'gross_amount' => $pesanan->total_harga,
+            ],
+            'customer_details' => [
+                'first_name' => $wisatawan->Nama,
+                'email' => $wisatawan->Email,
+            ],
+            'expiry' => [
+                'start_time' => date("Y-m-d H:i:s T"),
+                'unit' => 'minutes',
+                'duration' => 15 
+            ]
+        ];
+
+
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        $pesanan->snap_token = $snapToken;
+        $pesanan->save();
 
         return redirect()->route('wisatawan.pesanan')->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
     }
+
 
     public function showdetailtiket($id)
     {
@@ -208,11 +238,28 @@ class TransaksiController extends Controller
             Alert::error('Error', 'Pesanan tidak ditemukan.');
             return redirect()->back();
         }
+        $token = $tiket->snap_token;
 
         $destinasi = $tiket->destinasi;
         $pemilik = $destinasi->pemilikwisata;
 
-        return view('wisatawan.detail_tiket', compact('tiket', 'destinasi', 'pemilik'));
+        return view('wisatawan.detail_tiket', compact('tiket', 'destinasi', 'pemilik','token'));
+    }
+
+    public function sukses($id)
+    {
+        $wisatawan = Auth::guard('wisatawan')->user();
+
+        $transaksi = Transaksi::with('destinasi')
+            ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
+            ->get();
+
+        $update = Transaksi::findOrFail($id);
+
+        $update->Status = 'Paid';
+        $update->save();
+
+        return view('wisatawan.pesanan', compact('transaksi', 'wisatawan'))->with('success', 'Pembayaran Berhasil.');
     }
 
     public function uploadbukti(Request $request, $id)

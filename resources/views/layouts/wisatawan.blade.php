@@ -71,6 +71,9 @@
     <!--====== Jquery js ======-->
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>
 
+    <!--====== Midtrans js ======-->
+ 
+
     <!--====== Bootstrap js ======-->
     <script src="{{ asset('assets/wisatawan/vendor/popper/popper.min.js') }}" defer></script>
     <script src="{{ asset('assets/wisatawan/vendor/bootstrap/js/bootstrap.min.js') }}" defer></script>
@@ -136,6 +139,8 @@
     @endif
 
     @stack('scripts')
+
+    @yield('script-midtrans')
 
 </body>
 
