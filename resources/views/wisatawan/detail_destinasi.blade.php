@@ -58,63 +58,66 @@
                             <h4 class="mt-4">Deskripsi</h4>
                             <p style="text-align: justify;" class="mb-3">{!! strip_tags($destination->long_desk) !!}</p>
 
-                            <!--=== Acara Section ===-->
+                            <!--=== Acara ===-->
                             <h4 class="mt-4">Acara di {{ $destination->tujuan }}</h4>
-                            @if ($acara->isEmpty())
-                                <p>Tidak ada event yang tersedia untuk destinasi ini.</p>
-                            @else
-                                <!-- Tombol untuk membuka modal -->
-                                <button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal"
-                                    data-bs-target="#eventModal">
-                                    Lihat Semua Acara
-                                </button>
-
-                                <!-- Modal untuk menampilkan semua acara -->
-
-
-
-
-                                <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content"
-                                            style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                                            <div class="modal-header"
-                                                style="background-color: #4CAF50; color: white; border-top-left-radius: 10px; border-top-right-radius: 10px;">
-                                                <h5 class="modal-title" id="eventModalLabel">Daftar Acara</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Tutup"></button>
-                                            </div>
-                                            <div class="modal-body" style="padding: 15px; font-family: Arial, sans-serif; max-height: 400px; overflow-y: auto;">
-                                                @foreach ($acara as $event)
-                                                    <div class="card mb-4" style="border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); overflow: hidden;">
-                                                        <img src="{{ asset('storage/images/event/' .  $event->Gambar_acara) }}" class="card-img-top" alt="Gambar {{ $event->Nama_acara }}" style="height: 180px; object-fit: cover;">
-                                                        <div class="card-body" style="font-family: Arial, sans-serif;">
-                                                            <h5 class="card-title" style="font-weight: bold;">{{ $event->Nama_acara }}</h5>
-                                                            <p class="card-text mb-1" style="font-size: 14px;">
-                                                                <strong>Tanggal Mulai:</strong>
-                                                                {{ \Carbon\Carbon::parse($event->Tanggal_mulai_acara)->format('d F Y') }}
-                                                            </p>
-                                                            <p class="card-text mb-1" style="font-size: 14px;">
-                                                                <strong>Tanggal Berakhir:</strong>
-                                                                {{ \Carbon\Carbon::parse($event->Tanggal_berakhir_acara)->format('d F Y') }}
-                                                            </p>
-                                                            <p class="card-text" style="font-size: 0.9rem; color: #555;">
-                                                                {!! strip_tags($event->Deskripsi ?? 'Belum ada deskripsi.') !!}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                            <div class="modal-footer"
-                                                style="background-color: #f9f9f9; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Tutup</button>
+                            <div class="row text-center">
+                                @foreach ($acara as $event)
+                                    <div class="col-md-2 mb-4 d-flex justify-content-center">
+                                        <div data-bs-toggle="modal" data-bs-target="#eventModal{{ $event->ID_Acara }}"
+                                            style="position: relative; width: 125px; height: 125px; border-radius: 50%; overflow: hidden; border: 7px solid #aef7dd;
+                                            cursor: pointer; transition: transform 0.5s ease;"
+                                            onmouseenter="this.style.transform='scale(1.05)'"
+                                            onmouseleave="this.style.transform='scale(1)'">
+                                            <img src="{{ asset('storage/images/event/' . $event->Gambar_acara) }}"
+                                                alt="" style="width: 100%; height: 100%; object-fit: cover;">
+                                            <div style="position: absolute; inset: 0; background-color: rgba(11, 237, 52, 0.6); border-radius: 50%; display: flex;
+                                            justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 16px; opacity: 0; transition: opacity 0.3s ease;"
+                                                onmouseenter="this.style.opacity='1'" onmouseleave="this.style.opacity='0'">
+                                                {{ Str::words($event->Nama_acara, 2) }}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
+
+                                    {{-- modal utk detail  --}}
+                                    <div class="modal fade" id="eventModal{{ $event->ID_Acara }}" tabindex="-1"
+                                        aria-labelledby="modalLabel{{ $event->ID_Acara }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h3 class="modal-title">
+                                                        {{ $event->Nama_acara }}
+                                                    </h3>
+                                                    <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"></button>
+                                                </div>
+                                                <div class="modal-body text-center">
+                                                    <img src="{{ asset('storage/images/event/' . $event->Gambar_acara) }}"
+                                                        alt=""
+                                                        style="max-width: 100%; max-height: 300px; border-radius: 10px; margin-bottom: 10px;">
+                                                    <p style="font-weight: bold;">
+                                                        {{ $event->Tanggal_mulai_acara }} -
+                                                        {{ $event->Tanggal_berakhir_acara }}
+                                                    </p>
+                                                    <p style="margin-top: 25px;">
+                                                        {{ Str::limit(strip_tags($event->Deskripsi), 150, '...') }}
+                                                        <a href="{{ route('wisatawan.acara_detail', ['ID_Acara' => $event->ID_Acara]) }}"
+                                                            style="color: #8d979f; text-decoration: none;">Lihat
+                                                            Selengkapnya</a>
+                                                    </p>
+                                                    <div class="modal-footer justify-content-center">
+                                                        <a href="{{ route('wisatawan.acara_detail', ['ID_Acara' => $event->ID_Acara]) }}"
+                                                            class="btn btn-primary"
+                                                            style="margin-top: 20px; background-color: #64b5f6; border: none;">Lihat
+                                                            Detail</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
 
                             <h4 class="mt-4">Beli Tiket</h4>
                             <!-- pesantiket -->
@@ -143,7 +146,8 @@
                                                     @csrf
 
                                                     <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
-                                                    <input type="hidden" name="Harga_Satuan" value="{{ $tiket->Harga }}">
+                                                    <input type="hidden" name="Harga_Satuan"
+                                                        value="{{ $tiket->Harga }}">
 
                                                     <div class="form-group col-md-4">
                                                         <input name="Jumlah_Tiket" type="number" class="form-control"
@@ -292,8 +296,8 @@
                                 <div style="display: flex; align-items: flex-start;">
                                     <!-- Profil Image -->
                                     <div style="margin-right: 10px;">
-                                        <img src="{{ $ulasan->wisatawan->Foto_Profil ?? asset('assets/images/avatars/profile-image-2.png') }}" alt="foto-profil"
-                                            style="width: 40px; height: 40px; border-radius: 50%;">
+                                        <img src="{{ $ulasan->wisatawan->Foto_Profil ?? asset('assets/images/avatars/profile-image-2.png') }}"
+                                            alt="foto-profil" style="width: 40px; height: 40px; border-radius: 50%;">
                                     </div>
                                     <div>
                                         <!-- Nama Wisatawan -->

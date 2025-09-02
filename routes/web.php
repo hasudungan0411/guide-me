@@ -87,7 +87,7 @@ Route::prefix('wisatawan')->group(function () {
     Route::get('/blog/blog-kategori/{id_kategori}', [WisatawanBlogController::class, 'blogKategori'])->name('wisatawan.blog-kategori');
     Route::get('/galeri', [WisatawanGaleriController::class, 'galeri'])->name('wisatawan.galeri');
     Route::get('/acara', [WisatawanAcaraController::class, 'acara'])->name('wisatawan.acara');
-    Route::get('/acara/{ID_Acara}', [WisatawanAcaraController::class, 'show'])->name('wisatawan.acara-detail');
+    Route::get('/acara/{ID_Acara}', [WisatawanAcaraController::class, 'show'])->name('wisatawan.acara_detail');
     Route::get('/kategori/kategori-destinasi', [WisatawanKategoriController::class, 'destinasi'])->name('wisatawan.kategori-destinasi');
     Route::get('/kategori/destinasi/{id_kategori}', [WisatawanKategoriController::class, 'destinasiByKategori'])->name('wisatawan.destinasi-by-kategori');
     Route::get('/chatbot', [WisatawanChatbotController::class, 'chatbot'])->name('wisatawan.chatbot');
