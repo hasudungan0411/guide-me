@@ -139,16 +139,13 @@
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3 class="mb-0">Tiket {{ $destinasi->tujuan }}</h3>
-                    <form action="{{ route('batal.pesanan') }}" method="POST" style="display:inline;">
+                    <form action="{{ route('batal.pesanan', $pesanan->ID_Transaksi) }}" method="POST" style="display:inline;">
                         @csrf
                         <button type="submit" class="btn-close" aria-label="Tutup"></button>
                     </form>
                 </div>
-
                 <div class="card-body">
                     <div class="table-responsive">
-                        <form action="{{ route('konfirmasi.pesanan') }}" method="POST" style="display:inline;" enctype="multipart/form-data">
-                            @csrf
                             <table class="table">
                                 <tbody>
                                     <tr>
@@ -164,22 +161,22 @@
                                     <tr>
                                         <td><strong>Jumlah Tiket</strong></td>
                                         <td>:</td>
-                                        <td>{{ $data['Jumlah_Tiket'] }}</td>
+                                        <td>{{ $pesanan->Jumlah_Tiket }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Harga Satuan</strong></td>
                                         <td>:</td>
-                                        <td>Rp {{ number_format($data['Harga_Satuan'], 0, ',', '.') }}</td>
+                                        <td>Rp {{ number_format($tiket->Harga, 0, ',', '.') }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Total Harga</strong></td>
                                         <td>:</td>
-                                        <td>Rp {{ number_format($data['Total_Harga'], 0, ',', '.') }}</td>
+                                        <td>Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
                                     </tr>
                                     <tr>
                                         <td><strong>Tanggal Berkunjung</strong></td>
                                         <td>:</td>
-                                        <td><input type="date" name="Tanggal_Tiket"></td>
+                                        <td>{{ \Carbon\Carbon::parse($pesanan->Tanggal_Transaksi)->format('d-m-Y') }}</td>
                                     </tr>
                                     <!-- <tr>
                                         <td><strong>Bukti Bayar</strong></td>
@@ -192,17 +189,17 @@
                             </table>
 
                             <input type="hidden" name="ID_Wisata" value="{{ $destinasi->id }}">
-                            <input type="hidden" name="Harga_Satuan" value="{{ $data['Harga_Satuan'] }}">
-                            <input type="hidden" name="Jumlah_Tiket" class="form-control" id="Tiket" value="{{ $data['Jumlah_Tiket'] }}" required>
+                            
+                            <div class="d-flex gap-2">
+                                <form action="{{ route('batal.pesanan', $pesanan->ID_Transaksi) }}" method="POST" onsubmit="return confirm('Yakin ingin membatalkan pesanan ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger">Batalkan Tiket</button>
+                                </form>
 
-                            <button type="submit" class="btn btn-success" onclick="return confirm('Apakah Anda yakin ingin mengkonfirmasi pesanan ini?')">Konfirmasi Pesanan</button>
-                        </form>
+                                <button type="submit" class="btn btn-success" id="pay-button">Bayar Tiket</button>
+                            </div>
 
-                        <!-- <button class="btn btn-primary" data-bs-toggle="modal"data-bs-target="#bayarModal">Bayar</button> -->
-
-
-
-                    </div>
 
 
 
@@ -212,30 +209,28 @@
         </div>
     </div>
 
-    <!-- ModalBayar -->
-    <div class="modal fade" id="bayarModal" tabindex="-1"
-        aria-labelledby="bayarModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bayarModalLabel">
-                        Silakan lakukan pembayaran melalui transfer bank atau dengan memindai QRIS berikut ini.</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Transfer Bank : </strong>{{ $pemilik->Nomor_Rekening }}</p>
-                    <p><strong>Qris : </strong></p>
-                    <img src="{{ asset('gambar_qris/' . $pemilik->Qris) }}" alt="{{ $pemilik->Qris }}" style="max-width:400px;">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"
-                        data-bs-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+    <!-- script midtrans -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script type="text/javascript">
+      document.getElementById('pay-button').onclick = function(){
+        // SnapToken acquired from previous step
+        snap.pay('{{ $pesanan->snap_token }}', {
+          // Optional
+          onSuccess: function(result){
+            window.location.href = "{{ route('transaksi.sukses', ':id') }}".replace(':id', {{ $pesanan->ID_Transaksi }});
+          },
+          // Optional
+          onPending: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          },
+          // Optional
+          onError: function(result){
+            /* You may add your own js here, this is just example */ document.getElementById('result-json').innerHTML += JSON.stringify(result, null, 2);
+          }
+        });
+      };
+    </script>
 
     {{-- Scripts --}}
     <script src="{{ asset('assets/wisatawan/vendor/jquery-3.6.0.min.js') }}"></script>
@@ -252,6 +247,8 @@
     <script src="{{ asset('assets/wisatawan/vendor/jquery-ui/jquery-ui.min.js') }}" defer></script>
     <script src="{{ asset('assets/wisatawan/vendor/wow.min.js') }}" defer></script>
     <script src="{{ asset('assets/wisatawan/js/theme.js') }}" defer></script>
+
+
 
     <!-- SweetAlert2 for Success/Error Notifications -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

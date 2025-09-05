@@ -152,6 +152,8 @@ class TransaksiController extends Controller
 
     public function pesan(Request $request)
     {
+
+
         $request->validate([
             'ID_Wisata' => 'required|exists:destinations,id',
             'Jumlah_Tiket' => 'required|integer|min:1',
@@ -160,6 +162,7 @@ class TransaksiController extends Controller
             // 'bukti_transaksi' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
+        $destinasi = Destination::find($request['ID_Wisata']);
         $wisatawan = Auth::guard('wisatawan')->user();
         $tiket = Tiket::where('ID_Wisata', $request->ID_Wisata)->first();
 
@@ -168,7 +171,7 @@ class TransaksiController extends Controller
         }
 
         // Generate kode invoice unik
-        $kodeInvoice = 'INV-' . $wisatawan->ID_Wisatawan . '-' . time() . '-' . strtoupper(Str::random(5));
+        $kodeInvoice = 'INV-' . $wisatawan->ID_Wisatawan . '-' . time() . '-' . $destinasi->id . strtoupper(Str::random(3));
         $totalHarga = $request->Jumlah_Tiket * $request->Harga_Satuan;
 
         // Upload bukti
@@ -222,7 +225,28 @@ class TransaksiController extends Controller
         $pesanan->snap_token = $snapToken;
         $pesanan->save();
 
-        return redirect()->route('wisatawan.pesanan')->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+        alert::success('Sukses', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+
+        // return view('wisatawan.konfirmasi_pesanan', [
+        //     'pesanan' => $pesanan,
+        //     'wisatawan' => $wisatawan,
+        //     'destinasi' => $destinasi,
+        //     'tiket' => $tiket,
+        // ]);
+
+        return redirect()->route('wisatawan.konfirmasi', $pesanan->ID_Transaksi)->with('success', 'Pemesanan berhasil dengan kode: ' . $kodeInvoice);
+    }
+
+    public function konfirmasi($id)
+    {
+        $pesanan = Transaksi::findOrFail($id);
+        $wisatawan = Auth::guard('wisatawan')->user();
+        $destinasi = Destination::find($pesanan->ID_Wisata);
+        $tiket = Tiket::where('ID_Wisata', $pesanan->ID_Wisata)->first();
+
+
+
+        return view('wisatawan.konfirmasi_pesanan', compact('pesanan', 'wisatawan', 'destinasi', 'tiket'));
     }
 
 
@@ -294,7 +318,7 @@ class TransaksiController extends Controller
             'Jumlah_Tiket' => $request->input('Jumlah_Tiket'),
             'Total_Harga' => $request->input('Jumlah_Tiket') * $request->input('Harga_Satuan')
         ];
-
+ 
         $destinasi = Destination::find($data['ID_Wisata']);
         $pemilik = $destinasi->pemilikwisata;
 
@@ -305,10 +329,23 @@ class TransaksiController extends Controller
         return view('wisatawan.konfirmasi_pesanan', compact('data', 'wisatawan', 'destinasi', 'pemilik'));
     }
 
-    public function batalPesanan()
+    public function batalpesanan($id)
     {
-        Session::forget('data_pesanan');
+        $pesanan = Transaksi::findOrFail($id);
 
+        if ($pesanan->Status !== 'Pending') {
+            return redirect()->back()->with('error', 'Pesanan tidak bisa dibatalkan.');
+        }
+
+        $tiket = Tiket::where('ID_Wisata', $pesanan->ID_Wisata)->first();
+
+        if ($tiket) {
+            $tiket->Persediaan += $pesanan->Jumlah_Tiket;
+            $tiket->save();
+        }
+
+        $pesanan->delete();
+            
         return redirect()->route('wisatawan.pesanan')->with('success', 'Pesanan berhasil dibatalkan.');
     }
 

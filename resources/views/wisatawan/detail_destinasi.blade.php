@@ -139,25 +139,55 @@
                                                     aria-label="Tutup"></button>
                                             </div>
                                             <div class="modal-body">
-                                                <p><strong>Harga Tiket : </strong>{{ $tiket->Harga }}</p>
-                                                <p><strong>Stok Tiket : </strong>{{ $tiket->Persediaan }}</p>
-                                                <form action="{{ route('wisatawan.konfirmasi') }}" method="GET"
+                                                <form action="{{ route('pesan.tiket') }}" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
+                                                    
+                                                    <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}"> <input type="hidden">
 
-                                                    <input type="hidden" name="ID_Wisata" value="{{ $destination->id }}">
-                                                    <input type="hidden" name="Harga_Satuan"
-                                                        value="{{ $tiket->Harga }}">
+                                                    <div>
+                                                        <Label>Nama :</Label>
+                                                        <input type="text" class="form-control" value="{{ $wisatawan->Nama ?? '-'}}" readonly>
+                                                    </div>
+                                                    <div>
+                                                        <Label>Email :</Label>
+                                                        <input type="text" class="form-control" value="{{ $wisatawan->Email ?? '-'}}" readonly>
+                                                    </div>
+                                                    <div>
+                                                        <Label>Tanggal Berkunjung :</Label>
+                                                        <input type="date" class="form-control" name="Tanggal_Tiket" required>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label>Harga Satuan :</label>
+                                                            <input type="text" class="form-control" id="hargaSatuan" name="Harga_Satuan" value="{{ $tiket->Harga }}" readonly>
+                                                        </div>
 
-                                                    <div class="form-group col-md-4">
-                                                        <input name="Jumlah_Tiket" type="number" class="form-control"
-                                                            id="Tiket" min="0" required>
+                                                        <div class="col-md-6">
+                                                            <label>Total Harga :</label>
+                                                            <p class="form-control" id="totalHarga">Rp 0</p>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="modal-footer mt-4">
-                                                        <button id="submitBtn" type="submit"
-                                                            class="btn btn-primary mt-3">Pesan Tiket</button>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <label>Stok Tiket :</label>
+                                                            <input type="text" class="form-control" value="{{ $tiket->Persediaan }}" readonly>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label>Jumlah Tiket :</label>
+                                                            <input name="Jumlah_Tiket" type="number" class="form-control" id="jumlahTiket" min="1" required>
+                                                        </div>
                                                     </div>
+
+                                        
+
+
+                                                    <div class="modal-footer mt-4 d-flex justify-content-end">
+                                                        <button id="submitBtn" type="submit" class="btn btn-primary">Pesan Tiket</button>
+                                                    </div>
+
 
                                                 </form>
                                             </div>
@@ -592,6 +622,23 @@
                     });
                 @endif
             });
+        });
+    </script>
+
+    <!-- Harga -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const hargaSatuan = parseInt(document.getElementById('hargaSatuan').value);
+            const jumlahTiket = document.getElementById('jumlahTiket');
+            const totalHarga = document.getElementById('totalHarga');
+
+            function updateTotalHarga() {
+                const jumlah = parseInt(jumlahTiket.value) || 0;
+                const total = hargaSatuan * jumlah;
+                totalHarga.textContent = 'Rp ' + total.toLocaleString('id-ID');
+            }
+
+            jumlahTiket.addEventListener('input', updateTotalHarga);
         });
     </script>
 

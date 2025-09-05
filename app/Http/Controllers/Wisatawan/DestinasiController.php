@@ -33,7 +33,6 @@ class DestinasiController extends Controller
         // Ambil detail destinasi
         $destination = Destination::findOrFail($id);
 
-
         // data tiket
         $tiket = Tiket::where('ID_Wisata', $destination->id)->first();
 
@@ -46,9 +45,6 @@ class DestinasiController extends Controller
         // Ambil acara yang terkait dengan destinasi ini
         $acara = Acara::where('ID_Wisata', $destination->id)->get();
 
-        $user = Auth::guard('wisatawan')->user();
-
-
         // Buat array isi gambar-gambar yang tersedia
         $galleryImages = collect([
             $destination->gambar,
@@ -58,6 +54,6 @@ class DestinasiController extends Controller
             $destination->gambar5,
         ])->filter(); // filter buat buang yang null
 
-        return view('wisatawan.detail_destinasi', compact('destination', 'galleryImages', 'blogs', 'galleries', 'acara', 'tiket'));
+        return view('wisatawan.detail_destinasi', compact('destination', 'galleryImages', 'blogs', 'galleries', 'acara', 'tiket', 'wisatawan'));
     }
 }

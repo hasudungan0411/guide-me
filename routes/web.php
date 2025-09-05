@@ -129,17 +129,19 @@ Route::prefix('wisatawan')->group(function () {
         Route::post('/pesan-tiket', [TransaksiController::class, 'pesan'])->name('wisatawan.pesan');
 
         // Tiket Wisatawan
-        // Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
+        Route::post('/destinasi/detail_destinasi/', [TransaksiController::class, 'pesan'])->name('pesan.tiket');
         Route::get('/pesanan', [TransaksiController::class, 'showpesananwisatawan'])->name('wisatawan.pesanan');
         Route::post('/pesanan/upload/{id}', [TransaksiController::class, 'uploadbukti'])->name('upload.bukti');
         Route::get('/pesanan/detail/{id}', [TransaksiController::class, 'showdetailtiket'])->name('wisatawan.tiket-detail');
-        Route::get('/pesanan/konfirmasi', [TransaksiController::class, 'showKonfirmasi'])->name('wisatawan.konfirmasi');
-        Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
+        Route::get('/pesanan/konfirmasi/{id}', [TransaksiController::class, 'konfirmasi'])->name('wisatawan.konfirmasi');
+        Route::delete('/pesanan/konfirmasi/{id}/batal', [TransaksiController::class, 'batalpesanan'])->name('batal.pesanan');
+
+        // Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
 
         //sementara di lokal(lom iso webhook ngehe)
         Route::get('/pesanan/sukses/{id}', [TransaksiController::class, 'sukses'])->name('transaksi.sukses');
 
-        Route::post('/pesanan/batal', [TransaksiController::class, 'batalPesanan'])->name('batal.pesanan');
+
         Route::get('pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoicePDF'])->name('wisatawan.invoice');
 
         Route::get('/rekomendasi', [RekomendasiController::class, 'rekomendasiTopK']);

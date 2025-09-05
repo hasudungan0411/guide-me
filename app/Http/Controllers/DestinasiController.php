@@ -9,6 +9,7 @@ use App\Models\Tiket;
 use App\Models\Blog;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class DestinasiController extends Controller
 {
@@ -125,7 +126,7 @@ class DestinasiController extends Controller
     public function show(string $id)
     {
         // mencari destinasi berdasarkan ID
-        $destination = Destination::findOrFail($id);
+        $destination = Destination::findOrFail($id); 
 
         return view('destinasi.show', compact('destination'));
     }
