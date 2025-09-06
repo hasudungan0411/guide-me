@@ -181,7 +181,7 @@ class TransaksiController extends Controller
 
         // Simpan transaksi
         $pesanan = new Transaksi();
-        $pesanan->ID_Tiket = $kodeInvoice; // BIKIN FIELD BARU DI TABEL
+        $pesanan->ID_Tiket = $kodeInvoice; 
         $pesanan->ID_Wisata = $request->ID_Wisata;
         $pesanan->ID_Wisatawan = $wisatawan->ID_Wisatawan;
         $pesanan->Jumlah_Tiket = $request->Jumlah_Tiket;
@@ -274,6 +274,13 @@ class TransaksiController extends Controller
     {
         $wisatawan = Auth::guard('wisatawan')->user();
 
+        $tiket = Transaksi::with('destinasi')
+            ->findOrFail($id);
+
+        if ($tiket->ID_Wisatawan !== $wisatawan->ID_Wisatawan) {
+            abort(403, 'Unauthorized');
+        }
+
         $transaksi = Transaksi::with('destinasi')
             ->where('ID_Wisatawan', $wisatawan->ID_Wisatawan)
             ->get();
@@ -283,7 +290,7 @@ class TransaksiController extends Controller
         $update->Status = 'Paid';
         $update->save();
 
-        return view('wisatawan.pesanan', compact('transaksi', 'wisatawan'))->with('success', 'Pembayaran Berhasil.');
+        return redirect()->route('wisatawan.tiket-detail', ['id' => $tiket->ID_Transaksi])->with('success', 'Pembayaran Berhasil.');
     }
 
     public function uploadbukti(Request $request, $id)
@@ -346,7 +353,7 @@ class TransaksiController extends Controller
 
         $pesanan->delete();
             
-        return redirect()->route('wisatawan.pesanan')->with('success', 'Pesanan berhasil dibatalkan.');
+        return redirect()->route('wisatawan.detail_destinasi', ['id' => $pesanan->ID_Wisata])->with('success', 'Pesanan berhasil dibatalkan.');
     }
 
     public function konfirmasitiket($id)

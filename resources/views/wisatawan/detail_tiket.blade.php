@@ -35,7 +35,6 @@
                 </div>
                 <hr>
                 <a href="{{ route('wisatawan.pesanan') }}" class="btn btn-secondary">Kembali ke Daftar Pesanan</a>
-                <button type="submit" class="btn btn-success" id="pay-button">Konfirmasi Pesanan</button>
                 @if($tiket->Status === 'Paid')
                     <a href="{{ route('wisatawan.invoice', $tiket->ID_Transaksi) }}" class="btn btn-primary">Cetak Invoice</a>
                 @endif

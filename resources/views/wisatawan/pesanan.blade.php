@@ -46,8 +46,13 @@
                                         <a href="{{ route('wisatawan.detail_destinasi', $item->destinasi->id) }}">{{ $item->destinasi->tujuan }}</a>
                                     </h3>
                                     <h6 class="author"><i class="far fa-user"></i><a href="#">{{ $item->ID_Tiket }}</a></h6>
-                                    <a href="{{ route('wisatawan.tiket-detail', $item->ID_Transaksi) }}"
-                                        class="main-btn filled-btn">Detail Tiket <i class="fas fa-ticket"></i></a>
+                                    @if ($item->Status === 'Paid')
+                                        <a href="{{ route('wisatawan.tiket-detail', $item->ID_Transaksi) }}"
+                                            class="main-btn filled-btn">Detail Tiket <i class="fas fa-ticket"></i></a>
+                                    @elseif($item->Status === 'Pending')
+                                        <a href="{{ route('wisatawan.konfirmasi', $item->ID_Transaksi) }}"
+                                            class="main-btn filled-btn">Bayar Tiket <i class="fas fa-money-bill"></i></a>
+                                    @endif                                 
                                 </div>
                             </div>
                         @endforeach

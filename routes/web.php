@@ -139,7 +139,7 @@ Route::prefix('wisatawan')->group(function () {
         // Route::post('/pesanan/konfirmasi', [TransaksiController::class, 'pesan'])->name('konfirmasi.pesanan');
 
         //sementara di lokal(lom iso webhook ngehe)
-        Route::get('/pesanan/sukses/{id}', [TransaksiController::class, 'sukses'])->name('transaksi.sukses');
+        Route::post('/pesanan/konfirmasi/{id}/sukses', [TransaksiController::class, 'sukses'])->name('transaksi.sukses');
 
 
         Route::get('pesanan/invoice/{id}', [TransaksiController::class, 'generateInvoicePDF'])->name('wisatawan.invoice');

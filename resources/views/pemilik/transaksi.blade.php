@@ -61,7 +61,7 @@
                                             <th>Jumlah Tiket</th>
                                             <th>Tanggal Transaksi</th>
                                             <th>Tanggal Tiket</th>
-                                            <th>Bukti Transaksi</th>
+                                            <!-- <th>Bukti Transaksi</th> -->
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -90,14 +90,14 @@
                                                 <td>{{ $tiket->Jumlah_Tiket }}</td>
                                                 <td>{{ $tiket->Tanggal_Transaksi }}</td>
                                                 <td>{{ $tiket->Tanggal_Tiket }}</td>
-                                                <td>
+                                                <!-- <td>
                                                     @if ($tiket->Bukti_Transaksi)
                                                         <a class="btn btn-success" href="#" data-toggle="modal"
                                                             data-target="#ModalBukti{{ $tiket->ID_Transaksi }}">Lihat</a>
                                                     @else
                                                         <button class="btn btn-secondary" disabled>Tidak Ada</button>
                                                     @endif
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <div class="btn-group dropleft">
                                                         <button type="button" class="btn btn-secondary dropdown-toggle"

@@ -141,6 +141,7 @@
                     <h3 class="mb-0">Tiket {{ $destinasi->tujuan }}</h3>
                     <form action="{{ route('batal.pesanan', $pesanan->ID_Transaksi) }}" method="POST" style="display:inline;">
                         @csrf
+                        @method('DELETE')
                         <button type="submit" class="btn-close" aria-label="Tutup"></button>
                     </form>
                 </div>
@@ -198,6 +199,9 @@
                                 </form>
 
                                 <button type="submit" class="btn btn-success" id="pay-button">Bayar Tiket</button>
+                                <form id="success-payment-form" action="{{ route('transaksi.sukses', $pesanan->ID_Transaksi) }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
                             </div>
 
 
@@ -218,7 +222,7 @@
         snap.pay('{{ $pesanan->snap_token }}', {
           // Optional
           onSuccess: function(result){
-            window.location.href = "{{ route('transaksi.sukses', ':id') }}".replace(':id', {{ $pesanan->ID_Transaksi }});
+            document.getElementById('success-payment-form').submit();
           },
           // Optional
           onPending: function(result){
