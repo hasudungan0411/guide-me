@@ -62,7 +62,7 @@
                                             <th>Tanggal Transaksi</th>
                                             <th>Tanggal Tiket</th>
                                             <!-- <th>Bukti Transaksi</th> -->
-                                            <th>Aksi</th>
+                                            <!-- <th>Aksi</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -98,7 +98,7 @@
                                                         <button class="btn btn-secondary" disabled>Tidak Ada</button>
                                                     @endif
                                                 </td> -->
-                                                <td>
+                                                <!-- <td>
                                                     <div class="btn-group dropleft">
                                                         <button type="button" class="btn btn-secondary dropdown-toggle"
                                                             data-toggle="dropdown" aria-haspopup="true"
@@ -117,7 +117,7 @@
                                                                 data-target="#ModalHapus{{ $tiket->ID_Transaksi }}">Hapus</a>
                                                         </div>
                                                     </div>
-                                                </td>
+                                                </td> -->
                                             </tr>
 
                                             <!-- Modal Hapus -->
